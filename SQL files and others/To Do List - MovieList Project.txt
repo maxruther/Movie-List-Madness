@@ -1,0 +1,35 @@
+Movie List Project
+------------------
+
+
+Python:
+
+- The SQL procedures can be defined in SQL scripts, but the Python script should handle the running of things.
+
+- The Python ingestion script needs to run the getWatched() procedure. (Should be quick.)
+
+- Request Developer token from Evernote
+
+
+SQL:
+
+
+
+
+
+DONE
+
+- Create a procedure that generates allUnwatched
+- Consider aggregating unwatched movies from non-backburning tables into an allUnwatched
+	- Have the aggregating procedure assign 'priority rank' based on the 'og' source table.
+
+- Make it so that the "og" movie tables are automatically generated with the proper constraints:
+	- Constrain "Watched" and "Watched in theater" domain to values 1 and 0 only.
+	- Make Primary Key out of Title + Director
+
+- Add a "native index" attribute during ingestion, so that the original ordering of the tables can be recreated in SQL.
+
+- Create a stored procedure, "getWatched()", that creates an " allWatched table that lists all watched movies. It must always expect duplicates amongst the tables, as such duplicate entry is the current method of attributing genre.
+	- It was a little tricky adjusting to the MySQL syntax for defining procedures, particularly for loops using cursors. I was also slow to see the critical importance of changing the Delimiter setting away from ';'.
+	- It was VERY tricky getting the prepared statement to work, so that I could query tables that are only provided at runtime.
+	- 
