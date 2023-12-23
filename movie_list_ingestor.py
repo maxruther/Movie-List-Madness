@@ -1,49 +1,17 @@
-import html
-from html.parser import HTMLParser
 from bs4 import BeautifulSoup
 import mysql.connector
 
 
-class MyHTMLParser(HTMLParser):
-    curr_element = None
-    elements = []
-    data = []
-
-    def handle_starttag(self, tag, attrs):
-        if tag == "tr":
-            print("New row", tag)
-            self.elements.clear()
-        elif tag == "td":
-            print("New attribute", tag)
-
-        # print("Encountered a start tag:", tag)
-
-    def handle_endtag(self, tag):
-        if self.curr_element is None and tag == "td":
-            print("Encountered some data: None")
-            self.elements.append(None)
-        elif self.curr_element is not None and tag == "td":
-            self.curr_element = None
-        elif tag == "tr":
-            self.data.append(self.elements.copy())
-            self.elements.clear()
-        # print("Encountered an end tag :", tag)
-
-    def handle_data(self, data):
-        self.curr_element = data
-        print("Encountered some data :", data)
-        self.elements.append(data)
-
-
-# Here we read in the movie list HTML content, by using it to create a BeautifulSoup object.
+# Here we read in the movie list HTML content, by using it to create a
+# BeautifulSoup object.
 movieFile = "Movies\Movies.html"
 with open(movieFile) as f:
     soup = BeautifulSoup(f, "html.parser")
 
-# Here we read in the names of each of the tables, which are identified by their
-# being 'h2' elements.
-# NOTE: Any 'h2' headings in the movie list will be added as table headers,
-# which could really mess things up.
+# Here we read in the names of each of the tables, which are identified
+# by their being 'h2' elements.
+# NOTE: Any 'h2' headings in the Evernote movie list will be added as
+# table headers, which could really mess things up.
 header_counter = 0
 table_headers = []
 allHeaders = soup.find_all(name="h2")
@@ -149,6 +117,7 @@ def crtTableQry(k):
         total_constraint_str = total_constraint_str + ")"
         create_table_str = create_table_str[:-1] + ", " + total_constraint_str
 
+    # print(create_table_str)
     return create_table_str
 
 
@@ -160,14 +129,18 @@ def table_ins_queries(k):
         if i < 2:
             continue
         vals = data[k][i]
+
+        # print(data[k])
         # for val in vals:
         for l in range(len(vals)):
             val = vals[l]
 
             # Checking if it's a date, then replacing "/" chars if so.
             date_test_val = str(val).replace("/", "").replace("'", "")
-            if date_test_val.isnumeric() and len(date_test_val) > 1:
+            if "Date" in data[k][1][l] and "NULL" not in date_test_val:
+            # if date_test_val.isnumeric() and len(date_test_val) > 1:
                 the_date = val.replace("'", "").split("/")
+                # print(the_date)
                 mon = the_date[0]
                 day = the_date[1]
                 yr = the_date[2]
@@ -206,6 +179,12 @@ for i in range(len(data)):
     for k in table_ins_queries(i):
         # print("CURR INS STATEMENT: " + k)
         myCursor.execute(k)
+
+myCursor.callproc('generateUnwatched')
+myCursor.callproc('generateWatched')
+myCursor.callproc('generateAllMovies')
+
 mydb.commit()
 
-
+myCursor.close()
+mydb.close()
