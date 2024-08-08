@@ -1,0 +1,239 @@
+Movie_ID,Title,Year
+1,"Sing Sing",2023
+2,"Y Tu Mama Tambien",2001
+3,"Gasoline Rainbow",2023
+4,"Evil Does Not Exist",2023
+5,Slow,2023
+6,"The Old Oak",2023
+7,"The Beast",2023
+8,"Are You There God? It's Me, Margaret",2023
+9,"A Thousand and One",2023
+10,"Everything Everywhere All at Once",2022
+11,"The Nature of Love",2023
+12,Oddity,2024
+13,Challengers,2024
+14,"Furiosa: A Mad Max Saga",2024
+15,"Polite Society",2023
+16,"On the Count of Three",2021
+17,"The Piano",1993
+18,"Jackass Forever",2022
+19,Happening,2021
+20,"Asteroid City",2023
+21,"Petite Maman",2021
+22,"They Cloned Tyrone",2023
+23,"Civil War",2024
+24,Goodfellas,1990
+25,"All Dirt Roads Taste of Salt",2023
+26,"The Wonderful Story of Henry Sugar",2023
+27,"Frances Ha",2012
+28,"Love Lies Bleeding",2024
+29,"Outlaw Johnny Black",NULL
+30,Monica,2022
+31,"The Unbearable Weight of Massive Talent",2022
+32,"No Hard Feelings",2023
+33,"The Zone of Interest",2023
+34,"Society of the Snow",2023
+35,"El Conde",2023
+36,Ghostlight,2024
+37,"Raging Grace",2023
+38,"Return to Seoul",2022
+39,Suzume,2022
+40,"The Eight Mountains",2022
+41,Anselm,2023
+42,"The Ascent",1977
+43,Election,1999
+44,Sicario,2015
+45,"The French Dispatch",2021
+46,"Free Solo",2018
+47,Prisoners,2013
+48,"Across the Universe",2007
+49,"Spider-man: Far from Home",2019
+50,"Spider-man: No Way Home",2021
+51,Saltburn,2023
+52,"Spider-Man: Into the Spider-Verse",2018
+53,Adaptation,2002
+54,"The Mighty Ducks",1992
+55,"The Next Karate Kid",1994
+56,"Harry and the Hendersons",1987
+57,"Kindergarten Cop",1990
+58,"Air Bud",1997
+59,"The Addams Family",1991
+60,"The Santa Clause",1994
+61,"Father of the Bride",1991
+62,"Terms of Endearment",1983
+63,Spanglish,2004
+64,Ghost,1990
+65,"The Teachers' Lounge",2023
+66,"All of Us Strangers",2023
+67,Casablanca,1942
+68,"May December",2023
+69,"Anatomy of a Fall",2023
+70,"Master Gardener",2022
+71,"The Artifice Girl",2022
+72,Aftersun,2022
+73,Rodeo,2022
+74,"Earth Mama",2023
+75,"Showing Up",2022
+76,Oppenheimer,2023
+77,"The Lighthouse",2019
+78,TÃ¡r,2022
+79,"The Banshees of Inisherin",2022
+80,Thoroughbreds,2017
+81,Azor,2021
+82,"Short Term 12",2013
+83,Moonlight,2016
+84,Parasite,2019
+85,"Sound of Metal",2019
+86,Nomadland,2020
+87,"The Card Counter",2021
+88,Raw,2016
+89,Titane,2021
+90,"The Power of the Dog",2021
+91,"In the Cut",2003
+92,Sweetie,1989
+93,Babes,2024
+94,"I Used to Be Funny",2023
+95,Thelma,2024
+96,"Hundreds of Beavers",2022
+97,"Smoking Causes Coughing",2022
+98,"Metal Lords",2022
+99,"Funny Pages",2022
+100,"Drive-Away Dolls",2024
+101,Barbie,2023
+102,"American Fiction",2023
+103,Sanctuary,2022
+104,"Werewolves Within",2021
+105,"The Holdovers",2023
+106,"7 Days",2021
+107,"Shiva Baby",2020
+108,Bottoms,2023
+109,"Joy Ride",2023
+110,"Confess, Fletch",2022
+111,"Inspector Ike",2020
+112,"Licorice Pizza",2021
+113,"Dinner in America",2020
+114,"Brian and Charles",2022
+115,"Borat Subsequent Moviefilm",2020
+116,"Nate - A One Man Show",2020
+117,Upgraded,2024
+118,"Molli and Max in the Future",2023
+119,"Before Midnight",2013
+120,"Before Sunset",2004
+121,"Fallen Leaves",2023
+122,"Portrait of a Lady on Fire",2019
+123,"Before Sunrise",1995
+124,"Rye Lane",2023
+125,"Past Lives",2023
+126,"You Hurt My Feelings",2023
+127,"Crazy Rich Asians",2018
+128,"Pride & Prejudice",2005
+129,"Decision to Leave",2022
+130,"Drive My Car",2021
+131,"The Worst Person in the World",2021
+132,"Your Name",2016
+133,"Palm Springs",2020
+134,Skinamarink,2022
+135,Piggy,2022
+136,"Talk to Me",2022
+137,Barbarian,2022
+138,M3GAN,2022
+139,"Bodies Bodies Bodies",2022
+140,"Under the Skin",2013
+141,Hellraiser,1987
+142,Possessor,2020
+143,"Godzilla Minus One",2023
+144,"Leonor Will Never Die",2022
+145,RoboCop,1987
+146,"Violent Night",2022
+147,"You Were Never Really Here",2017
+148,Dredd,2012
+149,Kimi,2022
+150,Sisu,2022
+151,"Emily the Criminal",2022
+152,Nobody,2021
+153,"Casino Royale",2006
+154,"The Boy and the Heron",2023
+155,Migration,2023
+156,"Marcel the Shell with Shoes On",2021
+157,"Pokemon 2000",2000
+158,"The Last Unicorn",1982
+159,"Princess Mononoke",1997
+160,"Millennium Actress",2001
+161,Akira,1988
+162,"Silent Night",2023
+163,"All the Beauty and the Bloodshed",2022
+164,"Ex Machina",2014
+165,"Mad Max: Fury Road",2015
+166,"Harold & Kumar Go to White Castle",2004
+167,"Troll 2",1990
+168,"Tank Girl",1995
+169,Bean,1997
+170,Twilight,2008
+171,"Black Dynamite",2009
+172,"Starship Troopers",1997
+173,"The Man from U.N.C.L.E.",2015
+174,Memories,1995
+175,"Kiss Kiss Bang Bang",2005
+176,"The Boondock Saints",1999
+177,"Blade Runner 2049",2017
+178,"X-Men: First Class",2011
+179,Airplane!,1980
+180,"Slumdog Millionaire",2008
+181,"The NeverEnding Story",1984
+182,Scooby-Doo,2002
+183,"A Knight's Tale",2001
+184,"Back to the Future",1985
+185,"Interview with the Vampire",1994
+186,"Horrible Bosses",2011
+187,"Grosse Pointe Blank",1997
+188,"Mortal Kombat",1995
+189,"Gone in 60 Seconds",2000
+190,Highlander,1986
+191,Braveheart,1995
+192,"Perfume: The Story of a Murderer",2006
+193,"The Importance of Being Earnest",2002
+194,"Life as a House",2001
+195,"Star Trek",2009
+196,Dragonheart,1996
+197,"Star Trek Into Darkness",2013
+198,"Star Trek Beyond",2016
+199,Stardust,2007
+200,Labyrinth,1986
+201,"Johnny Mnemonic",1995
+202,Bedazzled,2000
+203,"Black Swan",2010
+204,"Pokemon: The First Movie",1998
+205,"Demolition Man",1993
+206,Legend,1985
+207,"Sex Drive",2008
+208,"The Lost Boys",1987
+209,"Short Circuit",1986
+210,Elf,2003
+211,"Sister Act",1992
+212,"Tommy Boy",1995
+213,"Idle Hands",1999
+214,"Reign of Fire",2002
+215,Rampant,2018
+216,"Sorry To Bother You",2018
+217,"Brokeback Mountain",2005
+218,Amadeus,1984
+219,Fargo,1996
+220,Terminator,1984
+221,"Terminator 2",1991
+222,"Shin Ultraman",2022
+223,"The Piano Teacher",2001
+224,"Billy Elliot",2000
+225,Nostalgia,2022
+226,"Cha Cha Real Smooth",2022
+227,Minari,2020
+228,"Two Days One Night",2014
+229,"Train to Busan",2016
+230,"Three Billboards",2017
+231,"The Love Witch",2016
+232,"Daughters of the Dust",1991
+233,"Dead for a Dollar",2022
+234,"Judas and the Black Messiah",2021
+235,Nightcrawler,2014
+236,Room,2015
+237,"The Lobster",2015
+238,Lamb,2021

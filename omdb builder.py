@@ -1,6 +1,6 @@
 import urllib.parse
 
-import mysql.connector
+import pymysql
 import requests as requests
 import pickle
 
@@ -28,33 +28,37 @@ def pickle_OMDB_recs(all_OMDB_dicts, all_OMDB_abrvd):
 def pull_OMDB_records(aCursor):
     all_OMDB_dicts = []
     all_OMDB_abrvd = []
+    pull_counter = 0
 
     keyFile = "C:/Users/maxru/Programming/Python/.secret/OMDB_API.txt"
 
     with open(keyFile) as f:
         API_key = f.read()
 
-    query_all_titles = "SELECT Title, Year FROM allMovies"
+    query_all_titles = "SELECT Movie_ID, Title, Year FROM allMovies"
     aCursor.execute(query_all_titles)
-
-    titles_years_list = []
 
     erroneous_OMDB_pulls = []
 
-    for (Title, Year) in aCursor:
-        titles_years_list.append((Title, Year))
-        # print("{}   |   {}".format(Title, Year))
-
+    for (Movie_ID, Title, Year) in aCursor:
         curr_title = urllib.parse.quote_plus(Title)
+
+        # OMDB API can only handle the English translation of the
+        # following famous Spanish-titled film.
+        if Title == 'Y Tu Mama Tambien':
+            curr_title = urllib.parse.quote_plus('And Your Mother Too')
 
         # Lydia Tar needs special treatment for her HTML request
         if curr_title == 'T%C3%83%C2%A1r':
             curr_title = 'T%C3%A1r'
 
         curr_year = str(Year)
+        m_id = Movie_ID
 
         OMDB_entry = requests.get('http://www.omdbapi.com/?i=tt3896198&apikey=' + API_key
                                   + '&t=' + curr_title + '&y=' + str(curr_year)).json()
+
+        pull_counter += 1
 
         if OMDB_entry['Response'] == 'False':
             erroneous_OMDB_pulls.append((curr_title, curr_year))
@@ -62,7 +66,8 @@ def pull_OMDB_records(aCursor):
 
         all_OMDB_dicts.append(OMDB_entry)
 
-        OMDB_entry_list = [OMDB_entry['Title'], OMDB_entry['Year'],
+        OMDB_entry_list = [m_id,
+                           Title, curr_year,
                            OMDB_entry['Released'], OMDB_entry['Runtime'],
                            OMDB_entry['Genre'], OMDB_entry['Director'],
                            OMDB_entry['Writer'], OMDB_entry['Actors'],
@@ -70,6 +75,11 @@ def pull_OMDB_records(aCursor):
                            OMDB_entry.get('BoxOffice', 0)]
         # print(OMDB_entry_list)
         all_OMDB_abrvd.append(OMDB_entry_list)
+
+        if pull_counter % 50 == 0:
+            print(f'{pull_counter} movies processed so far.')
+
+    print(f'COMPLETE: {pull_counter} movies processed in total.\n')
 
     if erroneous_OMDB_pulls:
         print("FUCKED UP REQUESTS:\n")
@@ -85,28 +95,28 @@ def create_2D_ratings_data(all_OMDB_abrvd):
     ratings_data = []
 
     for i in all_OMDB_abrvd:
-        curr_rec = [i[0], i[1], None, None, None]
-        for rev_dict in i[8]:
+        curr_rec = [i[0], i[1], i[2], None, None, None]
+        for rev_dict in i[9]:
             if rev_dict['Source'] == 'Internet Movie Database':
                 mc_rating = rev_dict['Value']
                 mc_rating = mc_rating.split('/')[0]
                 mc_rating = round((float(mc_rating) / 10), 2)
                 # print(rev_dict['Value'], imdb_rating, sep='\t')
-                curr_rec[2] = mc_rating
+                curr_rec[3] = mc_rating
 
             elif rev_dict['Source'] == 'Rotten Tomatoes':
                 rt_rating = rev_dict['Value']
                 rt_rating = rt_rating.replace('%', '')
                 rt_rating = round((float(rt_rating) / 100), 2)
                 # print(rt_rating, rev_dict['Value'], sep='\t')
-                curr_rec[3] = rt_rating
+                curr_rec[4] = rt_rating
 
             elif rev_dict['Source'] == 'Metacritic':
                 mc_rating = rev_dict['Value']
                 mc_rating = mc_rating.split('/')[0]
                 mc_rating = round((float(mc_rating) / 100), 2)
                 # print(rev_dict['Value'], mc_rating, sep='\t')
-                curr_rec[4] = mc_rating
+                curr_rec[5] = mc_rating
 
         ratings_data.append(curr_rec)
 
@@ -119,7 +129,7 @@ def gnr8_new_ratings_table(aCursor, ratings_data):
 
     create_table_str = "CREATE TABLE IF NOT EXISTS critic_ratings("
 
-    ratings_data_col_names = ['Title', 'Year', 'IMDB_Score', 'RT_Score', 'MetaC_Score']
+    ratings_data_col_names = ['Movie_ID', 'Title', 'Year', 'IMDB_Score', 'RT_Score', 'MetaC_Score']
     num_cols = len(ratings_data_col_names)
     for i in range(num_cols):
         curr_attr = ratings_data_col_names[i]
@@ -127,38 +137,43 @@ def gnr8_new_ratings_table(aCursor, ratings_data):
 
         if "Score" in curr_attr:
             var_type = " float"
+        elif "Movie_ID" in curr_attr:
+            var_type = " int NOT NULL"
 
-        if i < num_cols - 1:
-            create_table_str += curr_attr + var_type + ', '
-        else:
-            create_table_str += curr_attr + var_type + ')'
+        create_table_str += curr_attr + var_type + ', '
 
+    # create_table_str += 'FOREIGN KEY(Movie_ID) REFERENCES allmovies(Movie_ID))'
+    create_table_str += 'PRIMARY KEY(Movie_ID) )'
+    # print(create_table_str)
     aCursor.execute(create_table_str)
-    aCursor.executemany("INSERT INTO critic_ratings VALUES (%s, %s, %s, %s, %s)", ratings_data)
+    aCursor.executemany("INSERT INTO critic_ratings VALUES (%s, %s, %s, %s, %s, %s)", ratings_data)
 
 
 def gnr8_genre_2d_data(omdb_recs_abrvd):
     all_genres = []
+    # print(omdb_recs_abrvd[0])
     for i in omdb_recs_abrvd:
-        curr_genres = i[4].split(', ')
+        curr_genres = i[5].split(', ')
         for j in curr_genres:
             if j not in all_genres:
                 all_genres.append(j)
     num_genres = len(all_genres)
-    all_genres = ["Title", "Year"] + all_genres
+    all_genres = ["Movie_ID", "Title", "Year"] + all_genres
     # print(all_genres)
 
     genre_data = []
     for i in omdb_recs_abrvd:
-        curr_record = [i[0], i[1]] + ([0] * num_genres)
-        curr_genres = i[4].split(', ')
+        curr_record = [i[0], i[1], i[2]] + ([0] * num_genres)
+        curr_genres = i[5].split(', ')
         # print(i[0], curr_genres)
         for j in curr_genres:
             gen_ind = all_genres.index(j)
             curr_record[gen_ind] = 1
         # print(curr_record, "\t" + str(len(curr_record)))
         genre_data.append(curr_record)
-
+    # print(all_genres)
+    # for i in genre_data[0:3]:
+    #     print(i)
     return all_genres, genre_data
 
 
@@ -176,24 +191,23 @@ def gnr8_genre_table(table_name, col_names, aCursor, the_data):
         if curr_attr not in ['Title', 'Year']:
             var_type = " int"
 
-        if i < num_cols - 1:
-            create_table_str += curr_attr + var_type + ', '
-        else:
-            create_table_str += curr_attr + var_type + ')'
+        create_table_str += curr_attr + var_type + ', '
 
     # Adding constraints as necessary
     constraint_strings = []
-    if "Title" in col_names and "Year" in col_names:
-        constraint_strings.append("PRIMARY KEY (Title, Year)")
+    if "Movie_ID" in col_names:
+        constraint_strings.append("PRIMARY KEY (Movie_ID)")
+    # if "Movie_ID" in col_names:
+    #     constraint_strings.append("FOREIGN KEY(Movie_ID) REFERENCES allmovies(Movie_ID)")
     for attr in col_names:
         attr = attr.replace("-", "")
-        if attr not in ["Title", "Year"]:
+        if attr not in ["Movie_ID", "Title", "Year"]:
             constraint_strings.append("CHECK (" + attr + " in (0, 1))")
 
     if len(constraint_strings) > 0:
         total_constraint_str = ", ".join(constraint_strings)
         total_constraint_str = total_constraint_str + ")"
-        create_table_str = create_table_str[:-1] + ", " + total_constraint_str
+        create_table_str = create_table_str + total_constraint_str
 
     # print(create_table_str)
     aCursor.execute(create_table_str)
@@ -203,12 +217,12 @@ def gnr8_genre_table(table_name, col_names, aCursor, the_data):
 
 def setup_omdb_abrvd_data(omdb_abrvd_raw):
     omdb_abrvd_processed = [ele[:] for ele in omdb_abrvd_raw]
-    print(omdb_abrvd_processed[0])
+    # print(omdb_abrvd_processed[0])
     # counter = 0
     for i in omdb_abrvd_processed:
 
         # Review scores
-        curr_rev_dict = i[8]
+        curr_rev_dict = i[9]
         IMDB_score, RT_score, MC_score = None, None, None
         for j in curr_rev_dict:
             if j['Source'] == "Internet Movie Database":
@@ -224,25 +238,25 @@ def setup_omdb_abrvd_data(omdb_abrvd_raw):
                 MC_score = MC_score.split('/')[0]
                 MC_score = round((float(MC_score) / 100), 2)
 
-        i[8] = MC_score
-        i.insert(8, RT_score)
-        i.insert(8, IMDB_score)
+        i[9] = MC_score
+        i.insert(10, RT_score)
+        i.insert(11, IMDB_score)
 
         # Transform BoxOffice earnings attribute to int
-        curr_earnings = i[11]
+        curr_earnings = i[12]
         # print(i)
         # print(curr_earnings)
         if curr_earnings in ['N/A', 0]:
-            i[11] = None
+            i[12] = None
         else:
-            i[11] = int(curr_earnings.replace("$", "").replace(",", ""))
-        # print(i[10])
+            i[12] = int(curr_earnings.replace("$", "").replace(",", ""))
+        # print(i[11])
 
         # Transform runtime to int. NOTE: 'N/A' values in this field can
         # will result in an error, but these are helpful because they
         # seem to indicate that an incorrect record was pulled in the
         # OMDB request.
-        i[3] = int(i[3].replace(" min", ""))
+        i[4] = int(i[4].replace(" min", ""))
 
         # counter += 1
         # if counter <= 19:
@@ -257,9 +271,9 @@ def gnr8_omdb_abrvd_table(aCursor, omdb_abrvd_data):
 
     create_table_str = "CREATE TABLE IF NOT EXISTS " + table_name + "("
 
-    print(omdb_abrvd_data[0])
-    print(len(omdb_abrvd_data[0]))
-    col_names = ['Title', 'Year', 'OMDB_Release', 'Runtime',
+    # print(omdb_abrvd_data[0])
+    # print(len(omdb_abrvd_data[0]))
+    col_names = ['Movie_ID', 'Title', 'Year', 'OMDB_Release', 'Runtime',
                  'Genres', 'Directors', 'Writers', 'Actors',
                  'IMDB_Score', 'RT_Score', 'MetaC_Score', 'Earnings']
     num_cols = len(col_names)
@@ -267,7 +281,7 @@ def gnr8_omdb_abrvd_table(aCursor, omdb_abrvd_data):
         curr_attr = col_names[i]
         var_type = " varchar(80)"
 
-        if curr_attr in ['Runtime', 'Earnings']:
+        if curr_attr in ['Movie_ID', 'Runtime', 'Earnings']:
             var_type = ' int'
 
         if "Score" in curr_attr:
@@ -275,15 +289,17 @@ def gnr8_omdb_abrvd_table(aCursor, omdb_abrvd_data):
 
         create_table_str += curr_attr + var_type + ', '
 
-    create_table_str += ' PRIMARY KEY(Title, Year))'
+    create_table_str += ' PRIMARY KEY(Movie_ID))'
+    # print(create_table_str)
     aCursor.execute(create_table_str)
-    print(num_cols)
-    print(", ".join(['%s'] * num_cols))
+    # print(num_cols)
+    # print(", ".join(['%s'] * num_cols))
     arg_string = '(' + ", ".join(['%s'] * num_cols) + ')'
+    # print("INSERT INTO " + table_name + " VALUES " + arg_string)
     aCursor.executemany("INSERT INTO " + table_name + " VALUES " + arg_string, omdb_abrvd_data)
 
 
-mydb = mysql.connector.connect(
+mydb = pymysql.connect(
     host="localhost",
     user="root",
     password="yos",
