@@ -5,25 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f4c2f209-44a2-4bf1-a214-64648760519d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Movies/Movies 2024-01-28.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/allmovies.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ebert_add_to_cr.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ebert_ratings.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ebert_scraper.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ebert_search_scrape.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/letterboxd exporting.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/letterboxd_watchlist.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/letterboxd_watchlist2.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/repl_missing_metaC.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/search_scrape_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/(OLD) ebert_ratings.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.ipynb_checkpoints/Untitled-checkpoint.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Amending_CR_table.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Untitled.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/amend_CR_table.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/review_remedies.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reviewy_foldy/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reviewy_foldy/fill_in_RT.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reviewy_foldy/fill_in_metacritic.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reviewy_foldy/review_remedies.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reviewy_foldy/right_join_ebert.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Movies/Movies.html" beforeDir="false" afterPath="$PROJECT_DIR$/Movies/Movies.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ingestor_scratch.py" beforeDir="false" afterPath="$PROJECT_DIR$/ingestor_scratch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_list_ingestor.py" beforeDir="false" afterPath="$PROJECT_DIR$/movie_list_ingestor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_list_parsing.iml" beforeDir="false" afterPath="$PROJECT_DIR$/movie_list_parsing.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/omdb builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/omdb builder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pickled_OMDB_dicts.data" beforeDir="false" afterPath="$PROJECT_DIR$/pickled_OMDB_dicts.data" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pickled_OMDBs_abrvd.data" beforeDir="false" afterPath="$PROJECT_DIR$/pickled_OMDBs_abrvd.data" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/Amending_CR_table-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/Amending_CR_table-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Amending_CR_table.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Amending_CR_table.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ebert_add_to_cr.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ebert_ratings.csv" beforeDir="false" afterPath="$PROJECT_DIR$/ebert_ratings.csv" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,22 +56,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/maxru/projects&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.fileTypes&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "C:/Users/maxru/projects",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "configurable.group.build"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing\review_remedies" />
       <recent name="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing" />
       <recent name="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing\mysite" />
       <recent name="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing\Movies" />
