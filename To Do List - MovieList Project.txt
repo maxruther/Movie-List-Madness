@@ -4,17 +4,22 @@ Movie List Project
 
 Python:
 
-- The review_remedies need each be defined as functions rather than statements that will run upon import.
+- Function descriptions should be in triple-quotes for docustring functionality.
 
-- The Ebert file should be changed so that '-1' values are instead simply missing, or NA.
+- In movie_list_ingestor.py , add comments to the methods that generate SQL statements for the Evernote data.
+
+- Put SQL-statement generators in separate file, to be imported.
+
+- Have movie_list_ingestor.py run 'omdb builder.py', instead of running each them in sequence.
 
 - Recode OMDB_builder.py so that it only requests records for the newly added movies?
 
-- The SQL procedures can be defined in SQL scripts, but the Python script should handle the running of things.
+- Does the primary key need to be considered more intentionally?
+	- Might it be problematic for analysis that the Movie_ID s reindexed at every new processing of the watchlist?
+	
 
 
 
-- The Python ingestion script needs to run the getWatched() procedure. (Should be quick.)
 
 
 SQL:
@@ -25,12 +30,16 @@ SQL:
 
 DONE
 
+- The review_remedies need each be defined as functions rather than statements that will run upon import.
+- The Ebert file should be changed so that '-1' values are instead simply missing, or NA.
 - Refine the "Amending_CR_table" document so that it includes and explains the various processes that
   put the finishing touches on the critic_ratings table.
 - Add RT_Score amending for the critic_ratings table.
 
 - Request Developer token from Evernote
+- The Python ingestion script needs to run the getWatched() procedure. (Should be quick.)
 - Create a procedure that generates allUnwatched
+- The SQL procedures can be defined in SQL scripts, but the Python script should handle the running of things.
 - Consider aggregating unwatched movies from non-backburning tables into an allUnwatched
 	- Have the aggregating procedure assign 'priority rank' based on the 'og' source table.
 

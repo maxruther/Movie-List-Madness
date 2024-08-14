@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f4c2f209-44a2-4bf1-a214-64648760519d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/MovieList Analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/MovieList Analysis.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/To Do List - MovieList Project.txt" beforeDir="false" afterPath="$PROJECT_DIR$/To Do List - MovieList Project.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_list_ingestor.py" beforeDir="false" afterPath="$PROJECT_DIR$/movie_list_ingestor.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

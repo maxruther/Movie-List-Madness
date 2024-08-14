@@ -1,59 +1,53 @@
 from bs4 import BeautifulSoup
-# import mysql.connector
 import pymysql
 
 
 def evernote_2_3d_pylist(file_name):
-    # Here we read in the movie list HTML content, by using it to create a
-    # BeautifulSoup object.
+    # Reads in my movie list, which is exported from Evernote in HTML format.
+    # Uses BeautifulSoup to parse the content.
     with open(file_name, errors='ignore') as f:
         soup = BeautifulSoup(f, "html.parser")
 
-    # Here we read in the names of each of the tables, which are identified
-    # by their being 'h2' elements.
-    # NOTE: Any 'h2' headings in the Evernote movie list will be added as
-    # table headers, which could really mess things up.
+    # The movie list is composed of roughly a dozen tables, which variously
+    # represent anticipated films, specific genres, and favorite or
+    # nostalgic films.
+
+    # Reading in the names of each of the tables, which are identified
+    # by their being 'h2' elements. Each of these tables in the Evernote
+    # file will have a corresponding table in the MySQL database.
     table_names = []
     all_h2_headers = soup.find_all(name="h2")
-
-    # Removing first header, as it's the "In Theaters" header, which
-    # doesn't have a table associated.
-    # EDIT: NEVER MIND - I've deleted this "In Theaters" header.
-    # all_h2_headers.pop(0)
-
-    # The rest of the headers in this Evernote file are table names. Taking
-    # the text of these headers, reformatting them, then appending them to
-    # a list of table names.
     for header in all_h2_headers:
         header_name = header.text[0:-1].replace(" ", "_") + "_og"
         table_names.append(header_name)
 
-    # Reading in all of the tables.
+    # Next, read in the tables' entries.
 
-    # Data will be a 3D list. For each table, it will hold a corresponding 2D
-    # list.
+    # Storing this data in a 3D list, where each table is associated with
+    # a 2D-list of its entries.
     data = []
     table_ind = 0
+    # The movie_id will uniquely identify the movies. The first entry
+    # featured in the movie list HTML is always #1.
     movie_id = 1
     movie_dict = {}
     for table in soup.find_all("en-table"):
-        # Each table is read into a 2D list. The first 1D list contained will
-        # only contain the table's name, while the rest will hold the table's
-        # data.
-        # print(table_names, table_ind, sep='\n')
+        # Create a 2D list, where the first element is the table's name
         curr_table = [[table_names[table_ind]]]
         table_ind += 1
         row_num = 0
-        # Each row of the table is iterated through, where individual
-        # elements are indicated by <td> objects.
+        # Iterate through each row of the Evernote table (represented by
+        # <tr> elements) and also the cells of those rows (represented
+        # by <td> elements.
         for row in table.find_all("tr"):
             curr_row = []
             data_elements = row.find_all("td")
             for element in data_elements:
                 curr_elem = element.text
 
-                # This 'li_found' block handles the 'Watched' column intake,
-                # which is a checkbox value in Evernote.
+                # This 'li_found' block handles the 'Watched' attribute
+                # of the movie table, which is an interactive checkbox
+                # in Evernote.
                 li_found = element.find("li")
                 if li_found:
                     # If an <li> object shows 'True' for its 'data-checked'
@@ -68,29 +62,39 @@ def evernote_2_3d_pylist(file_name):
                 elif curr_elem == '':
                     curr_elem = "NULL"
 
-                # Following is some string handling. Values that contain
-                # a single-quote character are enclosed in double-quotes
-                # (and vice versa) for easy insertion into SQL tables.
+                # String elements that containing a single-quote
+                # character are enclosed in double-quotes (and vice
+                # versa) for easy insertion into SQL tables.
                 elif isinstance(curr_elem, str):
-                    if row_num > 0:
+                    # Column header strings are here reformatted, to better
+                    # serve as field names in SQL.
+                    if row_num == 0:
+                        curr_elem = curr_elem.replace(" ", "_")
+                        curr_elem = curr_elem.replace("Awesome?", "Rating")
+
+                    # Non-header string elements are here checked for
+                    # apostrophes. If apostrophes are present, then the
+                    # string is instead enclosed in double-quotes, for
+                    # the eventual SQL 'INSERT' statements.
+                    elif row_num > 0:
                         if "'" in curr_elem:
                             curr_elem = '"' + curr_elem + '"'
                         else:
                             curr_elem = "'" + curr_elem + "'"
 
-                    # Column header strings are here reformatted, to better
-                    # serve as field names in SQL.
-                    elif row_num == 0:
-                        curr_elem = curr_elem.replace(" ", "_")
-                        curr_elem = curr_elem.replace("Awesome?", "Rating")
-
-                # Having been prepped, the element is appended to the row's
-                # list, then that row is appended to the 2D table-list once
-                # complete.
+                # Appending the element to that row's list of data,
+                # which is ultimately appended to the 2D table-list upon
+                # completion.
                 curr_row.append(curr_elem)
             if row_num == 0:
+                # 'Movie_ID', an attribute generated by this process,
+                # is prepended to the table's list of native attributes.
                 curr_row = ['Movie_ID'] + curr_row
             else:
+                # Handle duplicate entries, which are numerous. If a
+                # combination of film title and director have already
+                # been processed, then that existing record is retrieved
+                # in place of the newly-ingested, duplicate record.
                 title_and_dir = curr_row[0] + curr_row[1]
                 if movie_dict.get(title_and_dir, -1) == -1:
                     curr_row = [movie_id] + curr_row
@@ -102,95 +106,107 @@ def evernote_2_3d_pylist(file_name):
             curr_table.append(curr_row.copy())
             row_num += 1
 
-        # A copy of that table's data is then appended to the Data list.
+        # A copy of the table's data is then appended to the master list
+        # of table data, 'data'.
         data.append(curr_table.copy())
 
     return data
 
 
-# Clearing and deleting an existing table
-def delete_from_table_stmt(k, data):
-    table_name = data[k][0][0]
-    delete_table_str = "DELETE FROM " + table_name
-    return delete_table_str
-
-
-# Dropping a table if it exists
 def drop_table_stmt(k, data):
+    # DELETES a table from the MySQL db, given the Evernote data and
+    # the table's index therein.
     table_name = data[k][0][0]
     drop_table_str = "DROP TABLE IF EXISTS " + table_name
     return drop_table_str
 
 
-# Creating a table
 def create_table_stmt(k, data):
+    # CREATES a table from the MySQL db, given the Evernote data and
+    # the table's index therein.
     table_name = data[k][0][0]
+
+    # Create list of attributes from the Evernote table header.
     table_attrs = []
     for attr in data[k][1]:
         table_attrs.append(attr)
 
-    num_attrs = len(table_attrs)
+    attr_count = len(table_attrs)
     create_table_str = "CREATE TABLE IF NOT EXISTS " + table_name + "("
 
     # Collecting the tables attributes into a list of strings
-    crt_tbl_attrs = []
-    for i in range(num_attrs):
+    attr_declarations = []
+    for i in range(attr_count):
         curr_attr = table_attrs[i]
-        var_type = " varchar(80)"
+        attr_type = " varchar(80)"
 
         if curr_attr in ["Watched", "Movie_ID"]:
-            var_type = " int"
+            attr_type = " int"
         elif "Date" in curr_attr:
-            var_type = " date"
+            attr_type = " date"
 
-        crt_tbl_attrs.append(curr_attr + var_type + ", ")
+        attr_declarations.append(curr_attr + attr_type + ", ")
 
-    crt_tbl_attrs.append("native_ordering int NOT NULL UNIQUE)")
+    attr_declarations.append("native_ordering int NOT NULL UNIQUE)")
 
     # Construct the "CREATE TABLE" statement, though it lacks constraints.
-    for i in crt_tbl_attrs:
+    for i in attr_declarations:
         create_table_str += i
 
-    # Adding constraints as necessary
+    # Adding table-specific constraints (in SQL)
     constraint_strings = []
+
+    # Make 'Movie_ID' a primary key.
     if "Movie_ID" in table_attrs:
         constraint_strings.append("PRIMARY KEY (Movie_ID)")
+
+    # Make 'Watched' and 'Watched_in_theater' binary by constraining
+    # them to 0 and 1.
     if "Watched" in table_attrs:
         constraint_strings.append("CHECK (Watched in (0, 1))")
     if "Watched_in_theater" in table_attrs:
         constraint_strings.append("CHECK (Watched_in_theater in (0, 1))")
+
+    # When multiple constraints apply, handle statement's formatting
     if len(constraint_strings) > 0:
         total_constraint_str = ", ".join(constraint_strings)
         total_constraint_str = total_constraint_str + ")"
         create_table_str = create_table_str[:-1] + ", " + total_constraint_str
 
-    # print(create_table_str)
     return create_table_str
 
 
-def table_insert_queries(k):
+def table_insert_queries(k, the_data):
+    # Returns a list of SQL 'INSERT' statements for each entry of an
+    # Evernote table, given the Evernote data and the table's index
+    # therein.
     insert_stmts = []
-    native_index = 1
-    for i in range(2, len(ingested_movie_data[k])):
-        ins_vals_str = "INSERT INTO " + ingested_movie_data[k][0][0] + " VALUES("
-        if i < 2:
-            continue
-        vals = ingested_movie_data[k][i]
 
-        # print(data[k])
-        # for val in vals:
+    # An attribute 'Native Ordering' will track the entries' original
+    # ordering within the Evernote table. native_index populates this.
+    native_index = 1
+
+    table = the_data[k]
+    # Iterate through the table's entries (skipping its name and header)
+    for i in range(2, len(table)):
+        ins_vals_str = "INSERT INTO " + table[0][0] + " VALUES("
+
+        vals = table[i]
         for l in range(len(vals)):
             val = vals[l]
 
-            # Checking if it's a date, then replacing "/" chars if so.
+            # Handling date values
             date_test_val = str(val).replace("/", "").replace("'", "")
-            if "Date" in ingested_movie_data[k][1][l] and "NULL" not in date_test_val:
+            if "Date" in table[1][l] and "NULL" not in date_test_val:
                 # if date_test_val.isnumeric() and len(date_test_val) > 1:
                 the_date = val.replace("'", "").split("/")
-                # print(the_date)
+
+                # Parse the date
                 mon = the_date[0]
                 day = the_date[1]
                 yr = the_date[2]
+
+                # Infer century, when it isn't provided.
                 if len(yr) < 4:
                     if 50 <= int(yr) <= 99:
                         yr = "19" + yr
@@ -198,8 +214,11 @@ def table_insert_queries(k):
                         yr = "20" + yr
                 val = "'" + yr + "-" + mon + "-" + day + "'"
 
+            # If there are more values to process, add a separator of
+            # ', ' to the SQL-Insert string.
             if l < len(vals) - 1:
                 ins_vals_str += str(val) + ", "
+            # Add 'native index/ordering' to the end of the record.
             else:
                 ins_vals_str += str(val) + ", " + str(native_index) + ")"
                 native_index += 1
@@ -209,25 +228,51 @@ def table_insert_queries(k):
 
 
 def recreate_tables_with_data(the_data, a_cursor, a_DB):
-    # Recreating and loading up the various tables
-    for i in range(len(the_data)):
+    # In the MySQL db, creates all movie tables from scratch, from the
+    # Evernote file.
+    # NOTE: Existing MySQL tables are DELETED & RECREATED if they share
+    # a name with an Evernote table. This is not a process that appends
+    # or updates existing MySQL tables.
+
+    # Every table in the Evernote data, as processed from file by
+    # 'evernote_2_3d_pylist()', is created from scratch.
+    table_count = len(the_data)
+    for i in range(table_count):
+        # Delete the existing table in MySQL if it shares this Evernote
+        # table's name.
         a_cursor.execute(drop_table_stmt(i, the_data))
-        # If an Evernote table has unnamed columns, it will cause errors
-        # here.
+
+        # Create a table in MySQL for this Evernote table.
+        #
+        # ERROR NOTE: If an Evernote table has unnamed columns, errors
+        # will here arise.
         # print(create_table_stmt(i, the_data))
         a_cursor.execute(create_table_stmt(i, the_data))
 
-        for k in table_insert_queries(i):
+        # Insert a row for each of this table's movie records.
+        for k in table_insert_queries(i, the_data):
             # print("CURR INS STATEMENT: " + k)
             a_cursor.execute(k)
 
+    # Once all the tables are read in, a few more MySQL tables are
+    # generated by SQL procedures that I've defined in advance.
+
+    # Create table 'allunwatched', containing all movies that I've yet
+    # to watch.
     a_cursor.callproc('generateUnwatched')
+
+    # Create table 'allwatched', containing all the listed movies that I
+    # have watched.
     a_cursor.callproc('generateWatched')
+
+    # Create table 'allmovies', which simply contains all movie records,
+    # regardless of whether they're of ones I've yet watched.
     a_cursor.callproc('generateAllMovies')
 
     a_DB.commit()
 
 
+# Connect to my MySQL movie database
 mydb = pymysql.connect(
     host="localhost",
     user="root",
@@ -235,11 +280,14 @@ mydb = pymysql.connect(
     database="movieDB"
 )
 
+# Create a cursor for this database
 myCursor = mydb.cursor()
 
+# Read in the movie list data from the Evernote-exported HTML file.
 movieFile = "Movies\\Movies.html"
 ingested_movie_data = evernote_2_3d_pylist(movieFile)
 
+# Regenerate tables in MySQL from the read-in movie list data.
 recreate_tables_with_data(ingested_movie_data, myCursor, mydb)
 
 mydb.commit()
