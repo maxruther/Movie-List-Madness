@@ -1,7 +1,11 @@
 USE movieDB;
 
 
-# Create the table of watched movies, 'allwatched'.
+# Create the table of watched movies, 'allwatched'
+
+# NOTE: This procedure ERRORS if there are existing tables with '_og' in their 
+# name that don't correspond to a table in the Evernote movie list.
+# (This issue was encountered on 8-14-2024)
 
 DROP PROCEDURE IF EXISTS generateWatched;
 DELIMITER //
@@ -43,9 +47,9 @@ BEGIN
                 
         SET @table = curr_table;
         IF @table LIKE '%backburning%' THEN
-			SET @b = CONCAT('INSERT INTO allWatched SELECT movie_id, title, year, release_date, director, watched, 0, rating, date_watched, native_ordering FROM ', @table, ' WHERE Watched = 1 AND CONCAT(Title,Director) NOT IN (SELECT CONCAT(Title,Director) FROM allWatched)');
+			SET @b = CONCAT('INSERT INTO allWatched SELECT movie_id, title, year, release_date, director, watched, 0, rating, date_watched, native_ordering FROM ', @table, ' WHERE Watched = 1 AND movie_id NOT IN (SELECT movie_id FROM allWatched)');
 		ELSE
-			SET @b = CONCAT('INSERT INTO allWatched SELECT movie_id, title, year, release_date, director, watched, Watched_in_theater, rating, date_watched, native_ordering FROM ', @table, ' WHERE Watched = 1 AND CONCAT(Title,Director) NOT IN (SELECT CONCAT(Title,Director) FROM allWatched)');
+			SET @b = CONCAT('INSERT INTO allWatched SELECT movie_id, title, year, release_date, director, watched, Watched_in_theater, rating, date_watched, native_ordering FROM ', @table, ' WHERE Watched = 1 AND movie_id NOT IN (SELECT movie_id FROM allWatched)');
 		END IF;
         PREPARE getWatched FROM @b;
 		EXECUTE getWatched;
@@ -56,6 +60,10 @@ DELIMITER ;
 
 
 # Create the table of unwatched movies, 'allunwatched'.
+
+# NOTE: This procedure ERRORS if there are existing tables with '_og' in their 
+# name that don't correspond to a table in the Evernote movie list.
+# (This issue was encountered on 8-14-2024)
 
 DROP PROCEDURE IF EXISTS generateUnwatched;
 
@@ -115,7 +123,7 @@ BEGIN
 			SET p_rank = 3;
 		END IF;
         
-		SET @b = CONCAT('INSERT INTO allUnwatched SELECT movie_id, title, year, release_date, director, watched, rating, date_watched, ', p_rank, ', native_ordering FROM ', @table, ' WHERE Watched = 0 AND CONCAT(Title,Director) NOT IN (SELECT CONCAT(Title,Director) FROM allUnwatched)');
+		SET @b = CONCAT('INSERT INTO allUnwatched SELECT movie_id, title, year, release_date, director, watched, rating, date_watched, ', p_rank, ', native_ordering FROM ', @table, ' WHERE Watched = 0 AND movie_id NOT IN (SELECT movie_id FROM allWatched)');
 		PREPARE getUnwatched FROM @b;
 		EXECUTE getUnwatched;
 	END LOOP;

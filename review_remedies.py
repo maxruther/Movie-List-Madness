@@ -1,40 +1,59 @@
 import pandas as pd
 from sqlalchemy import create_engine
+from typing import Self
 
-class remedyReviewTable:
+
+class ReviewTableMender:
     """Puts the finishing touches on the critic_ratings table
     by 1) filling in missing Metacritic and Rotten Tomatoes
     reviews and 2) adding the Ebert ratings (from file.)"""
-    def __init__(self, db_path):
+
+    def __init__(self, db_path: str) -> None:
+        self.isConnected = False
+        self.conn = None
+        self.engine = None
         self.db_path = db_path
-    
-    def connect_to_db(self):
+
+    def set_db_path(self, db_path: str) -> None:
+        self.db_path = db_path
+
+    def connect_to_db(self) -> None:
         self.engine = create_engine('mysql://root:yos@localhost/moviedb')
         self.conn = self.engine.connect()
+        self.isConnected = True
 
-    def disconnect_from_db(self):
+    def disconnect_from_db(self) -> None:
         self.engine.dispose()
         self.conn.close()
+        self.isConnected = False
 
-    def fill_in_metacritic(self):
-        # Querying the missing Metacritic reviews from the critic_ratings table
-        query = """SELECT Movie_ID, Title FROM 
-        (SELECT c.Movie_ID, c.Title, c.Year, c.MetaC_Score, a.Release_Date 
-        FROM critic_ratings c INNER JOIN allmovies a 
-        ON c.Title=a.Title 
-        WHERE c.MetaC_Score IS NULL
-        ORDER BY a.Release_Date ASC) AS tt;"""
+    def fill_in_metacritic(self) -> Self:
+        """Fills in some missing Metacritic scores by applying a
+        mapping. (Also contains functionality to identify such missing
+        scores and print out a mapping formatted for user entry.)"""
 
-        review_df = pd.read_sql_query(query, self.engine, index_col='Movie_ID')
+        # Functionality for querying films with missing scores and
+        # printing a map that's formatted for user-entry.
+        """# Querying the missing Metacritic reviews from the 
+        # critic_ratings table
+        query = 'SELECT Movie_ID, Title FROM (SELECT c.Movie_ID, ' \
+                'c.Title, c.Year, c.MetaC_Score, a.Release_Date ' \
+                'FROM critic_ratings c ' \
+                'INNER JOIN allmovies a ON c.Title=a.Title ' \
+                'WHERE c.MetaC_Score IS NULL ' \
+                'ORDER BY a.Release_Date ASC) AS tt;'
+
+        review_df = pd.read_sql_query(query, self.engine,
+                                      index_col='Movie_ID')
         # print(review_df)
 
-        # # Print the film titles in the format of a python dict literal,
-        # # ready for my manual data entry.
-        # for i in review_df.values:
-        #     print(f'"{i[0]}": ,')
+        # Print the film titles in the format of a python dict literal,
+        # ready for my manual data entry.
+        for i in review_df.values:
+            print(f'"{i[0]}": ,')"""
 
         # Map for the missing reviews
-        metaC_mapping = {
+        metacritic_mapping = {
             # These first several films lack metacritic reviews,
             # and are unlikely to ever get them.
             # "The Ascent": ,
@@ -84,32 +103,40 @@ class remedyReviewTable:
         # Import the critic_ratings table, as it is in the MySQL db, into a df.
         query = "SELECT * FROM critic_ratings"
         cr_df = pd.read_sql_query(query, self.engine, index_col='Movie_ID')
-        # print(cr_df.head(5))
 
         # Apply the mapping to the missing reviews.
-        cr_df['MetaC_Score'] = cr_df['MetaC_Score'].fillna(cr_df['Title'].map(metaC_mapping))
-        # print(cr_df.head(5))
+        cr_df['MetaC_Score'] = cr_df['MetaC_Score'].fillna(
+            cr_df['Title'].map(metacritic_mapping)
+        )
 
-        # Load this amended table to the MySQL db, replacing the preexisting one.
-        cr_df.to_sql('critic_ratings', self.engine, if_exists='replace', index=True)
+        # Load this amended table to the MySQL db, replacing the
+        # preexisting one.
+        cr_df.to_sql('critic_ratings', self.engine,
+                     if_exists='replace', index=True)
 
         return self
 
-    def fill_in_RT(self):
-        # Query the missing RT reviews from the critic_ratings table
-        query = """SELECT Movie_ID, Title FROM
-        (SELECT c.Movie_ID, c.Title, c.Year, c.RT_Score, a.Release_Date 
-        FROM critic_ratings c INNER JOIN allmovies a ON c.Title=a.Title
-        WHERE c.RT_Score IS NULL
-        ORDER BY a.Release_Date ASC) AS tt;"""
+    def fill_in_RT(self) -> Self:
+        """Fills in some missing RottenTomatoes scores by applying a
+        mapping. (Also contains functionality to identify such missing
+        scores and print out a mapping formatted for user entry.)"""
 
-        missing_RT_df = pd.read_sql_query(query, self.engine, index_col='Movie_ID')
-        # print(missing_RT_df)
+        # (Commented-out) functionality for querying films with missing
+        # scores and printing a map that's formatted for user-entry.
+        """# Query the missing RT reviews from the critic_ratings table
+        query = 'SELECT Movie_ID, Title FROM ' \
+                '(SELECT c.Movie_ID, c.Title, c.Year, c.RT_Score, a.Release_Date' \
+                ' FROM critic_ratings c INNER JOIN allmovies a ON c.Title=a.Title' \
+                'WHERE c.RT_Score IS NULL ' \
+                'ORDER BY a.Release_Date ASC) AS tt;'
 
-        # # Print the film titles in the format of a python dict literal,
-        # # ready for my manual data entry.
-        # for i in missing_RT_df.values:
-        #     print(f'"{i[0]}": ,')
+        missing_RT_df = pd.read_sql_query(query, self.engine,
+                                          index_col='Movie_ID')
+
+        # Print the film titles in the format of a python dict literal,
+        # ready for my manual data entry.
+        for i in missing_RT_df.values:
+            print(f'"{i[0]}": ,')"""
 
         # Creating the mapping for the missing reviews
         RT_mapping = {
@@ -140,8 +167,13 @@ class remedyReviewTable:
         cr_df.to_sql('critic_ratings', self.engine, if_exists='replace', index=True)
 
         return self
-    
-    def right_join_ebert(self):
+
+    def right_join_ebert(self,
+                         ebert_filepath: str = None,
+                         ) -> Self:
+        """Read in the ebert_ratings.csv and right-join it to the
+        critics_ratings table."""
+
         # Connect the SQLAlchemy engine to my local MySQL movie database
         self.engine = create_engine('mysql://root:yos@localhost/moviedb')
         conn = self.engine.connect()
@@ -152,18 +184,21 @@ class remedyReviewTable:
         # print(cr_df.head(5))
 
         # Read in the Ebert ratings from file
-        ebert_df = pd.read_csv('ebert_ratings.csv', index_col='Movie_ID')
+        if ebert_filepath:
+            ebert_df = pd.read_csv(ebert_filepath, index_col='Movie_ID')
+        else:
+            ebert_df = pd.read_csv('ebert_ratings.csv', index_col='Movie_ID')
+
+        # Change 'Year' attribute's type to string (from int).
         ebert_df['Year'] = ebert_df['Year'].astype(str)
-        # print(ebert_df.head(5))
 
         # Join the Ebert ratings onto the critic_ratings df
-        cr_plus_ebert_df = cr_df.merge(ebert_df, how='left', on=['Title','Year'])
-        cr_plus_ebert_df.index = range(1, len(cr_plus_ebert_df)+1)
+        cr_plus_ebert_df = cr_df.merge(ebert_df, how='left', on=['Title', 'Year'])
+        cr_plus_ebert_df.index = range(1, len(cr_plus_ebert_df) + 1)
         cr_plus_ebert_df.index.names = ['Movie_ID']
-        # print(cr_plus_ebert_df.head(5))
 
         # Load this amended table to the MySQL db, replacing the preexisting one.
         cr_plus_ebert_df.to_sql('critic_ratings', self.engine, if_exists='replace',
                                 index=True)
-        
+
         return self

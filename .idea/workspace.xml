@@ -5,9 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f4c2f209-44a2-4bf1-a214-64648760519d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/ReadInEvernote.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SQLStatingMovieData.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/omdb_builder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/recreate_movie_list_db.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scratch.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieList - SQL Proc Definitions.sql" beforeDir="false" afterPath="$PROJECT_DIR$/MovieList - SQL Proc Definitions.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Movies/Movies.html" beforeDir="false" afterPath="$PROJECT_DIR$/Movies/Movies.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/To Do List - MovieList Project.txt" beforeDir="false" afterPath="$PROJECT_DIR$/To Do List - MovieList Project.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/amend_CR_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/amend_CR_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/letterboxd exporting.sql" beforeDir="false" afterPath="$PROJECT_DIR$/letterboxd exporting.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/movie_list_ingestor.py" beforeDir="false" afterPath="$PROJECT_DIR$/movie_list_ingestor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/omdb builder.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pickled_OMDB_dicts.data" beforeDir="false" afterPath="$PROJECT_DIR$/pickled_OMDB_dicts.data" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pickled_OMDBs_abrvd.data" beforeDir="false" afterPath="$PROJECT_DIR$/pickled_OMDBs_abrvd.data" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/review_remedies.py" beforeDir="false" afterPath="$PROJECT_DIR$/review_remedies.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +142,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="omdb builder (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="omdb_builder" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="movie_list_parsing" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -141,7 +154,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/omdb builder.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing\omdb_builder.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -150,7 +163,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="omdb builder" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="omdb_builder" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="movie_list_parsing" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -162,7 +175,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing\omdb builder.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing\omdb_builder.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -194,10 +207,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.omdb builder (1)" />
+        <item itemvalue="Python.omdb_builder" />
+        <item itemvalue="Python.omdb_builder" />
         <item itemvalue="Python.ingestor_scratch" />
         <item itemvalue="Python.views" />
-        <item itemvalue="Python.omdb builder" />
         <item itemvalue="Python.newtutorial" />
       </list>
     </recent_temporary>
