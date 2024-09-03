@@ -388,9 +388,9 @@ def prepare_data_omdb(omdb_data: List[List[str |
                 mc_score = mc_score.split('/')[0]
                 mc_score = round((float(mc_score) / 100), 2)
 
-        i[9] = mc_score
+        i[9] = imdb_score
         i.insert(10, rt_score)
-        i.insert(11, imdb_score)
+        i.insert(11, mc_score)
 
         # Transform BoxOffice earnings attribute to int
         curr_earnings = i[12]
@@ -480,35 +480,25 @@ def gnr8_table_from_omdb_data(table_name: str,
         gnr8_table_critic_ratings(cursor, prepped_ratings_data)
 
 
-mydb = pymysql.connect(
-    host="localhost",
-    user="root",
-    password="yos",
-    database="movieDB"
-)
+def create_omdb_tables(omdb_load_method: str,
+                       db: pymysql.connections.Connection,
+                       which_table: str='all'
+                       ) -> None:
+    """Gets OMDB data for the movies in the 'allmovies' MySQL table,
+    then creates the OMDB-related tables in that same db. (These include
+    'omdb', 'genres', and 'critic_ratings'.)"""
 
-aCursor = mydb.cursor()
+    # Create a cursor from the db.
+    cursor = db.cursor()
 
-"""Read in the OMDB data, largely unprocessed, by requesting through
-their API or by loading from file the previous requests."""
-omdb_records = get_omdb_data('request from OMDB', aCursor)
-# omdb_records = get_omdb_data('load from file')
+    # Read in the OMDB data, largely unprocessed, by requesting through
+    # their API or by loading from file the previous requests.
+    omdb_records = get_omdb_data(omdb_load_method, cursor)
 
+    # Create the OMDB-related tables in the MySQL db. At time of writing
+    # these include 'omdb', 'genres', and 'critic_ratings'. Create all
+    # these by specifying 'all'.
+    gnr8_table_from_omdb_data(which_table, cursor, omdb_records)
 
-"""Create the OMDB-related tables in the MySQL db. At time of writing
-these include 'omdb', 'genres', and 'critic_ratings'."""
-gnr8_table_from_omdb_data('all', aCursor, omdb_records)
-
-# omdb_recs_processed = prepare_data_omdb(omdb_records)
-# gnr8_table_omdb(aCursor, omdb_recs_processed)
-#
-# genre_data = prepare_data_genre(omdb_records)
-# gnr8_table_genre(aCursor, genre_data)
-#
-# review_data = prepare_data_ratings(omdb_records)
-# gnr8_table_critic_ratings(aCursor, review_data)
-
-"""Commit the changes to the db, then close the cursor and connection."""
-mydb.commit()
-aCursor.close()
-mydb.close()
+    # Commit the changes to the db.
+    db.commit()

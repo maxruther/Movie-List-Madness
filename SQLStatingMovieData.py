@@ -184,15 +184,15 @@ def drop_old_og_tables(data: list[list[str | list[str | int]]],
     return True
 
 
-def recreate_tables_with_data(data: list[list[str | list[str | int]]],
-                              cursor: pymysql.cursors.Cursor,
-                              db: pymysql.connections.Connection,
-                              ) -> None:
+def recreate_tables_with_data(data: list[list[str | list[str | int]]], db: pymysql.connections.Connection) -> None:
     """In the MySQL db, creates all movie tables from scratch, from the
     Evernote file.
     NOTE: Existing MySQL tables are DELETED & RECREATED if they share
     a name with an Evernote table. This is not a process that appends
     or updates existing MySQL tables."""
+
+    # Create cursor from the db connection
+    cursor = db.cursor()
 
     # This process drops all existing tables before recreating them. In
     # order to do so, the OMDB-related tables must be dropped first, as
