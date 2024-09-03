@@ -123,7 +123,8 @@ class ReviewTableMender:
 
         # (Commented-out) functionality for querying films with missing
         # scores and printing a map that's formatted for user-entry.
-        """# Query the missing RT reviews from the critic_ratings table
+        """
+        # Query the missing RT reviews from the critic_ratings table
         query = 'SELECT Movie_ID, Title FROM ' \
                 '(SELECT c.Movie_ID, c.Title, c.Year, c.RT_Score, a.Release_Date' \
                 ' FROM critic_ratings c INNER JOIN allmovies a ON c.Title=a.Title' \
@@ -136,7 +137,8 @@ class ReviewTableMender:
         # Print the film titles in the format of a python dict literal,
         # ready for my manual data entry.
         for i in missing_RT_df.values:
-            print(f'"{i[0]}": ,')"""
+            print(f'"{i[0]}": ,')
+        """
 
         # Creating the mapping for the missing reviews
         RT_mapping = {
@@ -187,7 +189,7 @@ class ReviewTableMender:
         if ebert_filepath:
             ebert_df = pd.read_csv(ebert_filepath, index_col='Movie_ID')
         else:
-            ebert_df = pd.read_csv('ebert_ratings.csv', index_col='Movie_ID')
+            ebert_df = pd.read_csv('data/ebert_ratings.csv', index_col='Movie_ID')
 
         # Change 'Year' attribute's type to string (from int).
         ebert_df['Year'] = ebert_df['Year'].astype(str)

@@ -5,15 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f4c2f209-44a2-4bf1-a214-64648760519d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/data/ebert_ratings.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/watch_df_1.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/watch_df_2.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/update_movie_list_db.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Movies/Movies.html" beforeDir="false" afterPath="$PROJECT_DIR$/Movies/Movies.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SQLStatingMovieData.py" beforeDir="false" afterPath="$PROJECT_DIR$/SQLStatingMovieData.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/amend_CR_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/amend_CR_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/Adding Genre for DT-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/Adding Genre for DT-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/Amending_CR_table-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/Amending_CR_table-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/MovieList Analysis-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/MovieList Analysis-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Adding Genre for DT.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Adding Genre for DT.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Amending_CR_table.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Amending_CR_table.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieList Analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/MovieList Analysis.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/To Do List - MovieList Project.txt" beforeDir="false" afterPath="$PROJECT_DIR$/To Do List - MovieList Project.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ebert_ratings.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/movie_list_ingestor.py" beforeDir="false" afterPath="$PROJECT_DIR$/movie_list_ingestor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/omdb_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/omdb_builder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pickled_OMDB_dicts.data" beforeDir="false" afterPath="$PROJECT_DIR$/pickled_OMDB_dicts.data" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pickled_OMDBs_abrvd.data" beforeDir="false" afterPath="$PROJECT_DIR$/pickled_OMDBs_abrvd.data" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/recreate_movie_list_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/recreate_movie_list_db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/review_remedies.py" beforeDir="false" afterPath="$PROJECT_DIR$/review_remedies.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/watch_df_1.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/watch_df_2.csv" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -4,9 +4,9 @@ Movie List Project
 
 TO DO:
 
-- Have movie_list_ingestor.py run 'omdb builder.py', instead of running each them in sequence.
+- Creating programs that act as updating the db, rather than regenerating it from scratch. Then code the 'regenerate from scratch' process to mandate fresh requesting through OMDB API.
 
-- Also have movie_list_ingestor.py run 'amend_CR_table.py' following the running of 'omdb builder.py'.
+- Switch from pymysql to SQLAlchemy, throughout the program?
 
 - SQL-Constrain rating fields to decimals between 0 and 1, inclusive? (SQL & 'omdb builder.py')
 
@@ -34,6 +34,12 @@ SQL:
 
 DONE
 
+- Added checks to help ensure against discrepancies between the keys of the added and loaded movie records. Done to address this situation: "When a new movielist with added movies is processed by movie_list_ingestor, but the omdb_builder method doesn't request new OMDB records through the API, there will be INCONGRUITY BETWEEN THE TABLES' KEYS."
+
+9/3/24
+
+
+- Script 'recreate_movie_list_db.py' now runs the following scripts' main methods, in proper sequence: movie_list_ingestor.py, omdb_builder.py, and amend_CR_table.py .
 - Rename 'omdb_abrvd' table to 'omdb' ?
 - The "gnr8_2d_data_genre" method should simply make the attributes/header the first row in the data
   it returns. Then the "gnr8_table" methods should simply reference that first row when constructing

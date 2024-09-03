@@ -119,11 +119,6 @@ SELECT * FROM omdb_abrvd;
 SELECT * FROM allmovies;
  SELECT * FROM allunwatched ORDER BY Movie_ID;
  
- CREATE TABLE IF NOT EXISTS KissMyDick_og(
- ID int
- );
- INSERT INTO KissMyDick_og VALUES (1);
- SELECT * FROM KissMyDick_og;
  
  SELECT * FROM frontburners_og;
  
@@ -153,3 +148,23 @@ DROP TABLE IF EXISTS allwatched;
 DROP TABLE IF EXISTS allunwatched;
 
 SELECT * FROM critic_ratings;
+SELECT * FROM allmovsgenres;
+SELECT * FROM auth_group_permissions;
+SELECT * FROM genres;
+
+
+use moviedb;
+
+
+DROP TABLE omdb_abrvd;
+DROP TABLE allmovsgenres;
+SELECT * FROM critic_ratings WHERE movie_id IN (94, 95);
+SELECT * FROM comedies_og ORDER BY native_ordering;
+SELECT * FROM omdb ORDER BY MetaC_Score DESC;
+
+SELECT * FROM critic_ratings ORDER BY MetaC_Score DESC;
+SELECT * FROM comedies_og ORDER BY native_ordering ASC;
+SELECT * FROM omdb where Movie_ID = 94;
+
+SELECT * FROM allmovies WHERE Movie_ID = 94;
+SELECT * FROM omdb WHERE Movie_ID = 94;
