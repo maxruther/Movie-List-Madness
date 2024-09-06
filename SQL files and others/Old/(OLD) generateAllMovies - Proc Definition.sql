@@ -9,7 +9,7 @@ BEGIN
     
     DROP TABLE IF EXISTS allMovies;
     CREATE TABLE IF NOT EXISTS allMovies(
-		movie_id int,
+		Movie_ID int,
 		Title varchar(40),
         Year varchar(40),
 		Release_Date date,

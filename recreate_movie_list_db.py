@@ -16,8 +16,8 @@ mydb = pymysql.connect(
 movieFile = "Movies\\Movies.html"
 
 evernote_to_mysql(movieFile, mydb)
-create_omdb_tables('load from file', mydb)
-# create_omdb_tables('request from OMDB', mydb)
+# create_omdb_tables('load from file', mydb)
+create_omdb_tables('request from OMDB', mydb)
 
 mydb.close()
 

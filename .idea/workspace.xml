@@ -5,27 +5,53 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f4c2f209-44a2-4bf1-a214-64648760519d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/data/ebert_ratings.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/watch_df_1.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/watch_df_2.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/update_movie_list_db.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jupyter HTMLs/Amending_CR_table.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Misc/Movies.enex" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Misc/To Do List - MovieList Project.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Misc/ingestor_scratch.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Movies/Movies 2023-12-03.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SQL files and others/Old/(OLD) generateAllMovies - Proc Definition.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SQL files and others/Old/(OLD) generateUnwatched - Proc Definition.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SQL files and others/Old/(OLD) generateWatched - Proc Definition.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SQL files and others/SQL Proc Definitions - MovieList.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SQL files and others/Scratch 1.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SQL files and others/Scratch 2.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/old/(OLD) allmovies.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/old/(OLD) ebert_ratings.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pickled_OMDB_3D_list.data" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pickled_OMDB_dicts.data" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/Adding Genre for DT-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/Adding Genre for DT-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/Amending_CR_table-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/Amending_CR_table-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/MovieList Analysis-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/MovieList Analysis-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Adding Genre for DT.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Adding Genre for DT.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Amending_CR_table.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Amending_CR_table.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MovieList Analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/MovieList Analysis.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/To Do List - MovieList Project.txt" beforeDir="false" afterPath="$PROJECT_DIR$/To Do List - MovieList Project.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ebert_ratings.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_list_ingestor.py" beforeDir="false" afterPath="$PROJECT_DIR$/movie_list_ingestor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Amending_CR_table.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Letterboxd - exporting to/letterboxd exporting.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Letterboxd - exporting to/letterboxd exporting.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieList - SQL Proc Definitions.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Movie_List_Project-Scratch.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SE 450 - asst 3 - MySQL server.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/Movie_List_Project-Scratch.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/Movies.enex" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/Scratch - Unwatched Priority rank.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/To Do List - MovieList Project.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/generateUnwatched - Proc Definition.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/generateWatched - Proc Definition.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/To Do List - MovieList Project.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/(OLD) allmovies.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/(OLD) ebert_ratings.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ebert_scraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/ebert_scrape_by_inf_scroll.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ebert_search_scrape.py" beforeDir="false" afterPath="$PROJECT_DIR$/ebert_scrape_by_googling.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faves.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generateAllMovies - Proc Definition.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generateUnwatched - Proc Definition.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generateWatched - Proc Definition.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ingestor_scratch.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_code.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/omdb_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/omdb_builder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pickled_OMDB_dicts.data" beforeDir="false" afterPath="$PROJECT_DIR$/pickled_OMDB_dicts.data" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pickled_OMDBs_abrvd.data" beforeDir="false" afterPath="$PROJECT_DIR$/pickled_OMDBs_abrvd.data" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pickled_OMDB_dicts.data" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pickled_OMDBs_abrvd.data" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/recreate_movie_list_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/recreate_movie_list_db.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/review_remedies.py" beforeDir="false" afterPath="$PROJECT_DIR$/review_remedies.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/watch_df_1.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/watch_df_2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scratch.py" beforeDir="false" afterPath="$PROJECT_DIR$/scratch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.ui" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tutorial4.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +65,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="UML Sequence" />
+        <option value="UML Class" />
         <option value="Python Script" />
       </list>
     </option>
@@ -60,21 +88,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/maxru/projects&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.build&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "DefaultPlantUmlFileTemplate": "UML Class",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "C:/Users/maxru/projects",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing\review_remedies" />
@@ -84,6 +113,40 @@
     </key>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="review_remedies" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="review_remedies" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="review_remedies" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="ingestor_scratch" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="movie_list_parsing" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -208,6 +271,35 @@
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <module name="review_remedies" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <module name="review_remedies" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
       <method v="2" />
     </configuration>
     <recent_temporary>

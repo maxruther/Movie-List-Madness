@@ -10,14 +10,16 @@ BEGIN
     DECLARE table_cnt INT;
     DECLARE counter INT;
     DECLARE p_rank int;
-    DECLARE cur1 CURSOR FOR SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = "moviedb" AND TABLE_NAME LIKE "%_og";
+    DECLARE cur1 CURSOR FOR SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = "moviedb" and TABLE_NAME LIKE "%\_og";
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
     
-    SET table_cnt = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = "moviedb");
+    SET table_cnt = (SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = "moviedb"  and TABLE_NAME LIKE "%\_og");
     
     DROP TABLE IF EXISTS allUnwatched;
 	CREATE TABLE IF NOT EXISTS allUnwatched(
+		Movie_ID int,
 		Title varchar(40),
+        Year varchar(40),
 		Release_Date date,
 		Director varchar(40),
 		Watched int,
@@ -26,7 +28,7 @@ BEGIN
         Priority int,
 		native_ordering int NOT NULL,
 		
-		PRIMARY KEY (Title, Director),
+		PRIMARY KEY (movie_id),
 		CHECK (Watched in (0, 1))
 	);
     
@@ -56,7 +58,7 @@ BEGIN
 			SET p_rank = 3;
 		END IF;
         
-		SET @b = CONCAT('INSERT INTO allUnwatched SELECT title, release_date, director, watched, rating, date_watched, ', p_rank, ', native_ordering FROM ', @table, ' WHERE Watched = 0 AND CONCAT(Title,Director) NOT IN (SELECT CONCAT(Title,Director) FROM allUnwatched)');
+		SET @b = CONCAT('INSERT INTO allUnwatched SELECT movie_id, title, year, release_date, director, watched, rating, date_watched, ', p_rank, ', native_ordering FROM ', @table, ' WHERE Watched = 0 AND Movie_ID NOT IN (SELECT Movie_ID FROM allUnwatched)');
 		PREPARE getUnwatched FROM @b;
 		EXECUTE getUnwatched;
 	END LOOP;

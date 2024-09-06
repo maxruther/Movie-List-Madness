@@ -10,10 +10,12 @@ import datetime
 import html
 
 
-def scrape_eberts_review(num_pages=3):
+def scrape_ebert_review_page(num_pages=3):
     """
-    Parses through webpage with list of movies and returns DataFrame.
-    :num_pages = Number of pages to go through
+    Parses through RogerEbert.com's page of all reviews, which expands
+    as one scrolls down it, and returns a DataFrame of movie scores
+    therein.
+    num_pages = Number of pages to scroll through.
     """
     # url = "https://www.rogerebert.com/reviews"
     url = "http://www.rogerebert.com/reviews?great_movies=0&no_stars=0&title=Cabin+in+the+Woods&filtersgreat_movies%5D%5B%5D=&filters%5Bno_stars%5D%5B%5D=&filters%5Bno_stars%5D%5B%5D=1&filters%5Btitle%5D=&filters%5Breviewers%5D=&filters%5Bgenres%5D=&page={}&sort%5Border%5D=newest"
@@ -56,7 +58,7 @@ def scrape_eberts_review(num_pages=3):
     return df
 
 
-review_df = scrape_eberts_review()
+review_df = scrape_ebert_review_page()
 #
 # print(review_df.shape)
 # print(review_df.dtypes)

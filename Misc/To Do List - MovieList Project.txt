@@ -4,6 +4,9 @@ Movie List Project
 
 TO DO:
 
+- Clean up the MySQL procedure definitions. As is, they contain scratch querying and they also need line breaks in
+  some of the code to make it more readable.
+
 - Creating programs that act as updating the db, rather than regenerating it from scratch. Then code the 'regenerate from scratch' process to mandate fresh requesting through OMDB API.
 
 - Switch from pymysql to SQLAlchemy, throughout the program?

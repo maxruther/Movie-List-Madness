@@ -40,9 +40,9 @@ BEGIN
                 
         SET @table = curr_table;
         IF @table LIKE '%backburning%' THEN
-			SET @b = CONCAT('INSERT INTO allWatched SELECT movie_id, title, year, release_date, director, watched, 0, rating, date_watched, native_ordering FROM ', @table, ' WHERE Watched = 1 AND CONCAT(Title,Director) NOT IN (SELECT CONCAT(Title,Director) FROM allWatched)');
+			SET @b = CONCAT('INSERT INTO allWatched SELECT movie_id, title, year, release_date, director, watched, 0, rating, date_watched, native_ordering FROM ', @table, ' WHERE Watched = 1 AND movie_id NOT IN (SELECT movie_id FROM allWatched)');
 		ELSE
-			SET @b = CONCAT('INSERT INTO allWatched SELECT movie_id, title, year, release_date, director, watched, Watched_in_theater, rating, date_watched, native_ordering FROM ', @table, ' WHERE Watched = 1 AND CONCAT(Title,Director) NOT IN (SELECT CONCAT(Title,Director) FROM allWatched)');
+			SET @b = CONCAT('INSERT INTO allWatched SELECT movie_id, title, year, release_date, director, watched, Watched_in_theater, rating, date_watched, native_ordering FROM ', @table, ' WHERE Watched = 1 AND movie_id NOT IN (SELECT movie_id FROM allWatched)');
 		END IF;
         PREPARE getWatched FROM @b;
 		EXECUTE getWatched;
@@ -50,8 +50,6 @@ BEGIN
 END //
 DELIMITER ;
 
-SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = "moviedb" and TABLE_NAME LIKE "%\_og";
-USE moviedb;
 CALL generateWatched();
 
 SELECT * FROM frontburners_og;
@@ -77,11 +75,4 @@ SELECT Title, Director, Release_Date, Rating, Date_watched,
 FROM allWatched 
 HAVING RatingScore > 0
 ORDER BY RatingScore DESC, release_date DESC;
-SELECT AM.title, AM.year, OD.year FROM allMovies AM, omdb_abrvd OD WHERE AM.title = OD.title and AM.year != OD.year;
-SELECT AM.title, AM.year, OD.year FROM allMovies AM, omdb_abrvd OD WHERE AM.title = OD.title;
-SELECT title FROM allMovies WHERE title not in (SELECT title FROM omdb_abrvd);
-SELECT * FROM OMDB_abrvd;
-SELECT * FROM omdb_abrvd where title LIKE "%poke%";
-SELECT * FROM omdb_abrvd;
 
-SELECT * FROM allwatched;

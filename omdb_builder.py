@@ -17,12 +17,12 @@ def unpickle_stored_omdb_recs() -> (List[List[Dict[str, str | int]]],
     pull_omdb_records()."""
 
     with open('C:/Users/maxru/eclipse-workspace/movie_list_dvlp/'
-              'movie_list_parsing/pickled_OMDB_dicts.data',
+              'movie_list_parsing/data/pickled_OMDB_dicts.data',
               'rb') as f:
         all_omdb_dicts = pickle.load(f)
 
     with open('C:/Users/maxru/eclipse-workspace/movie_list_dvlp/'
-              'movie_list_parsing/pickled_OMDBs_abrvd.data',
+              'movie_list_parsing/data/pickled_OMDB_3D_list.data',
               'rb') as f:
         all_omdb_abrvd = pickle.load(f)
 
@@ -38,12 +38,12 @@ def pickle_omdb_recs(all_omdb_dicts: List[List[Dict[str, str | int]]],
     shortened datasets."""
 
     with open('C:/Users/maxru/eclipse-workspace/movie_list_dvlp/'
-              'movie_list_parsing/pickled_OMDB_dicts.data',
+              'movie_list_parsing/data/pickled_OMDB_dicts.data',
               'wb') as f:
         pickle.dump(all_omdb_dicts, f)
 
     with open('C:/Users/maxru/eclipse-workspace/movie_list_dvlp/'
-              'movie_list_parsing/pickled_OMDBs_abrvd.data',
+              'movie_list_parsing/data/pickled_OMDB_3D_list.data',
               'wb') as f:
         pickle.dump(all_omdb_abrvd, f)
 
