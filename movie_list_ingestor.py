@@ -1,6 +1,6 @@
 import pymysql
-from ReadInEvernote import read_evernote_tables_to_3D_list
-from SQLStatingMovieData import recreate_tables_with_data
+from read_from_evernote_html import read_evernote_tables_to_3D_list
+from write_to_sql_db import regenerate_tables_with_data
 
 
 def evernote_to_mysql(evernote_path: str,
@@ -11,4 +11,4 @@ def evernote_to_mysql(evernote_path: str,
     ingested_movie_data = read_evernote_tables_to_3D_list(evernote_path)
 
     # From that read-in movie list data, (re)generate tables in MySQL.
-    recreate_tables_with_data(ingested_movie_data, db)
+    regenerate_tables_with_data(ingested_movie_data, db)

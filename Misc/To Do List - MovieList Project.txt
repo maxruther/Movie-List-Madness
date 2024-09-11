@@ -4,10 +4,11 @@ Movie List Project
 
 TO DO:
 
+- Refactor movie_list_ingestor into a package
+
+
 - Clean up the MySQL procedure definitions. As is, they contain scratch querying and they also need line breaks in
   some of the code to make it more readable.
-
-- Creating programs that act as updating the db, rather than regenerating it from scratch. Then code the 'regenerate from scratch' process to mandate fresh requesting through OMDB API.
 
 - Switch from pymysql to SQLAlchemy, throughout the program?
 
@@ -36,6 +37,20 @@ SQL:
 
 
 DONE
+
+- Refactor ReviewTableMender further, so that its functions are intuitively grouped into separate files
+
+- In SQLStatingMovieData.py , the drop_table_stmt() method is pretty unnecessary.
+
+- Rename 'pickled_OMDB_dicts.data' and its references to 'OMDB_data_raw.data'
+
+- In review_table_mender,he 'report_missing_...' methods are nearly identical. Code this so that one can simply pass the parameter of the review type to get the appropriate report printed.
+
+- Test ReviewTableMender reporting functions
+
+- Fixed filepaths in the pickling methods, which were breaking down after I heavily refactored and modularized the code.
+
+9/9/24 - 9/10/24
 
 - Added checks to help ensure against discrepancies between the keys of the added and loaded movie records. Done to address this situation: "When a new movielist with added movies is processed by movie_list_ingestor, but the omdb_builder method doesn't request new OMDB records through the API, there will be INCONGRUITY BETWEEN THE TABLES' KEYS."
 

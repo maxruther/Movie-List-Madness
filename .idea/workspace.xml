@@ -5,53 +5,66 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f4c2f209-44a2-4bf1-a214-64648760519d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Jupyter HTMLs/Amending_CR_table.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Misc/Movies.enex" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Misc/To Do List - MovieList Project.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Misc/ingestor_scratch.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Movies/Movies 2023-12-03.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SQL files and others/Old/(OLD) generateAllMovies - Proc Definition.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SQL files and others/Old/(OLD) generateUnwatched - Proc Definition.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SQL files and others/Old/(OLD) generateWatched - Proc Definition.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SQL files and others/SQL Proc Definitions - MovieList.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SQL files and others/Scratch 1.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SQL files and others/Scratch 2.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/old/(OLD) allmovies.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/old/(OLD) ebert_ratings.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/pickled_OMDB_3D_list.data" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/pickled_OMDB_dicts.data" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Analysis (Jupyter NBs)/Jupyter HTMLs/Amending_CR_table.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OMDBbuilder/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OMDBbuilder/build_table.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OMDBbuilder/load_omdb_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OMDBbuilder/omdb_builder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OMDBbuilder/omdb_loaders.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OMDBbuilder/prepare_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OMDBbuilder/tests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/critic_ratings/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/critic_ratings/_add_reviewers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/critic_ratings/_map_missing_ratings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/critic_ratings/_reporting.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/critic_ratings/critic_ratings.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pickled_OMDB_3D_list.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pickled_OMDB_raw.pickle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ebertscrape/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ebertscrape/ebertscrape.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fix_critic_ratings_table.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scratch/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scratch/scratch.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Amending_CR_table.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Letterboxd - exporting to/letterboxd exporting.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Letterboxd - exporting to/letterboxd exporting.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MovieList - SQL Proc Definitions.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Movie_List_Project-Scratch.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SE 450 - asst 3 - MySQL server.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SQL files and others/Movie_List_Project-Scratch.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SQL files and others/Movies.enex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SQL files and others/Scratch - Unwatched Priority rank.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SQL files and others/To Do List - MovieList Project.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SQL files and others/generateUnwatched - Proc Definition.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SQL files and others/generateWatched - Proc Definition.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/To Do List - MovieList Project.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/(OLD) allmovies.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/(OLD) ebert_ratings.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ebert_scraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/ebert_scrape_by_inf_scroll.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ebert_search_scrape.py" beforeDir="false" afterPath="$PROJECT_DIR$/ebert_scrape_by_googling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faves.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/generateAllMovies - Proc Definition.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/generateUnwatched - Proc Definition.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/generateWatched - Proc Definition.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ingestor_scratch.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/movie_code.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/omdb_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/omdb_builder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pickled_OMDB_dicts.data" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pickled_OMDBs_abrvd.data" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/recreate_movie_list_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/recreate_movie_list_db.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scratch.py" beforeDir="false" afterPath="$PROJECT_DIR$/scratch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.ui" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutorial4.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Amending_CR_table.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Amending_CR_table.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Jupyter HTMLs/Amending_CR_table.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Misc/To Do List - MovieList Project.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Misc/To Do List - MovieList Project.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReadInEvernote.py" beforeDir="false" afterPath="$PROJECT_DIR$/read_from_evernote_html.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/.idea/SQL files and others.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/.idea/codeStyles/Project.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/Old/(OLD) generateAllMovies - Proc Definition.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/Old/(OLD) generateUnwatched - Proc Definition.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/Old/(OLD) generateWatched - Proc Definition.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/SQL Proc Definitions - MovieList.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/Scratch 1.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL files and others/Scratch 2.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQLStatingMovieData.py" beforeDir="false" afterPath="$PROJECT_DIR$/write_to_sql_db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/amend_CR_table.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/pickled_OMDB_3D_list.data" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/pickled_OMDB_dicts.data" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ebert_scrape_by_googling.py" beforeDir="false" afterPath="$PROJECT_DIR$/ebertscrape/ebert_scrape_by_googling.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ebert_scrape_by_inf_scroll.py" beforeDir="false" afterPath="$PROJECT_DIR$/ebertscrape/ebert_scrape_by_inf_scroll.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movie_list_ingestor.py" beforeDir="false" afterPath="$PROJECT_DIR$/movie_list_ingestor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/omdb_builder.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages.png" beforeDir="false" afterPath="$PROJECT_DIR$/packages.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recreate_movie_list_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/populate_movie_list_db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repl_missing_metaC.py" beforeDir="false" afterPath="$PROJECT_DIR$/critic_ratings/_reviewer_mappings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/review_remedies.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/review_remedies/review_remedies.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviewy_foldy/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviewy_foldy/fill_in_RT.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviewy_foldy/fill_in_metacritic.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviewy_foldy/review_remedies.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviewy_foldy/right_join_ebert.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scratch.py" beforeDir="false" afterPath="$PROJECT_DIR$/scratch/scratch_for_general.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scratch_for_search_scrape.py" beforeDir="false" afterPath="$PROJECT_DIR$/scratch/scratch_for_google_scrape.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/update_movie_list_db.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +80,7 @@
         <option value="HTML File" />
         <option value="UML Sequence" />
         <option value="UML Class" />
+        <option value="UML Activity" />
         <option value="Python Script" />
       </list>
     </option>
@@ -88,28 +102,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "DefaultPlantUmlFileTemplate": "UML Class",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/maxru/projects",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;DefaultPlantUmlFileTemplate&quot;: &quot;UML Activity&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/maxru/eclipse-workspace/movie_list_dvlp/movie_list_parsing/critic_ratings&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing\review_remedies" />
+      <recent name="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing\critic_ratings" />
+      <recent name="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing\OMDBbuilder" />
       <recent name="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing" />
-      <recent name="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing\mysite" />
-      <recent name="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing\Movies" />
+      <recent name="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing\scratch" />
+      <recent name="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing\ebertscrape" />
     </key>
   </component>
   <component name="RunManager">
@@ -222,7 +237,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing\omdb_builder.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\maxru\eclipse-workspace\movie_list_dvlp\movie_list_parsing\OMDBbuilder\omdb_builder.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />

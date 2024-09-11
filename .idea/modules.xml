@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/critic_ratings/critic_ratings.iml" filepath="$PROJECT_DIR$/critic_ratings/critic_ratings.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ebertscrape/ebertscrape.iml" filepath="$PROJECT_DIR$/ebertscrape/ebertscrape.iml" />
       <module fileurl="file://$PROJECT_DIR$/movie_list_parsing.iml" filepath="$PROJECT_DIR$/movie_list_parsing.iml" />
       <module fileurl="file://$PROJECT_DIR$/review_remedies/review_remedies.iml" filepath="$PROJECT_DIR$/review_remedies/review_remedies.iml" />
+      <module fileurl="file://$PROJECT_DIR$/scratch/scratch.iml" filepath="$PROJECT_DIR$/scratch/scratch.iml" />
     </modules>
   </component>
 </project>
