@@ -1,11 +1,11 @@
 
-.secret
+.secret/
 
-__pycache__
+__pycache__/
 
 # Remnants of my foray into Django, in 12/2023.
-mysite
+mysite/
 
 # Miscellaneous files that can probably be deleted.
-Old
-data/Old
+Old/
+data/Old/
