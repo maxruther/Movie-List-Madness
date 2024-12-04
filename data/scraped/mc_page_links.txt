@@ -1,0 +1,4 @@
+,Film,Metacritic Page Suffix
+0,"Gladiator (2000)",/movie/gladiator/
+1,"Wicked (2024)",/movie/wicked/
+2,"A Real Pain (2024)",/movie/a-real-pain/

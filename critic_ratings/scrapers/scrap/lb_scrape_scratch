@@ -1,0 +1,217 @@
+import requests
+from bs4 import BeautifulSoup
+import pymysql
+
+
+def larsen_letterboxd_scraper():
+    url = 'https://letterboxd.com/larsenonfilm/films/'
+
+    content = requests.get(url).text
+    soup = BeautifulSoup(content, 'html.parser')
+
+    pages = soup.find_all('li', {'class': 'paginate-page'})
+    page_count = int(pages[-1].find('a').string)
+
+    for page_num in range(1, 2):
+    # for page_num in range(1, page_count + 1):
+        url = 'https://letterboxd.com/larsenonfilm/films/page/{}'.format(page_num)
+        content = requests.get(url).text
+        soup = BeautifulSoup(content, 'html.parser')
+
+        movie_entries = soup.find_all('li', {'class': 'poster-container'})
+        for movie in movie_entries[:2]:
+            movie_title = movie.div.img['alt']
+            
+            print('\n\n')
+            # print(movie_title)
+
+            # print(movie.p.span.string)
+
+        ratings_on_page = soup.find_all('p', {'class': 'poster-viewingdata'})
+        print(ratings_on_page)
+        for rating in ratings_on_page:
+            raw_rating = rating.span.string
+            full_star_cnt = raw_rating.count('\u2605')
+            numeric_rating = full_star_cnt * 0.2
+            if '\u00BD' in raw_rating:
+                numeric_rating += 0.1
+            
+            print(numeric_rating)
+
+
+# ★★★
+# ½
+
+def letterboxd_diary_crawler():
+
+    url = 'https://letterboxd.com/yoyoyodaboy/films/diary/'
+
+    headers = {
+        'Accept': '*/*',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                      'AppleWebKit/537.36 (KHTML, like Gecko) '
+                      'Chrome/98.0.4758.82',
+    }
+
+    # content = requests.get(url, headers=headers, params=parameters).text
+    content = requests.get(url, headers=headers).text
+    soup = BeautifulSoup(content, 'html.parser')
+
+    search = soup.find('table', {"class": 'table film-table'})
+    # first_link = search.find('a')
+    # print(first_link['href'])
+
+    # diary_entries = search.find_all('tr', {'class': ['diary-entry-row viewing-poster-container not-rated film-watched',
+    #                                                  'diary-entry-row viewing-poster-container film-watched']})
+
+    diary_entries = search.find_all('h3', {'class': 'headline-3 prettify'})
+
+    watched_film_links = []
+
+    # print(len(diary_entries))
+
+    for film in diary_entries[1:4]:
+        
+        film_page_link = film.next['href']
+        film_page_link = film_page_link.replace('/yoyoyodaboy', '')
+        film_page_link = 'https://letterboxd.com' + film_page_link
+        watched_film_links.append(film_page_link)
+
+        # film_details_headline = soup.find('h3', {'class': 'headline-3 prettify'})
+        # print(film_details_headline)
+
+        # film_details_headline = film.find('a')
+
+        # film_page_link = film_details_headline['href']
+        # film_page_link = film_page_link.replace('/yoyoyodaboy', '')
+        # watched_film_links.append(film_page_link)
+
+    print(watched_film_links)
+
+    movie_page_url = diary_entries[2]
+    content = requests.get(url, headers=headers).text
+    soup = BeautifulSoup(content, 'html.parser')
+
+    friend_reviews = soup.find('section', {'class': 'section activity-from-friends -clear -friends-watched'
+                                   ' -no-friends-want-to-watch'})
+    print(friend_reviews)
+
+if __name__ == '__main__':
+    # larsen_letterboxd_scraper()
+    letterboxd_diary_crawler()
+
+#     review_link = ""
+#     link_found = False
+
+#     first_five_results = search.find_all('a', limit=3)
+#     for result in first_five_results:
+#         # print(result)
+#         # print(result.text)
+#         # print('\n\n')
+
+#         result_header = result.text
+#         if result.find('h3'):
+#             result_header = result.find('h3').text
+
+#         result_link = result['href']
+#         # Print result headers and links
+#         # print(result_header, result_link, sep='\n', end='\n\n')
+
+#         if 'https://www.rogerebert.com/reviews/' in result_link:
+#             # if f'{film_title.lower()}' in result_header.lower() and 'movie review' in result_header.lower():
+#             if f'{film_title.lower()}' in result_header.lower():
+#                 review_link = result_link
+#                 link_found = True
+#                 # print("EBERT REVIEW FOUND: ")
+#                 # print(result_header, result_link, sep='\n', end='\n\n')
+#                 break
+
+#     if not link_found:
+#         print(f'Ebert review not found for {film_title} ({film_year})')
+#         return ""
+#     else:
+#         return review_link
+
+
+# def scrape_ebert_rating(ebert_review_link):
+#     if not ebert_review_link:
+#         return -1
+
+#     ebert_review_page = requests.get(ebert_review_link).text
+#     ebert_review_soup = BeautifulSoup(ebert_review_page, 'html.parser')
+
+#     star_rating_element = ebert_review_soup.find('span', class_='star-rating _large')
+#     full_star_count = len(star_rating_element.find_all('i', {'title': 'star-full'}))
+#     half_star_count = len(star_rating_element.find_all('i', {'title': 'star-half'}))
+#     # print(f'{full_star_count=}', f'{half_star_count=}')
+
+#     complete_star_rating = full_star_count + half_star_count / 2
+
+#     # print(complete_star_rating)
+#     return complete_star_rating
+
+
+# def get_film_titles_and_years(Cursor, num_films=10):
+#     keyFile = "C:/Users/maxru/Programming/Python/.secret/OMDB_API.txt"
+
+#     with open(keyFile) as f:
+#         API_key = f.read()
+
+#     query_all_titles = "SELECT Movie_ID, Title, Year FROM allmovies"
+#     Cursor.execute(query_all_titles)
+
+#     titles_years_list = list(myCursor.fetchall())
+#     # counter = 0
+#     # for (Movie_ID, Title, Year) in Cursor:
+#     #     titles_years_list.append((Title, Year))
+#     #
+#     #     counter += 1
+#     #     if counter == num_films - 1:
+#     #         break
+
+#     return titles_years_list
+
+
+# def gnr8_ebert_table(cursor, ratings_data):
+#     cursor.execute("DROP TABLE IF EXISTS ebert_ratings")
+
+#     create_table_str = "CREATE TABLE IF NOT EXISTS ebert_ratings("
+
+#     col_names = ['Movie_ID', 'Title', 'Year', 'Ebert_Score']
+#     num_cols = len(col_names)
+#     for i in range(num_cols):
+#         curr_attr = col_names[i]
+#         var_type = " varchar(80)"
+
+#         if "Score" in curr_attr:
+#             var_type = " float"
+#         elif "Movie_ID" in curr_attr:
+#             var_type = " int NOT NULL"
+
+#         create_table_str += curr_attr + var_type + ', '
+
+#     # create_table_str += 'FOREIGN KEY(Movie_ID) REFERENCES allmovies(Movie_ID))'
+#     create_table_str += 'PRIMARY KEY(Movie_ID) )'
+#     # print(create_table_str)
+#     cursor.execute(create_table_str)
+
+#     cursor.executemany("INSERT INTO ebert_ratings VALUES (%s, %s, %s, %s)", ratings_data)
+
+# mydb = pymysql.connect(
+#     host="localhost",
+#     user="root",
+#     password="yos",
+#     database="movieDB"
+# )
+
+# myCursor = mydb.cursor()
+
+# all_film_records = get_film_titles_and_years(myCursor)
+# print(all_film_records)
+
+# for film in all_film_records:
+#     title = film[1]
+#     year = film[2]
+#     rating = scrape_ebert_rating(google_ebert_rev_link(title, year))
+#     print(f'{title} ({year}): {rating}')

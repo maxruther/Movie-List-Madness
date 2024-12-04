@@ -1,16 +1,42 @@
 Movie List Project
 ------------------
 
+SCRAPER ORGANIZATION:
+
+metacritic_cr_scrape.py - Given a dataframe of films and links to their Metacritic movie pages, scrape the individual reviews from critics that make up the films' aggregate 'Critical Review' scores.
+
+
+
 
 TO DO:
 
-- Refactor movie_list_ingestor into a package
+- The scraper that retrieves the metacritic film links should draw from the MySQL db to inform that search, rather than draw from the Letterboxd links. No? Or both.
+	- There are a few dozen movies that weren't scraped for Metacritic CR's because they aren't in my LetterBoxd diary, because they lack 'watch_dates' in my original data (in Evernote.)
+
+- The movie 'Adaptation' needs to be retitled to 'Adaptation.' (that period is part of it) in my Evernote movie list.
+
+- Change the reporting of missing ratings so that the results omit the films that I verified as unrated.
+	- This might involve including an empty value in their map entries (instead of only acknowledging such films
+	  in comments.
+	- Then the reporting function(s) can scan the 
+
+- If 'Watched' is '1', then 'Rating' shouldn't really ever be null. I need to write a phrase that describes my feeling of when I'm unmoved by a movie. Perhaps 'NAH'.
+
+- The module/method read_from_evernote_html.py should probably raise errors when key fields are empty, like title and year. When year is empty, it causes an error in one of the tests, test_for_movieid_discrepancies.
+	- Another test: make sure WatchDate is within the last several years.
 
 
-- Clean up the MySQL procedure definitions. As is, they contain scratch querying and they also need line breaks in
-  some of the code to make it more readable.
 
-- Switch from pymysql to SQLAlchemy, throughout the program?
+- The 'allmovies' table should have the native_ordering attribute removed. It's distracting and unhelpful outside of each 'og' table.
+
+- The SQL tables' attributes (or perhaps the Evernote ones) need to have consistent case. When queries are read into dataframes, the attribute's cases are those specified in the MySQL create table statements. Pandas is case sensitive when selecting features, while SQL isn't.
+
+- I may need to overhaul how I enter 'Release Date' values into my Evernote file.
+
+
+- Investigate whether pymysql interfaces with pandas in some way that I've missed.
+
+- Create a python method (or multiple) that test the ingested data for inconsistencies between duplicate film entries. In my 'Rating' attribute, one Pride & Prejudice entry showed "NONE" while the other showed "GREAT". Gotta test for these, and report failures.
 
 - SQL-Constrain rating fields to decimals between 0 and 1, inclusive? (SQL & 'omdb builder.py')
 
@@ -18,16 +44,36 @@ TO DO:
 
 BIG TO DO:
 
+- Get Josh Larsen's movie ratings and incorporate them into the critic_ratings table.
+
 - Use Pandas instead of "list[list[str | list[str | int] ] ]" ?
 
 - Recode OMDB_builder.py so that it only requests records for the newly added movies?
 
 - Does the primary key need to be considered more intentionally?
 	- Might it be problematic for analysis that the Movie_ID s reindexed at every new processing of the 		watchlist?
-	
 
 
 
+ANALYSIS TO DO:
+
+- The SQL queries should select the least fields necessary to the ensuing analysis. Feature selection that can be done at the outset should be done prior, in these queries.
+
+- Make a whole Jupyter NB dedicated to EDA of the movie data?
+
+
+
+EVERNOTE TO DO
+
+- Leverage Evernote API, which I now have access to.
+
+- Make the film 'Monica' a favorite.
+
+
+
+FINE FINE-TUNING
+
+- Once the Ebert file is updated (or a mapping is created to make sure new Ebert ratings get filled) then it might be worth rerunning the first Jupyter notebook, specifically its Ebert section towards the end.
 
 
 SQL:
@@ -37,6 +83,24 @@ SQL:
 
 
 DONE
+
+- Rewrote and HTML-printed the first jupyter notebook, "Fixing the CR Table.ipynb" (CR = critic_ratings). It does much to document the part of the process concerning my py package critic_ratings.
+
+- Added error reporting for when an OMDB-returned record shows 'N/A' for runtime. (This case usually suggests that OMDb did not match the correct film to the year and title that I provided in my Evernote list.) Now when this error occurs, the probably-mismatched movie's title and year are printed. (Though it's the OMDB title and year. Evernote-specified title and year would be better, if available at that juncture.)
+
+- Recoded the various fill_mapping_blank() functions into one, fill_mapping(). Uses the same idioms as the reporting_missing() method to do so.
+
+- If a film is missing a value in its 'Year' field in the Evernote file, then test_movieid_key_discrepancies() will raise an error.
+
+9/17/24
+
+- Refactor movie_list_ingestor into a package of multiple modules
+
+- The Jupyter NB's need to be moved to their corresponding subdir and the relative filepaths they reference need to be adjusted accordingly.
+
+- Add exception to create_table_stmt() in movielist_ingestion.compose_sql_stmts.py . This must raise the error described in the docstring, one triggered by the occurrence of an unnamed column in an Evernote table.
+
+9/11/24
 
 - Refactor ReviewTableMender further, so that its functions are intuitively grouped into separate files
 

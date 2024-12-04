@@ -23,13 +23,13 @@ BEGIN
     DROP TABLE IF EXISTS allWatched;
 	CREATE TABLE IF NOT EXISTS allWatched(
 		Movie_ID int,
-		Title varchar(40),
-        Year varchar(40),
+		Title varchar(80),
+        Year varchar(80),
 		Release_Date date,
-		Director varchar(40),
+		Director varchar(80),
 		Watched int,
         Watched_in_theater int,
-		Rating varchar(40),
+		Rating varchar(80),
 		Date_watched date,
 		native_ordering int NOT NULL,
 		
@@ -83,12 +83,12 @@ BEGIN
     DROP TABLE IF EXISTS allUnwatched;
 	CREATE TABLE IF NOT EXISTS allUnwatched(
 		Movie_ID int,
-		Title varchar(40),
-        Year varchar(40),
+		Title varchar(80),
+        Year varchar(80),
 		Release_Date date,
-		Director varchar(40),
+		Director varchar(80),
 		Watched int,
-		Rating varchar(40),
+		Rating varchar(80),
 		Date_watched date,
         Priority int,
 		native_ordering int NOT NULL,
@@ -123,7 +123,7 @@ BEGIN
 			SET p_rank = 3;
 		END IF;
         
-		SET @b = CONCAT('INSERT INTO allUnwatched SELECT movie_id, title, year, release_date, director, watched, rating, date_watched, ', p_rank, ', native_ordering FROM ', @table, ' WHERE Watched = 0 AND movie_id NOT IN (SELECT movie_id FROM allWatched)');
+		SET @b = CONCAT('INSERT INTO allUnwatched SELECT movie_id, title, year, release_date, director, watched, rating, date_watched, ', p_rank, ', native_ordering FROM ', @table, ' WHERE Watched = 0 AND Movie_ID NOT IN (SELECT Movie_ID FROM allUnwatched)');
 		PREPARE getUnwatched FROM @b;
 		EXECUTE getUnwatched;
 	END LOOP;
@@ -145,13 +145,13 @@ BEGIN
     DROP TABLE IF EXISTS allMovies;
     CREATE TABLE IF NOT EXISTS allMovies(
 		Movie_ID int,
-		Title varchar(40),
-        Year varchar(40),
+		Title varchar(80),
+        Year varchar(80),
 		Release_Date date,
-		Director varchar(40),
+		Director varchar(80),
 		Watched int,
         Watched_in_theater int,
-		Rating varchar(40),
+		Rating varchar(80),
 		Date_watched date,
         Priority int,
 		native_ordering int NOT NULL,
