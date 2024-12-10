@@ -1,0 +1,1 @@
+As of yet, to update this database, it can only be regenerated from scratch, from the specified movie list.
