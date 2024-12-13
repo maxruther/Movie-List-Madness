@@ -2,10 +2,10 @@ import pymysql
 from typing import List
 from pymysql import cursors
 
-from OMDBbuilder.load_omdb_data import load_omdb_data
-from OMDBbuilder.prepare_data import prep_omdb, prep_genre, prep_ratings
-from OMDBbuilder.build_tables import build_omdb_tbl, build_genre_tbl, build_ratings_tbl
-from OMDBbuilder.tests import test_for_movieid_discrepancies
+from omdb_builder.load_omdb_data import load_omdb_data
+from omdb_builder.prepare_data import prep_omdb, prep_genre, prep_ratings
+from omdb_builder.build_tables import build_omdb_tbl, build_genre_tbl, build_ratings_tbl
+from omdb_builder.tests import test_for_movieid_discrepancies
 
 
 def gnr8_table_from_omdb_data(table_name: str,
