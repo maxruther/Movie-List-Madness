@@ -9,3 +9,6 @@ mysite/
 # Miscellaneous files that can probably be deleted.
 Old/
 data/Old/
+SQL files/Old
+SQL files/Scratch
+SQL files/.idea
