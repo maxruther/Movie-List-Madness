@@ -44,20 +44,9 @@ def download_omdb_data(cursor: pymysql.cursors.Cursor,
         # treatment for their titles, in order to reconcile them with
         # those of OMDB.
 
-        # OMDB API can only handle the English translation of the
-        # following famous Spanish-titled film.
-        if Title == 'Y Tu Mama Tambien':
-            curr_title = urllib.parse.quote_plus('And Your Mother Too')
-
         # Lydia Tar needs special treatment for her HTML request
         if curr_title == 'T%C3%83%C2%A1r':
             curr_title = 'T%C3%A1r'
-
-        # A French movie is only accepted by its original French title
-        # in OMDB.
-        if Title == 'Sirocco and the Kingdom of the Winds':
-            curr_title = urllib.parse.quote_plus("Sirocco et le royaume"
-                                                 " des courants d'air")
         
         # Salo, by Pasolini, needs a longer name specified
         if Title == 'Salo':
@@ -115,9 +104,10 @@ def download_omdb_data(cursor: pymysql.cursors.Cursor,
 
     # Report the movies associated with failed requests to the user.
     if erroneous_omdb_pulls:
-        print("FAILED REQUESTS:\n")
+        print("FAILED OMDB REQUESTS:")
         for i in erroneous_omdb_pulls:
             print(i)
+        print()
 
     # Save these returned OMDB records to file, via Pickling.
     pickle_omdb_data(omdb_data_raw, omdb_data)

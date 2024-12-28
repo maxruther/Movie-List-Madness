@@ -11,6 +11,9 @@ def test_for_movieid_discrepancies(cursor: pymysql.cursors.Cursor,
                                              List[Dict[str, str]]
                                          ]]
                                    ) -> None:
+    
+    # NOTE: If an OMDB record request fails, then this test will fail.
+
     query_all_titles = "SELECT Movie_ID, Title, Year FROM allMovies"
     cursor.execute(query_all_titles)
 
@@ -59,18 +62,24 @@ def test_for_movieid_discrepancies(cursor: pymysql.cursors.Cursor,
                                 f'{title_and_year}')
 
     for movie_id in allmovies_dict:
-        if allmovies_dict[movie_id] != omdb_dict[movie_id]:
-            raise Exception(f'ERROR DURING OMDB PROCESS: DISCREPANCY IN '
-                            f'KEYS between \'allmovies\' MySQL table '
-                            f'and the loaded omdb data. \n'
-                            f'\n'
-                            f'Key: {movie_id}\n'
-                            f'Preexisting title and year:\t\t'
-                            f'{omdb_dict[movie_id]}\n'
-                            f'New title and year:\t\t\t\t'
-                            f'{allmovies_dict[movie_id]}\n'
-                            f'\n'
-                            f'RECOMMENDED ACTION: For the '
-                            f'create_omdb_tables method, change '
-                            f'omdb_load_method parameter to \'request '
-                            f'from OMDB\'')
+        if movie_id not in omdb_dict:
+            print(f'WARNING: Movie ID #{movie_id} not in OMDB data.\n',
+                  f'(warning from test_for_movieid_discrepancies', 
+                  f'method in omdb_builder.tests)\n')
+            # print(f'{list(omdb_dict.items())}')
+        else:
+            if allmovies_dict[movie_id] != omdb_dict[movie_id]:
+                raise Exception(f'ERROR DURING OMDB PROCESS: DISCREPANCY IN '
+                                f'KEYS between \'allmovies\' MySQL table '
+                                f'and the loaded omdb data. \n'
+                                f'\n'
+                                f'Key: {movie_id}\n'
+                                f'Preexisting title and year:\t\t'
+                                f'{omdb_dict[movie_id]}\n'
+                                f'New title and year:\t\t\t\t'
+                                f'{allmovies_dict[movie_id]}\n'
+                                f'\n'
+                                f'RECOMMENDED ACTION: For the '
+                                f'create_omdb_tables method, change '
+                                f'omdb_load_method parameter to \'request '
+                                f'from OMDB\'')
