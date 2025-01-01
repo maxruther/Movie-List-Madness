@@ -11,9 +11,98 @@ from sklearn.metrics.pairwise import cosine_similarity
 from fuzzywuzzy import fuzz
 
 
-test = 0
-if not test:
-    print("Yep, 0's false")
+
+# new_header = ['Movie_ID', 'Title', 'Director', 'Watched', 'Rating',
+#              'Year', 'Release_Date', 'Watched_in_theater',
+#                'Date_watched']
+# new_data = [273, "'Pokemon 2000'", "'Yuyama / Haigney'", 1, 'NULL', "'2000'", "'7/21/00'", 0, "'9/1/23'"]
+
+# old_header = ['Movie_ID', 'Title', 'Director', 'Watched', 'Recommending', 'Rating', 'Year', 'Release_Date', 'Watched_in_theater', 'Date_watched']
+# old_data = [213, "'Pokemon 2000'", "'Yuyama / Haigney'", 1, 'NULL', 'NULL', "'2000'", "'7/21/00'", 0, "'9/1/23'"]
+
+new_header = ['Movie_ID', 'Title', 'Director', 'Watched', 'Friend_recommending', 'Rating', 'Year', 'Release_Date', 'Watched_in_theater', 'Date_watched']
+new_data = [74, "'Evil Does Not Exist'", "'Hamaguchi'", 0, "'NYT'", 'NULL', "'2023'", "'5/3/24'", 0, 'NULL']
+
+old_header = ['Movie_ID', 'Title', 'Director', 'Watched', 'Recommending', 'Rating', 'Year', 'Release_Date', 'Watched_in_theater', 'Date_watched']
+old_data = [6, "'Evil Does Not Exist'", "'Hamaguchi'", 1, "'NYT'", "'PRETTY AWESOME'", "'2023'", "'5/3/24'", 1, "'12/21/24'"]
+
+new_entry = dict(zip(new_header, new_data))
+old_entry = dict(zip(old_header, old_data))
+
+
+def compare_dup_entries(new_entry: dict[str : str | int],
+                        old_entry: dict[str : str | int],
+                        ) -> None:
+    
+    # Discrepancy dictionary, to store the warnings of how the two entries 
+    # differ.
+    discr_dict = {
+        'Unshared Attribute': [],
+        'Value Change': [],
+        }
+
+    discr_count = 0
+    discr_found = False
+
+    # print(' ', old_entry, new_entry, sep='\n', end='\n\n')
+
+    for attr in new_entry:
+        if attr not in old_entry:
+            discr_found = True
+            discr_count += 1
+
+            discr_str = f"'{attr}' attribute not in OLD record. \n" +\
+                f"\tIn NEW record:  {attr} = {new_entry[attr]}"
+            
+            discr_dict['Unshared Attribute'].append(discr_str)
+        else:
+            if new_entry[attr] != old_entry[attr]:
+                if attr == 'Movie_ID':
+                    continue
+
+                discr_found = True
+                discr_count += 1
+
+                discr_str = f'For attribute {attr}, the values differ: \n' + \
+                    f'\tIn NEW record:\t{attr} = {new_entry[attr]} \n' + \
+                    f'\tIn OLD Record:\t{attr} = {old_entry[attr]}'
+                discr_dict['Value Change'].append(discr_str)
+
+    for attr in old_entry:
+        if attr not in new_entry:
+            discr_found = True
+            discr_count += 1
+
+            discr_str = f"'{attr}' attribute not in NEW record. \n" +\
+                f"\tIn OLD record:  {attr} = {old_entry[attr]}"
+            
+            discr_dict['Unshared Attribute'].append(discr_str)
+
+
+    if discr_found:
+        longer_dashline = '-' * 100
+        shorter_dashline = '-' * 50
+        print(longer_dashline,
+            f"\nWARNING: Records of film {new_entry['Title']} by " + \
+            f"{new_entry['Director']} differ.\n" + \
+            f"Discrepancy count = {discr_count}\n",
+            new_entry, old_entry,
+            sep='\n', end='\n\n')
+        for discr_type in discr_dict:
+            if discr_dict[discr_type]:
+                print(shorter_dashline,
+                    discr_type.upper() + ':',
+                    sep='\n\n')
+                for warning in discr_dict[discr_type]:
+                    print(warning, '\n')
+        print(longer_dashline + '\n')
+
+# Compare differing fields
+
+
+# test = 0
+# if not test:
+#     print("Yep, 0's false")
 
 
 # pattern = r'(^.+\S)\s+\((\d{4})\)$'
