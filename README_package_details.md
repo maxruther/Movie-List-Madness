@@ -13,7 +13,7 @@ Next, I sought to enrich this data by incorporating that of *The Open Movie Data
 
 ## 3. **critic_ratings.RatingsTableMender**
 
-The addition of OMDb data provided my project's first critical review scores, to which I then shifted its focus. Some analysis revealed that these review score attributes had a substantial number of missing values, often erroneously. To mitigate such scarcity in my already small sample of film watches, I coded several functionalities in **RatingsTableMender**, the sub-package of **critic_ratings**:
+The addition of OMDb data provided my project's first critical review scores, to which I then shifted its focus. Some preliminary analysis revealed that these review score attributes were missing values, often erroneously: online searches would often demonstrate instead that such review scores' existed. To mitigate such scarcity in my already small sample of film watches, I coded several functionalities in **RatingsTableMender**, the sub-package of **critic_ratings**:
 1) Report the titles of each reviewer's missing scores, as value-less dictionary literals conducive to manual mapping.
 2) Apply these mappings to the missing scores, once they're manually completed.
 3) Add a new reviewer's film ratings, given a list of them that also includes the films' titles and release years.

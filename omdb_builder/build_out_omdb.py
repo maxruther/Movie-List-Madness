@@ -22,8 +22,10 @@ def gnr8_table_from_omdb_data(table_name: str,
     elif table_name == 'all':
         prepped_omdb_data = prep_omdb(omdb_data)
         build_omdb_tbl(cursor, prepped_omdb_data)
+
         prepped_genre_data = prep_genre(omdb_data)
         build_genre_tbl(cursor, prepped_genre_data)
+        
         prepped_ratings_data = prep_ratings(omdb_data)
         build_ratings_tbl(cursor, prepped_ratings_data)
 

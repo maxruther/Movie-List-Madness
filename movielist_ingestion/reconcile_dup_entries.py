@@ -94,6 +94,9 @@ def reconcile_dup_entries(new_record: dict[str : str | int],
 
 
 if __name__ == '__main__':
+
+    # A mess of testing this script's method as I coded it:
+    
     new_header = ['Movie_ID', 'Title', 'Director', 'Watched', 'Rating',
                  'Year', 'Release_Date', 'Watched_in_theater',
                    'Date_watched']

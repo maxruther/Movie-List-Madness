@@ -13,7 +13,7 @@ def download_omdb_data(cursor: pymysql.cursors.Cursor,
     """Queries all movie records (from table allMovies) and gets OMDB
     API records for each one. Each OMDB record is a dictionary, in the
     style of a JSON file. This method returns a list of those original
-    dict records, as well as a list of lists representing their
+    dictionary records, as well as a list of lists representing their
     abbreviated versions."""
 
     omdb_data_raw = []
@@ -60,9 +60,22 @@ def download_omdb_data(cursor: pymysql.cursors.Cursor,
         curr_year = str(Year)
         m_id = Movie_ID
 
-        omdb_raw_record = requests.get(
-            'http://www.omdbapi.com/?i=tt3896198&apikey=' + omdb_api_key
-            + '&t=' + curr_title + '&y=' + str(curr_year)).json()
+        # print(f"OMDb requesting film: {curr_title} ({curr_year}) - #{m_id}")
+
+        try:
+            omdb_raw_record = requests.get(
+                'http://www.omdbapi.com/?i=tt3896198&apikey=' + omdb_api_key
+                + '&t=' + curr_title + '&y=' + str(curr_year)
+                ).json()
+        except:
+            print(f"ERROR WITH OMDB REQUEST. RESPONSE RECEIVED:\n {omdb_raw_record}")
+
+
+        # omdb_raw_record = requests.get(
+        #     'http://www.omdbapi.com/?apikey=' + omdb_api_key
+        #     + '&t=' + curr_title + '&y=' + str(curr_year)
+        #     ).json()
+
 
         # A counter tracks how many requests have been made.
         pull_counter += 1

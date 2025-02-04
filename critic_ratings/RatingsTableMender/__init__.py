@@ -13,6 +13,8 @@ class RatingsTableMender:
         self.engine = None
         self.db_path = db_path
 
+        # Variable 'cr_df' will hold the queried result of the 
+        # 'critic_ratings' table, once it's retrieved.
         self.cr_df: pd.DataFrame = pd.DataFrame()
 
     # Import this class's various functions from the separate modules.

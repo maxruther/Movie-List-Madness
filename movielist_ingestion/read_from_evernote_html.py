@@ -5,6 +5,7 @@ def read_evernote_tbls_to_3d_list(filename: str
                                   ) -> list[list[str | list[str | int]]]:
     """Reads in my movie list, which is exported from Evernote in HTML
     format. Uses BeautifulSoup to parse the content."""
+    
     with open(filename, errors='ignore') as f:
         soup = BeautifulSoup(f, "html.parser")
 

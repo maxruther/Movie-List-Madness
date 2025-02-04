@@ -1,0 +1,14 @@
+runtime_str = '2 h 35 m'
+
+test_strs = ['2 h 35 m', '2 h 40 m', '1 h 30 m', '2 h', '39 m']
+
+for runtime_str in test_strs:
+    if 'h' not in runtime_str:
+        runtime_str = '0 h ' + runtime_str
+    if 'm' not in runtime_str:
+        runtime_str = runtime_str + ' 0 m'
+
+    runtime_str = runtime_str.replace('h', '').replace('m', '')
+    runtime_hours, runtime_mins =  [int(i) for i in runtime_str.split()]
+
+    print(f'{runtime_str}\t|\t{runtime_hours*60 + runtime_mins}')

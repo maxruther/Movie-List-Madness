@@ -51,7 +51,6 @@ def prep_omdb(omdb_data: List[List[str |
         # field can result in an error, but these are helpful because
         # they seem to indicate that an incorrect record was pulled in
         # the OMDB request.
-
         try:
             i[4] = int(i[4].replace(" min", ""))
         except ValueError:
