@@ -24,11 +24,11 @@ def get_users_diary_links(user_url: str, driver: webdriver.Chrome) -> list[str]:
 
     # From that page, retrieve the diary's page count.
     diary_pages_xpath = '//*[@id="content"]/div/section[2]/div[2]/div[3]/ul/li/a'
-    yoyo_diary_pages = driver.find_elements(By.XPATH, diary_pages_xpath)
-    diary_page_count = yoyo_diary_pages[-1].get_attribute('text')
+    diary_page_elems = driver.find_elements(By.XPATH, diary_pages_xpath)
+    diary_page_count = diary_page_elems[-1].get_attribute('text')
 
-    # Initialize lists where the films' titles, release years, and letterboxd links
-    # will be stored.
+    # Initialize lists where the films' titles, release years, and 
+    # letterboxd links will be stored.
     all_film_links = []
     all_film_titles = []
     all_film_release_yrs = []
@@ -80,7 +80,9 @@ if __name__ == '__main__':
     users_lb_diary_df = get_users_diary_links(my_user_url, driver)
 
     # Print the dataframe (for the developer to check at a glance.)
-    print(users_lb_diary_df)
+    print('\nScraped links of Letterboxd diary entries:',
+          users_lb_diary_df,
+          sep='\n\n')
 
     # Close the driver to conclude.
     driver.close()

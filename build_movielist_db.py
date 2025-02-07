@@ -22,8 +22,8 @@ evernote_to_mysql(movie_list_file, my_db)
 
 # Retrieve supplemental movie data from OMDB, the "Online Movie
 # Database," and write it to additional tables in the MySQL database.
-# build_out_omdb_tables('load from file', my_db)
-build_out_omdb_tables('request through OMDB API', my_db)
+build_out_omdb_tables('load from file', my_db)
+# build_out_omdb_tables('request through OMDB API', my_db)
 
 
 # Close the pymysql connection to the movie list database but also
@@ -36,6 +36,5 @@ db_path = 'mysql://root:yos@localhost/moviedb'
 # fixes include filling in some scores that were erroneously missed by
 # OMDB, as well as adding additional reviewers' scores, like from
 # RogerEbert.com .
-fix_critic_ratings_tbl(db_path)
+# fix_critic_ratings_tbl(db_path)
 # fix_critic_ratings_tbl(db_path, na_report=True)
-

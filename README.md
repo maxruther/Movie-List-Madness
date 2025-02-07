@@ -1,39 +1,62 @@
-# Max's Movie List Project
-## Data Ingestor and Ratings Predictor
+# Max's Mad Movie List Project
+## *HTML-parsing personal movie journals, review sites, and more to build a MySQL database primed for ratings prediction.*
+<!-- ## Data Ingestor and Ratings Predictor -->
 
-### The Movie List
+## The Movie List
 
-This is a multi-faceted personal project that centers on my personal moviegoing. I record this moviegoing in a document that functions as both a watchlist and a log. It resembles a to-do list, including movies both seen and unseen, as well as my ratings of the former.
+This is a multi-faceted personal project that centers on my personal moviegoing. I record my moviegoing in a document that functions as both a watchlist and a log. It so resembles a to-do list, including movies both seen and unseen, and my ratings of the former.
 
-My project starts with the parsing and loading of this list's data, into a dedicated, local MySQL database. From there, its course over the past year can be traced chronologically to these packages I've created...
+To create a database primed for prediction of my ratings, I here embarked on a series of subprojects to build and enrich such a one. These subprojects, which number at four and counting, mark various stages of the effort and have been organized into separate custom Python packages.
 
-### Custom Packages
+So organized, the course of this project can be chronologically traced through the below list of packages, which each have dedicated *README_\*.md* files:
 
-1. **movielist_ingestion**: Automatically parse and load data from my movie list into a local MySQL database.
+## Custom Packages
 
-2. **omdb_builder**: Broaden this dataset by also loading in records from *The Open Movie Database (OMDb)*.
+### [**1. Movie List Ingestion (*movielist_ingestion*)**](/README_movielist_ingestion.md): 
+Automatically parse and load data from my movie list into a local MySQL database.
 
-3. **critic_ratings.RatingsTableMender**: For the review scores provided in the *OMDb* data, programmatically report and remap values that might be missing erroneously.
+### [**2. Enriching the Movie Data (*omdb_builder*)**](/README_omdb_builder.md):
+Broaden this dataset by also loading in records from *The Open Movie Database (OMDb)*.
 
-4. **critic_ratings.scrapers**: Web-scrape  individual reviews from various critical publications which are aggregated to form a films "Metascore" on *Metacritic*. With these, I am able to analyze correlations between my ratings and those of prominent publications. 
+### [**3. Improving the Review Score Data (*critic_ratings.RatingsTableMender*)**](/README_ratings_mender.md): 
+For the review scores provided in the *OMDb* data, programmatically report and remap values that might be missing erroneously.
 
-    This package also includes scrapers that I've built for the sites *Letterboxd* and *RogerEbert*.
+### [**4. Scraping for More Reviewers (*critic_ratings.scrapers*)**](/README_scraping_reviews.md): From various sites, web-scrape the following:
+- **Metacritic**: Scrape the individual reviews from various critical publications which are aggregated to form a film's "Metascore". 
+- **LetterBoxd**: 
+    - Scrape a user's moviegoing *Diary* for those watched films' titles, years, and relative paths to their dedicated page on *LB*.
+    - Scrape a users' friends' ratings of their watched films.
+- A scraper of review scores from the site **RogerEbert** is still in progress, as the program currently gets blocked after scraping only ~40 scores.
 
-### Notebook Analyses
 
-These packages each enhanced the dataset by adding to it. At the introduction of each package, I attempted to leverage those added data elements in a new analysis. These analyses are presentably featured in the **Analysis (Jupyter NBs)** directory, in both *ipynb* and *html* files. These documents, which were deliberately written and organized with an interested reader in mind, might help to explain my project's structure and motivations. 
 
-As a light disclaimer, I feel that these analyses of mine are much lighter than what my beloved database deserves. I intend to return and deepen my analysis in ways that better leverage the richness I've cultivated. But I've yet skimped on this because analysis was rarely the primary focus for this project, which brings me to my next point...
+<!-- Web-scrape  individual reviews from various critical publications which are aggregated to form a film's "Metascore" on *Metacritic*. With these, I am able to analyze correlations between my ratings and those of prominent publications. This package also includes scrapers that I've built for the sites *Letterboxd* and *RogerEbert*. -->
+
+### [**Analyses**](/Analysis/Jupyter%20HTMLs/)
+
+I took my movie data for a spin with some analysis and modelling, once I was satisfied with the quality and integrity of my movie database. These analyses are presentably featured in the [**Analysis (Jupyter NBs)**](/Analysis/) directory, in both [*ipynb*](/Analysis/) and [*html*](/Analysis/Jupyter%20HTMLs/) files. These documents, which were deliberately written and organized with an interested reader in mind, might help to explain my project's structure and motivations:
+
+1. [**Fixing the CR Table**](/Analysis/1%20-%20Fixing%20the%20CR%20Table.ipynb) - This first notebook isn't an analysis, but instead walks through the processes of my third subproject. That subproject involved making improvements to the review score data that was retrieved from *OMDb*, in the subproject preceding it.
+
+2. [**My Own Ratings**](/Analysis/2%20-%20My%20Own%20Ratings%20-%20First%20DT.ipynb) - With the review score data now mended, thereon I train a first decision tree model to predict my own ratings.
+
+3. [**Incorporating Genre**](/Analysis/3%20-%20Incorporating%20Genre%20-%20Second%20DT.ipynb) - In an attempt to refine my decision tree model, I incorporate the films' genre data, which was retrieved and parsed from the *OMDb.*
+
+4. [**Scraped Metacritic CR's (*IN-PROGRESS*)**](/Analysis/4%20-%20Scraped%20Metacritic%20CR's.ipynb) - After scraping all the individual critical reviews that make up my watched films' *Metacritic* aggregate scores (a.k.a. "*Metascores*") I perform a cursory analysis. Towards the end, it assesses the correlations between my review scores and those of these various publications of film criticism.
+
+<!-- These packages each enhanced the dataset by adding to it. At the introduction of each package, I attempted to leverage those added data elements in a new analysis. These analyses are presentably featured in the **Analysis (Jupyter NBs)** directory, in both *ipynb* and *html* files. These documents, which were deliberately written and organized with an interested reader in mind, might help to explain my project's structure and motivations.  -->
+
+As a light disclaimer, I feel that these analyses of mine are much lighter than what my beloved database deserves. I intend to return and deepen my analysis in ways that better leverage the richness I've cultivated. But as of yet I've skimped on this, because analysis was rarely the primary focus for this project. Which brings me to my next point...
 
 ## This Project's Focus
 
 Questions stemming from data analysis often guided this project, but such analysis was rarely the primary focus of this exercise. Rather, **this project primarily involves data ingestion through web-scraping and other parsings of HTML, as well as some database management.** I have programmatically taken in data from several sources- my watchlist; the *OMDb*; and several various websites that aggregate film criticism- to create a rich and persistent dataset, aimed toward the prediction of ratings.
 
-### Legibility
+## Legibility
 
-To maximize the legibility of this project's code and findings, I have attempted to thoroughly document it with explanation. Such explanation manifests in ample code comments, the notebook analyses, and *README* files like this one.
+To maximize the legibility of this project's code and findings, I have attempted to thoroughly document it with explanation. Such explanation manifests in ample code comments, presentable notebook analyses, and *README* files like this one.
 
-### Questions and Feedback
+## Questions and Feedback
 
 Please feel free to reach out to me with questions. I would also welcome and appreciate any feedback you might offer. If you do comment, please consider that this work is both ongoing and quite personal to me.
 

@@ -8,6 +8,7 @@ metacritic_mapping = {
 	# "Nate - A One Man Show": ,
 	# "Inspector Ike": ,
 	# "Sirocco and the Kingdom of the Winds": ,
+	# "Striking Rescue": ,
 	"Pokemon 2000": 0.28,
 	"Hundreds of Beavers": 0.82,
 	"The Holdovers": 0.82,
@@ -48,6 +49,11 @@ metacritic_mapping = {
 	"Oddity": 0.78,
 	"Only the River Flows": 0.7,
 	"His Three Daughters": 0.84,
+    "The People's Joker": 0.78,
+	"La Cocina": 0.74,
+	"Bird": 0.74,
+	"Hard Truths": 0.88,
+	"Nickel Boys": 0.91,
 }
 
 

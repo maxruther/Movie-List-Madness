@@ -169,6 +169,11 @@ if __name__ == "__main__":
     # lb_friends_ratings_df = get_friends_ratings(lb_diary_links, driver)
     lb_friends_ratings_df = get_friends_ratings(lb_diary_links, driver, test_n_films=3)
 
+    # # (For the dev's reference) print the dataframe of the user's friends' ratings.
+    print('Scraped ratings from friends on Letterboxd:', 
+          lb_friends_ratings_df,
+          sep='\n\n')
+
     # (For the dev's reference) print the runtime of the scrape.
     scrape_runtime = time.time() - scrape_start
     scrape_runtime = round(scrape_runtime)
@@ -177,8 +182,7 @@ if __name__ == "__main__":
     scrape_runtime_str = f'{runtime_min} m {runtime_sec} s'
     print(f'\nRuntime of this scrape: {scrape_runtime_str}')
 
-    # # (For the dev's reference) print the dataframe of the user's friends' ratings.
-    # print(lb_friends_ratings_df)
+    
 
     # Close the Selenium driver to conclude.
     driver.close()
