@@ -1,6 +1,6 @@
-# Custom Package Details
+# The Subprojects - A Chronology and Further Details
 
-Please read on for more details on each of the custom packages.
+Please read on for more details on each of the custom packages, which might shed light on the greater project's continuity and direction.
 
 ## 1. **movielist_ingestion**
 
@@ -22,4 +22,4 @@ This way, the Rotten Tomatoes, IMDb, and Metacritic review scores were better fi
 
 ## 4. **critic_ratings.scrapers**
 
-To drill down on the correlation between my ratings and the critical aggregates from Metacritic, I web-scraped the individual critic reviews that form them. This process as well as others for the sites Letterboxd and RogerEbert comprise **scrapers**, another of my subpackages of **critic_ratings**. The Letterboxd scrapers combine to retrieve a user's friends' ratings of the films they've watched, given that user's log-in credentials.
+To drill down on the correlation between my ratings and the critical aggregates from *Metacritic*, I web-scraped the individual critic reviews that form them. This process and similar ones, for the sites *Letterboxd* and *RogerEbert* comprise my custom package **scrapers**, another subpackage of **critic_ratings**. The Letterboxd scrapers combine to retrieve a user's friends' ratings of the films they've watched, given that user's log-in credentials.

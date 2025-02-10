@@ -8,13 +8,13 @@ In this second phase of my project, I enrich my movie list database by incorpora
 This open source database, *OMDb*, affords much richer film data than my own movie list offers. Without any broadening, my own data only offers the following film information: title, director, production year, and US release date:
 
 <br></br>
-<center><img src="Presentation/pics for quick overview/2 - allmovies table.png" width="80%" height="20%"/> </center>
+<center><img src="../Presentation/pics for quick overview/2 - allmovies table.png" width="80%" height="20%"/> </center>
 <br></br>
 
 The *OMDb* data goes far beyond this, containing attributes like cast, runtime, genres, and review scores from a few major aggregators of film criticism. To illustrate, here below is an image of their data record for the film *Nickel Boys (2024)*:
 
 <br></br>
-<center><img src="Presentation/pics for quick overview/omdb - nickel boys.png" width="80%" height="20%"/> </center>
+<center><img src="../Presentation/pics for quick overview/omdb - nickel boys.png" width="80%" height="20%"/> </center>
 <br></br>
 
 I felt that adding this external data to my database would greatly enrich it, not least because it might enhance its capability for predicting my ratings. Once added, that data populates three new MySQL tables that I created...
@@ -25,7 +25,7 @@ I felt that adding this external data to my database would greatly enrich it, no
 ### *Holds an abbreviated version of films'* OMDB *records.*
 
 <br></br>
-<center><img src="Presentation/pics for quick overview/2 - omdb table.png" width="80%" height="20%"/> </center>
+<center><img src="../Presentation/pics for quick overview/2 - omdb table.png" width="80%" height="20%"/> </center>
 <br></br>
 
 
@@ -33,7 +33,7 @@ I felt that adding this external data to my database would greatly enrich it, no
 ### *Indicates films' genres, which can be multiple for each film.*
 
 <br></br>
-<center><img src="Presentation/pics for quick overview/2 - genres table.png" width="80%" height="20%"/> </center>
+<center><img src="../Presentation/pics for quick overview/2 - genres table.png" width="80%" height="20%"/> </center>
 <br></br>
 
 
@@ -41,8 +41,9 @@ I felt that adding this external data to my database would greatly enrich it, no
 ### *Contains films' review scores, originally as given by* OMDb *, from the aggregate review sites* IMDb *,* RottenTomatoes *, and* Metacritic.
 
 <br></br>
-<center><img src="Presentation/pics for quick overview/2 - critic_ratings table.png" width="40%" height="20%"/> </center>
+<center><img src="../Presentation/pics for quick overview/2 - critic_ratings table.png" width="40%" height="20%"/> </center>
 <br></br>
+
 
 ## Details on how this process works
 
@@ -71,6 +72,6 @@ With testing done, the *OMDb* data is ready for the final stage of this process:
 Each table has dedicated methods for parsing the *OMDB* data further and then loading it. Such parsing variously consists of cleaning strings; handling null values; type-transforming numeric data; and parsing review scores from their nested dictionary. The loading consists of programatically drafting and executing SQL 'INSERT' statements.
 
 <br></br>
-# Next up:  [Improving the review score data](/README_ratings_mender.md)
+# Next up:  [Improving the review score data](../critic_ratings/RatingsTableMender/README_ratings_mender.md)
 
 In the next phase of my project, I hone in on this *OMDb* data's aggregate review scores. Identifying many missing values, I code processes to report and remap them. I also add a process that joins in scores from another external source of reviews.

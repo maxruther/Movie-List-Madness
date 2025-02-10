@@ -167,6 +167,7 @@ def siskel_scrape(driver: webdriver.Chrome,
                             
                         elif detail_elem.get_attribute('cpropname').strip() == 'Runtime':
                             film_runtime = detail_elem.get_attribute('innerHTML')
+                            film_runtime = int(film_runtime)
                             this_films_details['Runtime'] = film_runtime
                         
                         elif detail_elem.get_attribute('cpropname').strip() == 'Director':
@@ -191,10 +192,10 @@ def siskel_scrape(driver: webdriver.Chrome,
     #       sep='\n\n')
  
     # Save to file the dictionaries of showtimes and production info.
-    with open('siskel_films_showtimes_dict.pkl', 'wb') as file:
+    with open('data/showtimes/siskel_films_showtimes_dict.pkl', 'wb') as file:
         pickle.dump(films_showtimes, file)
 
-    with open('siskel_films_details_dict.pkl', 'wb') as file:
+    with open('data/showtimes/siskel_films_details_dict.pkl', 'wb') as file:
         pickle.dump(film_details, file)
 
     # (For the dev's reference) print the runtime of the scrape.
@@ -219,7 +220,7 @@ if __name__ == '__main__':
     showtime_dict, prod_info_dict = siskel_scrape(driver)
 
     # # Print the dictionaries
-    # print(showtime_dict, prod_info_dict, sep='\n\n')
+    print(showtime_dict, prod_info_dict, sep='\n\n')
 
     # Quit and close the driver, to conclude.
     driver.quit()
