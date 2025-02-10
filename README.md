@@ -1,4 +1,4 @@
-# **Max's Movie List Madness** - A Database Project
+# **Max's Movie Madness** - A Database Project
 ## *HTML-parsing personal movie journals, review websites, and more to build a MySQL database primed for ratings prediction.*
 
 ## The Movie List
@@ -32,11 +32,17 @@ So organized, the course of this project can be chronologically traced through t
     - Scrape some of this site's most recent ratings.
     - Scrape a film's rating, given its title and release year.
 
-For a high-level overview of how these subprojects connect, which might clarify continuity as well as provide some closer descriptions, please see this [ReadMe.](/Presentation/README_package_details.md)
+
+### 5. **(IN-PROGRESS) - Scraping and Scheduling Showtimes ([its_showtimes](/its_showtimes/))**
+**Scraping showtimes from the pages of independent movie theaters in Chicago then scheduling them in Google Calendars.**
+
+<br></br>
+
+Please see this [package timeline ReadMe](/Presentation/README_package_details.md) for a high-level overview of how these subprojects connect.
 
 <!-- Web-scrape  individual reviews from various critical publications which are aggregated to form a film's "Metascore" on *Metacritic*. With these, I am able to analyze correlations between my ratings and those of prominent publications. This package also includes scrapers that I've built for the sites *Letterboxd* and *RogerEbert*. -->
 
-### [**Analyses**](/Analysis/Jupyter%20HTMLs/)
+## [**Analyses**](/Analysis/Jupyter%20HTMLs/)
 
 I took my movie data for a spin with some analysis and modelling, once I was satisfied with the quality and integrity of my movie database. These analyses are presentably featured in the [**Analysis (Jupyter NBs)**](/Analysis/) directory, in both [*ipynb*](/Analysis/) and [*html*](/Analysis/Jupyter%20HTMLs/) files. These documents, which were deliberately written and organized with an interested reader in mind, might help to explain my project's structure and motivations:
 

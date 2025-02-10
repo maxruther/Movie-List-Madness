@@ -6,7 +6,8 @@ USE movieDB;
 
 # NOTE: This procedure ERRORS if there are existing tables with '_og' in their 
 # name that don't correspond to a table in the Evernote movie list.
-# (This issue was encountered on 8-14-2024)
+# (This issue was encountered on 8-14-2024. It was partly addressed by adding a
+# process that deletes existing '_og' tables upon rebuildings of the database.)
 
 DROP PROCEDURE IF EXISTS generateWatched;
 DELIMITER //

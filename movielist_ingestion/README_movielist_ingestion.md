@@ -88,7 +88,7 @@ The above process of HTML-parsing yields something akin to a 3D-list, where each
 
 This involves dropping all tables from the MySQL movie list database, then recreating and populating them. The latter task is performed by automatically drafting 'CREATE TABLE' and 'INSERT' SQL statements from the ingested data, which contains the Evernote tables' names and attribute headers in addition to the records. In this way, tables are constructed in the MySQL database that match those of the Evernote file.
 
-Before this process concludes, a few more MySQL tables are formed from those sourced in the Evernote HTML. These are the "allwatched", "allunwatched", and "allmovies" tables, which are each created by the invocation of a pre-defined SQL procedure. These respectively list all watched movies, all unwatched movies, and all movies. The table of all watched movies might be especially important, as its contents are later used to train predictors of ratings.
+Before this process concludes, a few more MySQL tables are formed from those sourced in the Evernote HTML. These are the "allwatched", "allunwatched", and "allmovies" tables, which are created by [pre-defined SQL procedures](/SQL%20files/create_movieDB.sql). These respectively list all watched movies, all unwatched movies, and all movies. The table of all watched movies might be especially important, as its contents are later used to train predictors of ratings.
 
 <br></br>
 
