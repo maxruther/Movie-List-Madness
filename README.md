@@ -33,7 +33,7 @@ So organized, the course of this project can be chronologically traced through t
     - Scrape a film's rating, given its title and release year.
 
 
-### 5. **(IN-PROGRESS) - Scraping and Scheduling Showtimes ([its_showtimes](/its_showtimes/))**
+### 5. **(IN-PROGRESS) - [Scraping and Scheduling Showtimes](/its_showtimes/README_its_showtimes.md) ([its_showtimes](/its_showtimes/))**
 **Scraping showtimes from the pages of independent movie theaters in Chicago then scheduling them in Google Calendars.**
 
 <br></br>
