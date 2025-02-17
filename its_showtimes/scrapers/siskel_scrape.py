@@ -10,44 +10,10 @@ import pickle
 
 from typing import Dict, Tuple
 
-
-def parse_show_name(show_name: str,
-                    ) -> str:
-    """Parse a Siskel show's title into those of the series and film,
-    which sometimes comprise it.
-    
-    An auxiliary method of the siskel_scrape."""
-
-    film_title = None
-    series_prepends = None
-
-
-    if ': ' in show_name:
-        parsed_show_name = show_name.split(': ')
-
-        # In the event that the film title contains a single
-        # colon, detect and combine its erroneously split 
-        # segments.
-        if len(parsed_show_name) >= 2:
-            potential_title_segment = parsed_show_name[-2]
-
-            some_valid_series_names = ['OFF CENTER', 
-                                       'ARTHUR ERICKSON',
-                                       'ADFF',
-                                       ]
-
-            if potential_title_segment not in some_valid_series_names and \
-            not any(char.islower() for char in potential_title_segment):
-                film_title = ': '.join(parsed_show_name[-2:])
-                series_prepends = parsed_show_name[:-2]
-            else:
-                film_title = parsed_show_name[-1]
-                series_prepends = parsed_show_name[:-1]
-    else:
-        film_title = show_name
-        series_prepends = None
-
-    return film_title, series_prepends
+if not __name__ == '__main__':
+    from scrapers.utils import parse_show_name
+else:
+    from utils import parse_show_name
 
 
 def siskel_scrape(driver: webdriver.Chrome,

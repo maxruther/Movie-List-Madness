@@ -1,4 +1,6 @@
 import time
+from datetime import datetime
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
@@ -12,29 +14,21 @@ from sklearn.metrics.pairwise import cosine_similarity
 from fuzzywuzzy import fuzz
 
 
-def scrape_mc_page_links(fr_df: pd.DataFrame,
+def mc_film_detail_scrape(fr_df: pd.DataFrame,
                             driver: webdriver,
                             test_n_films: int = 0,
                             ) -> pd.DataFrame:
-    """Return a dataframe of links to individual films' Metacritic
-    pages, given a dataframe containing their titles and release years
-    as well as a Chromium WebDriver object.
-    
-    This function also writes those links to file, in two forms:
-        - 'mc_page_links.txt' - written as each link is scraped.
-        - 'mc_page_links.csv' - only written once all scraping finishes.
-    """
 
     # If this is a test run, only run this scrape for the first films.
     # Also, create a prefix of 'test_' for the names of any saved files.
-    filename_prefix_test = ''
+    filename_suffix_test = ''
     if test_n_films:
         if len(fr_df) >= test_n_films:
             fr_df = fr_df[:test_n_films]
 
-        filename_prefix_test = 'test_'
+        filename_suffix_test = '_test'
 
-    df_filename = f'data/scraped/{filename_prefix_test}mc_page_links'
+    df_filename = f'data/scraped/mc_film_details{filename_suffix_test}'
     
     # # Open a file to write to, to save the links as they're each
     # # scraped. This can be a helpful log when errors occur.
@@ -194,9 +188,45 @@ def scrape_mc_page_links(fr_df: pd.DataFrame,
                 'Link': chosen_link,
             }
 
+
+            # Navigate to the film's Metacritic page.
             driver.get('https://www.metacritic.com' + chosen_link)
             soup = BeautifulSoup(driver.page_source, 'html.parser')
 
+            ### FINDING AND ADDING FILM DETAILS FROM THE METACRITIC PAGE
+
+            # Metascore
+            review_score_elems = soup.select('div.c-productScoreInfo.u-clearfix')
+            for elem in review_score_elems:
+                review_type = elem.get('data-testid')
+                if review_type == 'critic-score-info':
+                    metascore = elem.select_one('div.c-siteReviewScore').text.strip()
+                    metascore = float(metascore) / 100
+                    prod_detail_dict['Metascore'] = metascore
+                    print(film_title, review_type, metascore)
+
+            # Summary
+            summary_element = soup.select_one('span.c-productDetails_description.g-text-xsmall')
+            if summary_element:
+                prod_detail_dict['Summary'] = summary_element.text.strip()
+                print(film_title, summary_element.text.strip())
+
+            # Director(s)
+            directors_element = soup.select_one('div.c-crewList.g-inner-spacing-bottom-small.c-productDetails_staff_directors').select('a.c-crewList_link.u-text-underline')
+            if directors_element:
+                directors_str = ' '.join([director.text.strip() for director in directors_element])
+                prod_detail_dict['Directors'] = directors_str
+                print(film_title, directors_str)
+
+            # Writer(s)
+            writers_element = soup.select_one('div.c-crewList.g-inner-spacing-bottom-small.c-productDetails_staff_writers').select('a.c-crewList_link.u-text-underline')
+            if writers_element:
+                writers_str = ' '.join([writer.text.strip() for writer in writers_element])
+                prod_detail_dict['Writers'] = writers_str
+                print(film_title, writers_str)
+
+
+            # Runtime and (US theatrical) release date
             prod_detail_elems = soup.select('div.c-movieDetails_sectionContainer')
             for elem in prod_detail_elems:
                 prod_detail_type = elem.select_one('span.g-text-bold').text.strip()
@@ -217,26 +247,35 @@ def scrape_mc_page_links(fr_df: pd.DataFrame,
                     runtime_in_minutes = runtime_hrs * 60 + runtime_mins
 
                     prod_detail_dict['Runtime'] = runtime_in_minutes
+
+                if prod_detail_type == 'Release Date':
+                    release_date = elem.select_one('span.g-outer-spacing-left-medium-fluid').text.strip()
+                    release_date = datetime.strptime(release_date, '%b %d, %Y')
+                    release_date = datetime.strftime(release_date, '%Y-%m-%d')
+                    prod_detail_dict['Release Date'] = release_date
+                    print(film_title, release_date,
+                          elem.select_one('span.g-outer-spacing-left-medium-fluid').text.strip()
+                          )
         
             prod_detail_dict_list.append(prod_detail_dict)
 
-
+    print(prod_detail_dict_list)
     prod_detail_df = pd.DataFrame(prod_detail_dict_list)
-    print(prod_detail_df)
+    # print(prod_detail_df)
     
-    # # Close the adhoc file, now that writing is finished.
-    # adhoc_link_file.close()
+    # # # Close the adhoc file, now that writing is finished.
+    # # adhoc_link_file.close()
 
-    # Create a final dataframe from the above-generated dictionary of 
-    # films and links (to their Metacritic 'Critic Review' pages.) 
-    films, links = zip(*mc_page_links.items())
-    mc_page_links_df = pd.DataFrame({'Film': films, 'Metacritic Page Suffix': links})
+    # # Create a final dataframe from the above-generated dictionary of 
+    # # films and links (to their Metacritic 'Critic Review' pages.) 
+    # films, links = zip(*mc_page_links.items())
+    # mc_page_links_df = pd.DataFrame({'Film': films, 'Metacritic Page Suffix': links})
 
-    # # Save the final dataframe to a csv file.
-    # mc_page_links_df.to_csv(f'{df_filename}.csv', index=False)
-    # mc_page_links_df.to_pickle(f'{df_filename}.pkl')
+    # # # Save the final dataframe to a csv file.
+    # # mc_page_links_df.to_csv(f'{df_filename}.csv', index=False)
+    # # mc_page_links_df.to_pickle(f'{df_filename}.pkl')
 
-    return mc_page_links_df
+    return prod_detail_df
 
 
 if __name__ == '__main__':
@@ -259,7 +298,7 @@ if __name__ == '__main__':
 
     # Call method to search and scrape for the films' Metacritic pages.
     # mc_page_links_df = scrape_mc_page_links(fr_df, driver)
-    mc_page_links_df = scrape_mc_page_links(fr_df, driver, test_n_films=10)
+    prod_detail_df = mc_film_detail_scrape(fr_df, driver, test_n_films=3)
 
     # (For the dev's reference) print the runtime of the scrape.
     scrape_runtime = time.time() - scrape_start
@@ -273,5 +312,4 @@ if __name__ == '__main__':
     driver.quit()
 
     # (For the dev's reference: print this final dataframe.)
-    print(mc_page_links_df)
-
+    print(prod_detail_df)

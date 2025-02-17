@@ -3,46 +3,18 @@ from selenium.webdriver.common.by import By
 
 from bs4 import BeautifulSoup
 
-import pandas as pd
-
 import time
 from datetime import datetime
-import re
 
 import pickle
+import re
 
 from typing import Dict, Tuple
 
-
-def tech_summary_list_to_dict(tech_summary_list: list[str],
-                              ) -> dict[str: int | str]:
-
-    tech_details = {}
-
-    year_pattern = r'^(\d{4})$'
-    runtime_pattern = r'^(\d*) mins?$'
-    format_pattern = r'(^DCP$|^\d\.\dmm$|^\d{1,3}mm$)'
-
-    for tech_detail in tech_summary_list:
-
-        year_match = re.search(year_pattern, tech_detail)
-        runtime_match = re.search(runtime_pattern, tech_detail)
-        format_match = re.search(format_pattern, tech_detail)
-
-        if year_match:
-            tech_details['Year'] = year_match.group(1)
-            # print(tech_details['Year'])
-            # print(type(tech_details['Year']))
-        elif runtime_match:
-            tech_details['Runtime'] = int(runtime_match.group(1))
-            # print(tech_details['Runtime'])
-            # print(type(tech_details['Runtime']))
-        elif format_match:
-            tech_details['Format'] = format_match.group(1)
-            # print(tech_details['Format'])
-            # print(type(tech_details['Format']))
-
-    return tech_details
+if __name__ != '__main__':
+    from scrapers.utils import tech_summary_list_to_dict
+else:
+    from utils import tech_summary_list_to_dict
 
 
 def musicbox_scrape(driver: webdriver.Chrome,
@@ -50,7 +22,7 @@ def musicbox_scrape(driver: webdriver.Chrome,
                       Dict[str, datetime],
                       Dict[str, Dict[str, str]]
                       ]:
-    
+
     # Navigate the driver to the Music Box calendar page.
     mb_calendar_link = 'https://musicboxtheatre.com/films-and-events'
     driver.get(mb_calendar_link)
