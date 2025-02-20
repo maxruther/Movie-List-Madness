@@ -4,40 +4,68 @@
 <br></br>
 ## Overview
 
-This is a multi-faceted personal project that centers on my personal moviegoing, as recorded in my [movie list.](/movie_lists/Movies.html) This document serves as both a watchlist and a log. It so resembles a to-do list, including movies both seen and unseen, and my ratings of the former.
+This is a multi-faceted personal project that centers on my personal moviegoing. It started with loading my [movie list](/movie_lists/Movies.html) to a local MySQL database, but sprawled out from there.
 
+My skills that this project may have exercised most are those in **HTML-scraping and database management.**
+
+
+
+### This Project's Course, in Subprojects
+
+This project, which I started in Dec 2023, consists of several fairly expansive subprojects. The first of these involved parsing my movie list and loading it into a local MySQL database.
+
+In the next subproject, I broadened that database by also loading records from the *OMDb*, which I found to be a rich, open source film database. 
+
+That addition introduced film review scores to my database, onto which this project's focus then shifted. In the subproject following, I shored up the integrity of this review score data, by building processes to report its missing values and facilitate their remapping (in cases where the lack was erroneous.)
+
+This led to a new subproject where I again broadened the database, this time by retrieving the scores of additional review sites. It involved building numerous web-scrapers for *Metacritic*, *Letterboxd*, and *RogerEbert*. 
+
+Once satisfied, I followed webscraping to a different end: the retrieval of showtimes for Chicago's independent cinemas (which aren't covered by Fandango.) With these successfully retrieved, I then coded schedulers to slate them in Google Calendars, for my convenient reference. Though I have achieved these functionalities, I continue to work on this subproject, as I hope to add a couple additional cinemas, like FACETS and Logan Theatre.
+
+If you would like a more detailed overview of how these subprojects connect, please see this [summary in markdown.](/Presentation/README_package_details.md).
+
+<!--
 To create a database primed to predict my own ratings, I here embarked on a series of subprojects to build and enrich to such a one. These subprojects, which number at four and counting, mark various stages of the effort and have been organized into separate custom Python packages.
 
 So organized, the course of this project can be chronologically traced through the below list of packages, which each contain dedicated *README_\*.md* files:
+-->
 
 <br></br>
 ## **The Subprojects (*Custom_Packages*)**
-If you would like a high-level overview of how these subprojects connect, please see my [summary in markdown.](/Presentation/README_package_details.md).
+
+This project's course as I've just described it can be traced through the below list of packages, which each contain a dedicated *README_\*.md* file.
+
+
 
 ### 1. [**Movie List Ingestion**](/movielist_ingestion/README_movielist_ingestion.md) ([*movielist_ingestion*](/movielist_ingestion/)): 
 **HTML-parsing my movie list and loading that data into a local MySQL database.**
+<br></br>
 
 ### 2. [**Enriching the Movie Data**](/omdb_builder/README_omdb_builder.md) ([*omdb_builder*](/omdb_builder/)):
 **Retrieving and loading in records from *The Open Movie Database (OMDb)*, to broaden my database.**
+<br></br>
 
 ### 3. [**Improving the Review Score Data**](/critic_ratings/RatingsTableMender/README_ratings_mender.md) ([*critic_ratings.RatingsTableMender*](/critic_ratings/RatingsTableMender/)):
 **Programmatically reporting and remapping values that might be missing erroneously,** for the review scores that were provided in the *OMDb* data. **Also, joining in an additional reviewer, from file.**
+<br></br>
 
 ### 4. [**Scraping to Add Reviewers**](/critic_ratings//scrapers/README_scraping_reviews.md) ([*critic_ratings.scrapers*](/critic_ratings/scrapers/)): 
 **From various websites, scraping the following:**
-- ***Metacritic***: Scrape the individual reviews from various critical publications which are aggregated to form a film's "Metascore". 
+- ***Metacritic***:
+    - **Critical Review scores** - Films' individual reviews from various critical publications that are aggregated to form its "Metascore".
+    - **Film Details** - Films' technical details, like release year, runtime, directors, writers, the date of its US theatrical release, and a descriptive summary.
 
 - ***LetterBoxd***: 
-    - Scrape a user's moviegoing *Diary* for those watched films' titles, years, and relative paths to their dedicated page on *LB*.
-    - Scrape a users' friends' ratings of their watched films.
+    - ***LB* Diary Watches** - A specified user's moviegoing *Diary* for its films' titles, years, and the relative paths to their dedicated pages on *LB*.
+    - **Critics & Friends' Ratings** - A specified users' friends' ratings of their own watched films.
+<br></br>
     
-- ***RogerEbert* (IN-PROGRESS)**: These scrapers are still in-progress, as they get blocked after only ~30 ratings scraped.
-    - Scrape some of this site's most recent ratings.
-    - Scrape a film's rating, given its title and release year.
+<!-- - ***RogerEbert* (IN-PROGRESS)**: These scrapers are still in-progress, as they get blocked after only ~30 ratings scraped.
+    - **Recent Ratings** - Scrape some of this site's most recent ratings.
+    - **Ratings of Specified Films** - Scrape a film's rating, given its title and release year. -->
 
-
-### 5. **(IN-PROGRESS) - [Scraping and Scheduling Showtimes](/its_showtimes/README_its_showtimes.md) ([its_showtimes](/its_showtimes/))**
-**Scraping showtimes from the pages of independent movie theaters in Chicago then scheduling them in Google Calendars.**
+### 5. [**Scraping and Scheduling Showtimes**](/its_showtimes/README_its_showtimes.md) ([its_showtimes](/its_showtimes/))
+**Scraping showtimes from the pages of Chicago's independent movie theaters, then scheduling them in Google Calendars.** So far covers the Music Box and the Siskel.
 
 <!-- Web-scrape  individual reviews from various critical publications which are aggregated to form a film's "Metascore" on *Metacritic*. With these, I am able to analyze correlations between my ratings and those of prominent publications. This package also includes scrapers that I've built for the sites *Letterboxd* and *RogerEbert*. -->
 
