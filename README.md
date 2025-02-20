@@ -37,19 +37,19 @@ This project's course as I've just described it can be traced through the below 
 
 
 
-### 1. [**Movie List Ingestion**](/movielist_ingestion/README_movielist_ingestion.md) ([*movielist_ingestion*](/movielist_ingestion/)): 
+### 1. [**Movie List Ingestion**](/movielist_ingestion/README.md) ([*movielist_ingestion*](/movielist_ingestion/)): 
 **HTML-parsing my movie list and loading that data into a local MySQL database.**
 <br></br>
 
-### 2. [**Enriching the Movie Data**](/omdb_builder/README_omdb_builder.md) ([*omdb_builder*](/omdb_builder/)):
+### 2. [**Enriching the Movie Data**](/omdb_builder/README.md) ([*omdb_builder*](/omdb_builder/)):
 **Retrieving and loading in records from *The Open Movie Database (OMDb)*, to broaden my database.**
 <br></br>
 
-### 3. [**Improving the Review Score Data**](/critic_ratings/RatingsTableMender/README_ratings_mender.md) ([*critic_ratings.RatingsTableMender*](/critic_ratings/RatingsTableMender/)):
+### 3. [**Improving the Review Score Data**](/critic_ratings/RatingsTableMender/README.md) ([*critic_ratings.RatingsTableMender*](/critic_ratings/RatingsTableMender/)):
 **Programmatically reporting and remapping values that might be missing erroneously,** for the review scores that were provided in the *OMDb* data. **Also, joining in an additional reviewer, from file.**
 <br></br>
 
-### 4. [**Scraping to Add Reviewers**](/critic_ratings//scrapers/README_scraping_reviews.md) ([*critic_ratings.scrapers*](/critic_ratings/scrapers/)): 
+### 4. [**Scraping to Add Reviewers**](/critic_ratings//scrapers/README.md) ([*critic_ratings.scrapers*](/critic_ratings/scrapers/)): 
 **From various websites, scraping the following:**
 - ***Metacritic***:
     - **Critical Review scores** - Films' individual reviews from various critical publications that are aggregated to form its "Metascore".
