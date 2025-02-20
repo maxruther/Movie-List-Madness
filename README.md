@@ -1,7 +1,8 @@
 # **Max's Movie Madness** - A Database Project
 ## *HTML-parsing personal movie journals, review websites, and more to build a MySQL database primed for ratings prediction.*
 
-## The Movie List
+<br></br>
+## Overview
 
 This is a multi-faceted personal project that centers on my personal moviegoing, as recorded in my [movie list.](/movie_lists/Movies.html) This document serves as both a watchlist and a log. It so resembles a to-do list, including movies both seen and unseen, and my ratings of the former.
 
@@ -9,7 +10,9 @@ To create a database primed to predict my own ratings, I here embarked on a seri
 
 So organized, the course of this project can be chronologically traced through the below list of packages, which each contain dedicated *README_\*.md* files:
 
+<br></br>
 ## **The Subprojects (*Custom_Packages*)**
+If you would like a high-level overview of how these subprojects connect, please see my [summary in markdown.](/Presentation/README_package_details.md).
 
 ### 1. [**Movie List Ingestion**](/movielist_ingestion/README_movielist_ingestion.md) ([*movielist_ingestion*](/movielist_ingestion/)): 
 **HTML-parsing my movie list and loading that data into a local MySQL database.**
@@ -36,12 +39,9 @@ So organized, the course of this project can be chronologically traced through t
 ### 5. **(IN-PROGRESS) - [Scraping and Scheduling Showtimes](/its_showtimes/README_its_showtimes.md) ([its_showtimes](/its_showtimes/))**
 **Scraping showtimes from the pages of independent movie theaters in Chicago then scheduling them in Google Calendars.**
 
-<br></br>
-
-Please see this [package timeline ReadMe](/Presentation/README_package_details.md) for a high-level overview of how these subprojects connect.
-
 <!-- Web-scrape  individual reviews from various critical publications which are aggregated to form a film's "Metascore" on *Metacritic*. With these, I am able to analyze correlations between my ratings and those of prominent publications. This package also includes scrapers that I've built for the sites *Letterboxd* and *RogerEbert*. -->
 
+<br></br>
 ## [**Analyses**](/Analysis/Jupyter%20HTMLs/)
 
 I took my movie data for a spin with some analysis and modelling, once I was satisfied with the quality and integrity of my movie database. These analyses are presentably featured in the [**Analysis (Jupyter NBs)**](/Analysis/) directory, in both [*ipynb*](/Analysis/) and [*html*](/Analysis/Jupyter%20HTMLs/) files. These documents, which were deliberately written and organized with an interested reader in mind, might help to explain my project's structure and motivations:
@@ -58,14 +58,17 @@ I took my movie data for a spin with some analysis and modelling, once I was sat
 
 As a light disclaimer, I feel that these analyses of mine are much lighter than what my beloved database deserves. I intend to return and deepen my analysis, to better leverage the richness I've cultivated. But as of yet I've skimped on this, because analysis was rarely the primary focus for this project. Which brings me to my next point...
 
+<br></br>
 ## This Project's Focus
 
 Questions stemming from data analysis often guided this project, but such analysis was rarely its primary focus. **Rather, this project primarily involves data ingestion through web-scraping and other parsings of HTML, as well as some database management.** I have programmatically taken in data from several sources- my watchlist; the *OMDb*; and several online aggregators of film criticism- to create a rich and persistent dataset, aimed toward the prediction of ratings.
 
+<br></br>
 ## Legibility
 
 To maximize the legibility of this project's code and findings, I have strove to document it thoroughly with explanation. Such explanation manifests in ample code comments, presentable notebook analyses, and *README* files like this one.
 
+<br></br>
 ## Questions and Feedback
 
 Please feel free to reach out to me with questions. I would also welcome and appreciate any feedback you might offer. If you do comment, please consider that this work is both ongoing and quite personal to me.
