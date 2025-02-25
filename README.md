@@ -8,7 +8,7 @@ This is a multi-faceted personal project that centers on personal moviegoing. It
 
 My skills that this project may have exercised most are those in **ETL, HTML-scraping, and database management.**
 
-If you would like more details on the course of this project and how its subprojects connect, please see [this section](#projects-course).
+If you would like details on the course of this project and how its subprojects connect, please see [this section](#projects-course).
 
 
 <!--
@@ -22,7 +22,7 @@ So organized, the course of this project can be chronologically traced through t
 <br></br>
 ## **The Subprojects (*Custom_Packages*)**
 
-This project's course as I've just described it can be traced through the below list of packages, which each contain a dedicated *README_\*.md* file.
+This project's course can be traced through the series of packages below, which each contain a dedicated *README_\*.md* file.
 
 
 
