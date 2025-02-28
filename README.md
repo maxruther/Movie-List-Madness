@@ -4,25 +4,12 @@
 <br></br>
 ## Overview
 
-This is a multi-faceted personal project that centers on my personal moviegoing. It started with loading my [movie list](/movie_lists/Movies.html) to a local MySQL database, but sprawled out from there.
+This is a multi-faceted personal project that centers on personal moviegoing. It started with loading my [movie list](/movie_lists/Movies.html) to a local MySQL database, but sprawled out from there to take in data from various sources, especially film review scores.
 
-My skills that this project may have exercised most are those in **HTML-scraping and database management.**
+My skills that this project may have exercised most are those in **ETL, HTML-scraping, and database management.**
 
+If you would like details on the course of this project and how its subprojects connect, please see [this section](#projects-course).
 
-
-### This Project's Course, in Subprojects
-
-This project, which I started in Dec 2023, consists of several fairly expansive subprojects. The first of these involved parsing my movie list and loading it into a local MySQL database.
-
-In the next subproject, I broadened that database by also loading records from the *OMDb*, which I found to be a rich, open source film database. 
-
-That addition introduced film review scores to my database, onto which this project's focus then shifted. In the subproject following, I shored up the integrity of this review score data, by building processes to report its missing values and facilitate their remapping (in cases where the lack was erroneous.)
-
-This led to a new subproject where I again broadened the database, this time by retrieving the scores of additional review sites. It involved building numerous web-scrapers for *Metacritic*, *Letterboxd*, and *RogerEbert*. 
-
-Once satisfied, I followed webscraping to a different end: the retrieval of showtimes for Chicago's independent cinemas (which aren't covered by Fandango.) With these successfully retrieved, I then coded schedulers to slate them in Google Calendars, for my convenient reference. Though I have achieved these functionalities, I continue to work on this subproject, as I hope to add a couple additional cinemas, like FACETS and Logan Theatre.
-
-If you would like a more detailed overview of how these subprojects connect, please see this [summary in markdown.](/Presentation/README_package_details.md).
 
 <!--
 To create a database primed to predict my own ratings, I here embarked on a series of subprojects to build and enrich to such a one. These subprojects, which number at four and counting, mark various stages of the effort and have been organized into separate custom Python packages.
@@ -30,10 +17,12 @@ To create a database primed to predict my own ratings, I here embarked on a seri
 So organized, the course of this project can be chronologically traced through the below list of packages, which each contain dedicated *README_\*.md* files:
 -->
 
+
+
 <br></br>
 ## **The Subprojects (*Custom_Packages*)**
 
-This project's course as I've just described it can be traced through the below list of packages, which each contain a dedicated *README_\*.md* file.
+This project's course can be traced through the series of packages below, which each contain a dedicated *README_\*.md* file.
 
 
 
@@ -46,7 +35,7 @@ This project's course as I've just described it can be traced through the below 
 <br></br>
 
 ### 3. [**Improving the Review Score Data**](/critic_ratings/RatingsTableMender/README.md) ([*critic_ratings.RatingsTableMender*](/critic_ratings/RatingsTableMender/)):
-**Programmatically reporting and remapping values that might be missing erroneously,** for the review scores that were provided in the *OMDb* data. **Also, joining in an additional reviewer, from file.**
+**Programmatically reporting and remapping values that might be missing erroneously,** from the review scores featured in the *OMDb* data. **Also, joining in an additional reviewer, from file.**
 <br></br>
 
 ### 4. [**Scraping to Add Reviewers**](/critic_ratings//scrapers/README.md) ([*critic_ratings.scrapers*](/critic_ratings/scrapers/)): 
@@ -86,15 +75,36 @@ I took my movie data for a spin with some analysis and modelling, once I was sat
 
 As a light disclaimer, I feel that these analyses of mine are much lighter than what my beloved database deserves. I intend to return and deepen my analysis, to better leverage the richness I've cultivated. But as of yet I've skimped on this, because analysis was rarely the primary focus for this project. Which brings me to my next point...
 
+
 <br></br>
 ## This Project's Focus
 
 Questions stemming from data analysis often guided this project, but such analysis was rarely its primary focus. **Rather, this project primarily involves data ingestion through web-scraping and other parsings of HTML, as well as some database management.** I have programmatically taken in data from several sources- my watchlist; the *OMDb*; and several online aggregators of film criticism- to create a rich and persistent dataset, aimed toward the prediction of ratings.
 
+
+<br></br>
+
+<a id="projects-course"></a>
+### This Project's Course, in Subprojects
+
+This project, which I started in Dec 2023, consists of several fairly expansive subprojects. The first of these involved parsing my movie list and loading it into a local MySQL database.
+
+In the next subproject, I broadened that database by also loading records from the *OMDb*, which I found to be a rich, open source film database. 
+
+That addition introduced film review scores to my database, onto which this project's focus then shifted. In the subproject following, I shored up the integrity of this review score data, by building processes to report its missing values and facilitate their remapping (in cases where the lack was erroneous.)
+
+This led to a new subproject where I again broadened the database, this time by retrieving the scores of additional review sites. It involved building numerous web-scrapers for *Metacritic*, *Letterboxd*, and *RogerEbert*. 
+
+Once satisfied, I followed webscraping to a different end: the retrieval of showtimes for Chicago's independent cinemas (which aren't covered by Fandango.) With these successfully retrieved, I then coded schedulers to slate them in Google Calendars, for my convenient reference. Though I have achieved these functionalities, I continue to work on this subproject, as I hope to add a couple additional cinemas, like FACETS and Logan Theatre.
+
+If you would like a more detailed overview of how these subprojects connect, please see this [summary in markdown.](/Presentation/README_package_details.md).
+
+
 <br></br>
 ## Legibility
 
 To maximize the legibility of this project's code and findings, I have strove to document it thoroughly with explanation. Such explanation manifests in ample code comments, presentable notebook analyses, and *README* files like this one.
+
 
 <br></br>
 ## Questions and Feedback
