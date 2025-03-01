@@ -17,6 +17,7 @@ from fuzzywuzzy import fuzz
 def mc_film_detail_scrape(fr_df: pd.DataFrame,
                             driver: webdriver,
                             test_n_films: int = 0,
+                            output_filename='mc_film_details',
                             ) -> pd.DataFrame:
 
     # If this is a test run, only run this scrape for the first films.
@@ -28,7 +29,7 @@ def mc_film_detail_scrape(fr_df: pd.DataFrame,
 
         filename_suffix_test = '_test'
 
-    df_filename = f'data/scraped/mc_film_details{filename_suffix_test}'
+    df_filename = f'data/scraped/{output_filename}{filename_suffix_test}'
     
     # # Open a file to write to, to save the links as they're each
     # # scraped. This can be a helpful log when errors occur.
@@ -201,7 +202,10 @@ def mc_film_detail_scrape(fr_df: pd.DataFrame,
                 review_type = elem.get('data-testid')
                 if review_type == 'critic-score-info':
                     metascore = elem.select_one('div.c-siteReviewScore').text.strip()
-                    metascore = float(metascore) / 100
+                    if metascore == 'tbd':
+                        metascore = None
+                    else:
+                        metascore = float(metascore) / 100
                     prod_detail_dict['Metascore'] = metascore
                     print(film_title, review_type, metascore)
 
@@ -219,9 +223,11 @@ def mc_film_detail_scrape(fr_df: pd.DataFrame,
                 print(film_title, directors_str)
 
             # Writer(s)
-            writers_element = soup.select_one('div.c-crewList.g-inner-spacing-bottom-small.c-productDetails_staff_writers').select('a.c-crewList_link.u-text-underline')
-            if writers_element:
-                writers_str = ' '.join([writer.text.strip() for writer in writers_element])
+            writers_detail_element = soup.select_one('div.c-crewList.g-inner-spacing-bottom-small.c-productDetails_staff_writers')
+            # writers_element = soup.select_one('div.c-crewList.g-inner-spacing-bottom-small.c-productDetails_staff_writers').select('a.c-crewList_link.u-text-underline')
+            if writers_detail_element:
+                writer_entries_element = writers_detail_element.select('a.c-crewList_link.u-text-underline')
+                writers_str = ' '.join([writer.text.strip() for writer in writer_entries_element])
                 prod_detail_dict['Writers'] = writers_str
                 print(film_title, writers_str)
 
@@ -258,22 +264,16 @@ def mc_film_detail_scrape(fr_df: pd.DataFrame,
                           )
         
             prod_detail_dict_list.append(prod_detail_dict)
-
-    print(prod_detail_dict_list)
-    prod_detail_df = pd.DataFrame(prod_detail_dict_list)
+    
     # print(prod_detail_df)
     
     # # # Close the adhoc file, now that writing is finished.
     # # adhoc_link_file.close()
 
-    # # Create a final dataframe from the above-generated dictionary of 
-    # # films and links (to their Metacritic 'Critic Review' pages.) 
-    # films, links = zip(*mc_page_links.items())
-    # mc_page_links_df = pd.DataFrame({'Film': films, 'Metacritic Page Suffix': links})
-
-    # # # Save the final dataframe to a csv file.
-    # # mc_page_links_df.to_csv(f'{df_filename}.csv', index=False)
-    # # mc_page_links_df.to_pickle(f'{df_filename}.pkl')
+    # Save the production details to file, from a dataframe.
+    prod_detail_df = pd.DataFrame(prod_detail_dict_list)
+    prod_detail_df.to_csv(f'{df_filename}.csv', index=False)
+    prod_detail_df.to_pickle(f'{df_filename}.pkl')
 
     return prod_detail_df
 
