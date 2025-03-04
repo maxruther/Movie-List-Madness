@@ -130,7 +130,27 @@ def musicbox_scrape(driver: webdriver.Chrome,
                             tech_summary_elem = main_section_soup.select_one('p.tech-summary')
                             tech_summ_deets = tech_summary_elem.select('span')
                             tech_deet_list = [deet.text.strip() for deet in tech_summ_deets]
-                            film_details[show_title] = tech_summary_list_to_dict(tech_deet_list)           
+                            film_details[show_title] = tech_summary_list_to_dict(tech_deet_list)
+
+                            credit_elems = main_section_soup.select('div.credits')
+                            print(f'\n\n{show_title} - Credits:')
+                            for credit_elem in credit_elems:
+                                credit_type = credit_elem.find('label').text.strip()
+                                if credit_type == 'DIRECTED BY':
+                                    director_elems = credit_elem.select('span')
+                                    director = ', '.join([director_elem.text.strip(' ,') for director_elem in director_elems])
+                                    print(f'{credit_type}: {director}')
+                                    film_details[show_title]['Director'] = director
+                                elif credit_type == 'WRITTEN BY':
+                                    writer_elems = credit_elem.select('span')
+                                    writer = ', '.join([writer_elem.text.strip(' ,') for writer_elem in writer_elems])
+                                    print(f'{credit_type}: {writer}')
+                                    film_details[show_title]['Writer'] = writer
+                                elif credit_type == 'STARRING':
+                                    cast_elems = credit_elem.select('span')
+                                    cast = ', '.join([cast_elem.text.strip(' ,') for cast_elem in cast_elems])
+                                    print(f'{credit_type}: {cast}')
+                                    film_details[show_title]['Cast'] = cast
 
                     showtimes = showtimes_elem.select('a.use-ajax')
                     # print(f'Showtimes:')

@@ -98,9 +98,13 @@ if __name__ == '__main__':
                         'Title': film.upper(),
                         'Release Year': prod_info_dict_siskel[film]['Release Year'],
                   }
+
+                  if 'Director' in prod_info_dict_siskel[film]:
+                        master_dict[film]['Director'] = prod_info_dict_siskel[film]['Director']
             else:
                   siskel_missing_year.append(film)
-      
+
+      musicbox_missing_year = []
       for film in showtime_dict_musicbox:
             if 'Year' in prod_info_dict_musicbox[film]:
                   master_dict[film] = {
@@ -108,16 +112,30 @@ if __name__ == '__main__':
                         'Release Year': prod_info_dict_musicbox[film]['Year'],
                   }
 
+                  if 'Director' in prod_info_dict_musicbox[film]:
+                        master_dict[film]['Director'] = prod_info_dict_musicbox[film]['Director']
+
       master_titles_yrs_df = pd.DataFrame(master_dict).T.reset_index(drop=True)
       master_titles_yrs_df.to_csv('data/showtimes/showtime_master_titles_yrs.csv', index=False)
-      # print(master_titles_yrs_df)
+      print(master_titles_yrs_df)
+
+      # Load the search log from the previous scrape. The scraper can use this
+      # to avoid redundant searches.
+      # existing_scrape_df = pd.read_csv('data\scraped\showtime_mc_detail_scrape_test_search_results_log.csv')
+      with open('data\scraped\showtime_mc_detail_scrape_test_search_results_log.pkl', 'rb') as file:
+            existing_scrape_df = pickle.load(file)
+
+      print(existing_scrape_df.head())
+
+      # print(existing_scrape_df.loc[(existing_scrape_df['Title Searched'] == "I'M STILL HERE") & (existing_scrape_df['Year Searched'] == 2024)])
 
       master_detail_scrape_df = mc_film_detail_scrape(master_titles_yrs_df, 
                             driver,
-                            test_n_films=10,
-                            output_filename='showtime_mc_detail_scrape')
+                        #     test_n_films=130,
+                            output_filename='showtime_mc_detail_scrape',
+                            )
 
-      print(master_detail_scrape_df)
+      # print(master_detail_scrape_df)
             
       # print('Siskel films missing year:\n', siskel_missing_year)
       # print('Music Box films missing year:\n', musicbox_missing_year)
