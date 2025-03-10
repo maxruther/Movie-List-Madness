@@ -95,7 +95,7 @@ def musicbox_scrape(driver: webdriver.Chrome,
             shows = day.select('div.programming-content')
             for show in shows:
 
-                show_title = show.select_one('a').text.strip()
+                show_title = show.select_one('a').text.strip().upper()
 
                 # Remove parenthesized release year from the show/film title string, if present.
                 pattern = r'(.*)\ \((\d{4})\)$'

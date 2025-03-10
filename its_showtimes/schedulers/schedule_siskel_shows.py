@@ -38,9 +38,14 @@ def schedule_siskel_shows():
         
         # Some runtimes were missing from the Siskel page. I'm adding 
         # them manually here.
-        siskel_film_details_dict['THE ROOM NEXT DOOR']['Runtime'] = 110
-        siskel_film_details_dict['THE SEALED SOIL']['Runtime'] = 90
-        siskel_film_details_dict['MYSTERY MOVIE MONDAY']['Runtime'] = 120
+        if 'THE ROOM NEXT DOOR' in siskel_film_details_dict:
+            siskel_film_details_dict['THE ROOM NEXT DOOR']['Runtime'] = 110
+        
+        if 'THE SEALED SOIL' in siskel_film_details_dict:
+            siskel_film_details_dict['THE SEALED SOIL']['Runtime'] = 90
+        
+        if 'MYSTERY MOVIE MONDAY' in siskel_film_details_dict:
+            siskel_film_details_dict['MYSTERY MOVIE MONDAY']['Runtime'] = 120
 
         for movie_title in siskel_showtimes_dict:
             # Skip movies that don't have a runtime specified.

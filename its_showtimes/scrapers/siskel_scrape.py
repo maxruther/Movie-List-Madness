@@ -109,6 +109,9 @@ def siskel_scrape(driver: webdriver.Chrome,
                 # Get the show's name, and parse it into the names of the
                 # screened film and series (if applicable.)
                 show_name = film.select_one('div.Name').text
+
+                show_name = show_name.replace('Ô', 'O')
+
                 film_name, show_series_prepends = parse_show_name(show_name)
                 # print(show_name, film_name, show_series_prepends, sep='\t||\t')
 
@@ -214,7 +217,7 @@ if __name__ == '__main__':
     showtime_dict, prod_info_dict = siskel_scrape(driver)
 
     # # Print the dictionaries
-    print(showtime_dict, prod_info_dict, sep='\n\n')
+    # print(showtime_dict, prod_info_dict, sep='\n\n')
 
     # Quit and close the driver, to conclude.
     driver.quit()
