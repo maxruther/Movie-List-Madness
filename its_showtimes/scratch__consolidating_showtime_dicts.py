@@ -11,7 +11,7 @@ import pandas as pd
 
 import sys
 sys.path.append('c:\\Users\\maxru\\eclipse-workspace\\movie_list_dvlp\\movie_list_parsing\\')
-from critic_ratings.scrapers.mc_film_detail_scrape import mc_film_detail_scrape
+from critic_ratings.scrapers.old.mc_film_detail_scrape import mc_film_detail_scrape
 
 # Set up the Selenium Chromium driver
 options = webdriver.ChromeOptions()
