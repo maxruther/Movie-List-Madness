@@ -1,5 +1,5 @@
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, types
 
 from mc_complete_scrape import mc_search_and_scrape
 
@@ -20,3 +20,30 @@ mc_search_and_scrape(
     cr_filename='mywatches_mc_crs',
     info_filename='mywatches_mc_info',
     searchresults_filename='mywatches_mc_searchresults')
+
+mywatches_mc_crs_df = pd.read_pickle('data/scraped/mywatches_mc_crs.pkl')
+print(mywatches_mc_crs_df.head(5))
+
+# Fix a couple variable types
+mywatches_mc_crs_df['Score'] = mywatches_mc_crs_df['Score'].astype(int)
+mywatches_mc_crs_df['Date Written'] = pd.to_datetime(mywatches_mc_crs_df['Date Written'], format='%b %d, %Y')
+
+# Define the variable type mapping for the MySQL table
+dtype_mapping = {
+    'Title': types.VARCHAR(80),
+    'Year': types.INT,
+    'Publication': types.VARCHAR(80),
+    'Score': types.INT,
+    'Critic': types.VARCHAR(80),
+    'Snippet': types.TEXT,
+    'Date Written': types.DATE,
+}
+
+
+mywatches_mc_crs_df.to_sql(con=conn, 
+                           name='mc_reviews', 
+                           if_exists='replace',
+                           index=False,
+                           dtype=dtype_mapping,
+                           )
+
