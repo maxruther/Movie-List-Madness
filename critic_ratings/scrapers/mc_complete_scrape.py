@@ -25,6 +25,8 @@ def combine_and_save_data(new_data: list[dict[str: str]],
     # Otherwise, create a new dataframe from the records.
     else:
         existing_df = pd.DataFrame(new_data)
+    
+    
 
     # Save the final dataframe of critic reviews to a csv file.
     existing_df.to_csv(f'{output_filepath}.csv', index=False)
@@ -46,7 +48,9 @@ def mc_search_and_scrape(
     options = webdriver.ChromeOptions()
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--ignore-ssl-errors')
-    driver = webdriver.Chrome(options)
+    options.page_load_strategy = 'eager'
+
+    driver = webdriver.Chrome(options=options)
 
     ## SET UP AND/OR LOAD EXISTING FILES
 
@@ -82,6 +86,16 @@ def mc_search_and_scrape(
         if os.path.exists(f'{review_df_filepath}.pkl'):
             review_df = pd.read_pickle(f'{review_df_filepath}.pkl')
 
+    
+    # Identify the film year attribute from the given dataset. It's
+    # either 'Release Year' or 'Year'. (Inconsistently named across
+    # scrapers, at the moment.)
+    year_attr = None
+    if 'Year' in target_film_df.columns:
+        year_attr = 'Year'
+    elif 'Release Year' in target_film_df.columns:
+        year_attr = 'Release Year'
+
 
     # Initialize lists that will eventually form the desired outputs. These
     # will hold respective dictionaries of the films' search results, 
@@ -98,10 +112,16 @@ def mc_search_and_scrape(
         # Assign the film's title, release year, and their concatenation to
         # dedicated variables.
         film_title = film_record['Title']
-        film_year = film_record['Release Year']
+        film_year = film_record[year_attr]
+
 
         # Announce the film currently scraped for.
         print(f'\nCurrent scrape:\t{film_title} ({film_year})')
+
+        if pd.isna(film_year):
+            print(f'NO YEAR GIVEN for film {film_title}.'
+                  '\nAborting scrape, as this field is required.')
+            continue
 
         # Check for bogus year entry, which Siskel submissions sometimes have.
         # example_str = '2017-2024'. A single, specific year is instead

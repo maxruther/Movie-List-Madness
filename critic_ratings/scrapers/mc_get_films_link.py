@@ -83,7 +83,7 @@ def mc_get_films_link(
             # candidate. As such, its similarities to the searched title
             # (and its link) are stored in a dictionary for later 
             # comparison to the others.
-            if abs(int(result_year) - int(film_year)) <= 1:
+            if abs(int(result_year) - int(film_year)) <= 1 or title_cos_sim == 1:
             # if result_year == film_year:
                 result_director, director_fuzzy_sim, director_cos_sim = None, None, None
                 if film_director:

@@ -11,6 +11,8 @@ from datetime import datetime
 import pickle
 import re
 
+import pandas as pd
+
 from typing import Dict, Tuple
 
 if __name__ != '__main__':
@@ -128,8 +130,9 @@ def musicbox_scrape(driver: webdriver.Chrome,
                             main_section_soup = BeautifulSoup(main_section_text, 'html.parser')
 
                             tech_summary_elem = main_section_soup.select_one('p.tech-summary')
-                            tech_summ_deets = tech_summary_elem.select('span')
-                            tech_deet_list = [deet.text.strip() for deet in tech_summ_deets]
+                            if tech_summary_elem:
+                                tech_summ_deets = tech_summary_elem.select('span')
+                                tech_deet_list = [deet.text.strip() for deet in tech_summ_deets]
                             film_details[show_title] = tech_summary_list_to_dict(tech_deet_list)
 
                             credit_elems = main_section_soup.select('div.credits')
@@ -176,10 +179,10 @@ def musicbox_scrape(driver: webdriver.Chrome,
     # print(films_showtimes, '\n\n')
     # print(film_details)
 
-    # film_details_df = pd.DataFrame.from_dict(film_details, orient='index').reset_index()
-    # film_details_df.rename(columns={'index': 'Title'}, inplace=True)
-    # print(film_details_df)
-
+    film_details_df = pd.DataFrame.from_dict(film_details, orient='index').reset_index()
+    film_details_df.rename(columns={'index': 'Title'}, inplace=True)
+    film_details_df.to_csv('data/showtimes/musicbox_radar.csv', index=False)
+    film_details_df.to_pickle('data/showtimes/musicbox_radar.pkl')
 
     # Saving the scraped data to pickle files.
     with open('data/showtimes/musicbox_films_showtimes_dict.pkl', 'wb') as file:
