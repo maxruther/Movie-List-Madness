@@ -46,9 +46,10 @@ def mc_info_scrape(film_title: str,
         # print(film_title, summary)
 
     # Director(s)
-    directors_element = soup.select_one('div.c-crewList.g-inner-spacing-bottom-small.c-productDetails_staff_directors').select('a.c-crewList_link.u-text-underline')
-    if directors_element:
-        directors_str = ' '.join([director.text.strip() for director in directors_element])
+    directors_detail_element = soup.select_one('div.c-crewList.g-inner-spacing-bottom-small.c-productDetails_staff_directors')
+    if directors_detail_element:
+        directors_entries_element = directors_detail_element.select('a.c-crewList_link.u-text-underline')
+        directors_str = ' '.join([director.text.strip() for director in directors_entries_element])
         detail_dict['Directors'] = directors_str
         # print(film_title, directors_str)
 

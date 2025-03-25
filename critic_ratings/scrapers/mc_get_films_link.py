@@ -144,19 +144,24 @@ def mc_get_films_link(
     # With the results' examination now complete, the single-most
     # similar search result is chosen.
     if len(top_results) == 1:
-        # If there is only one result with matching release year, then it is
-        # decided as the chosen result.
+        # If there is only one result that might fit.
         result_title, result_dict = top_results.popitem()
 
         # If the result's title and director are (cosine) similar enough to those of the searched film, then it is chosen as the match.
-        if result_dict['Titles Cosine Sim'] == 1:
+        result_year = result_dict['Year Result']
+
+        if result_dict['Titles Cosine Sim'] == 1 and result_dict['Directors Cosine Sim'] >= 0.5:
             chosen_link = result_dict['Link']
         elif result_dict['Titles Cosine Sim'] < 1:
             if result_dict['Directors Cosine Sim'] >= 0.5:
                 chosen_link = result_dict['Link']
-            else:
-                print("\nWARNING: No suitably matched result for the queried film! There were some results that showed the same year, but the cosine similarities between the titles and directors were too low to indicate a match.\n",
-                f'{film_title=}\n{film_year=}\n')
+        
+        if not chosen_link:
+            print("NO METACRITIC PAGE IDENTIFIED for film",
+                    f'"{film_title} ({film_year})":',
+                    "\nOne search result showed a similar year, but its",
+                    "title and/or director(s) were too dissimilar to",
+                    "indicate a match.\n")
 
     elif len(top_results) > 1:
         # If there are multiple results to decide from, then the one
@@ -175,14 +180,26 @@ def mc_get_films_link(
         # If the result's title and director are (cosine) similar enough
         # to those of the searched film, then it is chosen as the match.
         if maximally_fuzzy_res_dict['Titles Cosine Sim'] == 1:
-            chosen_link = maximally_fuzzy_res_dict['Link']
-        elif maximally_fuzzy_res_dict['Titles Cosine Sim'] < 1:
-            if maximally_fuzzy_res_dict['Directors Cosine Sim']:
+            # Scrutinize further if director similarity is available.
+            if film_director:
                 if maximally_fuzzy_res_dict['Directors Cosine Sim'] >= 0.5:
                     chosen_link = maximally_fuzzy_res_dict['Link']
-        else:
-            print("\nWARNING: No suitably matched result for the queried film! There were some results that showed the same year, but the cosine similarities between the titles and directors were too low to indicate a match.\n",
-            f'{film_title=}\t{film_director=}\n{maximally_fuzzy_res_dict['Title Result']}\t{maximally_fuzzy_res_dict['Director Result']=}\n')
+            # Otherwise, just choose this result.
+            else:
+                chosen_link = maximally_fuzzy_res_dict['Link']
+        
+        elif maximally_fuzzy_res_dict['Titles Cosine Sim'] < 1:
+            if film_director:
+                if maximally_fuzzy_res_dict['Directors Cosine Sim'] >= 0.5:
+                    chosen_link = maximally_fuzzy_res_dict['Link']
+        
+        if not chosen_link:
+            print("NO METACRITIC PAGE IDENTIFIED for film",
+                      f"{film_title} ({film_year}).",
+                      "\nMultiple search results showed a similar year or",
+                      "a closely matching title, but either their",
+                      "titles or directors were too dissimilar to",
+                      "indicate a match.\n")
 
         
         # # (For the dev's reference: print the title and link of the

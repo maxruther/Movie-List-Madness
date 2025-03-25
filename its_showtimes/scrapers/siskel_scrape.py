@@ -3,6 +3,8 @@ from selenium.webdriver.common.by import By
 
 from bs4 import BeautifulSoup
 
+import pandas as pd
+
 import time
 from datetime import datetime
 
@@ -51,18 +53,24 @@ def siskel_scrape(driver: webdriver.Chrome,
 
     # Now at the actual calendar, we check for a working link to the
     # next month's page, by checking for a clickable "Next" button.
-    next_month_button_xpath = '//*[@id="ctl00_CPH1_EventCalendar_calNext"]'
-    next_month_button_element = driver.find_element(By.XPATH, 
-                                                    next_month_button_xpath)
+#
+    next_month_button_element = None
+    try:
+        next_month_button_element = driver.find_element(By.ID, 
+                                                    'ctl00_CPH1_EventCalendar_calNext')
+    except:
+        time.sleep(7)
     
     calendar_links = [true_calendar_link]
 
     if next_month_button_element:
         
+        print("In the 'next month' branch!")
         driver.implicitly_wait(3)
         next_month_button_element.click()
         driver.implicitly_wait(3)
         calendar_links.append(driver.current_url)
+        print(f'Appended to calendar_links: {driver.current_url}')
         print(driver.current_url)
 
         driver.get(true_calendar_link)
@@ -182,11 +190,15 @@ def siskel_scrape(driver: webdriver.Chrome,
 
     # # (For debugging/feedback) Print the various dictionaries.
     # print('',
-    #     #   film_titles_master,
     #       siskel_series_dict,
     #       films_showtimes,
     #       film_details,
     #       sep='\n\n')
+
+    film_details_df = pd.DataFrame.from_dict(film_details, orient='index').reset_index()
+    film_details_df.rename(columns={'index': 'Title'}, inplace=True)
+    film_details_df.to_csv('data/showtimes/siskel_radar.csv', index=False)
+    film_details_df.to_pickle('data/showtimes/siskel_radar.pkl')
  
     # Save to file the dictionaries of showtimes and production info.
     with open('data/showtimes/siskel_films_showtimes_dict.pkl', 'wb') as file:

@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 def select_text_from_soup(element_name: str, 
                         the_soup: BeautifulSoup,
                         css_select_str: str,
+                        mute=True,
                         ) -> str:
         """From a BeautifulSoup object, get the stripped text of
         the first element of a possibly numerous CSS-selection,
@@ -23,19 +24,20 @@ def select_text_from_soup(element_name: str,
         # indicate this unmet expectation.
         selection_count = len(element_selection)
         if selection_count != 1:
-
             if selection_count == 0:
-                print("\n",
+                if not mute:
+                     print("\n",
                     f"No {element_name} elements found.\n")
                 data_element = ''
                 return data_element
             else:
-                print("\n",
-                    f"There were {selection_count} elements of",
-                    f"{element_name} found:\n")
-                for i in element_selection:
-                    print(i, '\n\n')
-                print()
+                if not mute:
+                    print("\n",
+                        f"There were {selection_count} elements of",
+                        f"{element_name} found:\n")
+                    for i in element_selection:
+                        print(i, '\n\n')
+                    print()
 
         # Take the text of the first element found, strip it, then 
         # return it.
