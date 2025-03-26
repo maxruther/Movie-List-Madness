@@ -17,6 +17,7 @@ def sign_in_to_lb(user: str, pw: str):
     options = webdriver.ChromeOptions()
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--ignore-ssl-errors')
+    options.page_load_strategy = 'eager'
     driver = webdriver.Chrome(options)
     
     # Navigate the driver to the letterboxd homepage.
@@ -45,21 +46,32 @@ def sign_in_to_lb(user: str, pw: str):
     return driver
 
 
-def get_friends_ratings(film_links: list[str], 
-                        driver: webdriver, 
-                        test_n_films: int = 0,
-                        ) -> pd.DataFrame:
+def lb_scrape_friends_ratings(lb_creds: list[str],
+                              film_links: list[str], 
+                            #   driver: webdriver, 
+                              test_n_films: int = 0,
+                              output_parentdir='letterboxd',
+                              ) -> pd.DataFrame:
+    
+    # Unpack the creds which were read in from file.
+    user, password, user_url = lb_creds
+
+    driver = sign_in_to_lb(user, password)
 
     # If this is a test run, only run this scrape for the first films.
-    # Also, create a prefix of 'test_' for the names of any saved files.
-    filename_prefix_test = ''
+    # Also, create a suffix of '_test' for the names of any saved files.
+    filename_suffix_test = ''
     if test_n_films:
         if len(film_links) >= test_n_films:
             film_links = film_links[:test_n_films]
     
-        filename_prefix_test = 'test_'
+        filename_suffix_test = '_test'
 
-    output_filename = f'data/scraped/{filename_prefix_test}lb_friends_ratings_{user}'
+    output_filename = f'lb_friends_ratings_{user}{filename_suffix_test}'
+
+        
+    # (For the dev's reference) time the imminent scraping.
+    scrape_start = time.time()
 
     # # If the parameter 'testing' is true and sufficiently low, limit the list of links
     # # to just the first three (for testing purposes.)
@@ -128,6 +140,7 @@ def get_friends_ratings(film_links: list[str],
         
         # Add that film's dictionary of friend ratings to the list.
         friend_ratings_dict_list.append(friend_ratings_dict)
+        print(f"Grabbed elements for {film_title_and_yr}")
 
         # # (For the dev's reference) print an acknowledgment that this
         # # film was processed.
@@ -138,9 +151,22 @@ def get_friends_ratings(film_links: list[str],
     friend_ratings_df = pd.DataFrame(friend_ratings_dict_list)
 
     # Save that dataframe to pkl and csv files, then return it.
-    friend_ratings_df.to_csv(f'{output_filename}.csv', index=False)
-    friend_ratings_df.to_pickle(f'{output_filename}.pkl')
+    friend_ratings_df.to_csv(f'data/csv/{output_parentdir}/{output_filename}.csv', index=False)
+    friend_ratings_df.to_pickle(f'data/pkl/{output_parentdir}/{output_filename}.pkl')
+
     
+    # (For the dev's reference) print the runtime of the scrape.
+    scrape_runtime = time.time() - scrape_start
+    scrape_runtime = round(scrape_runtime)
+    runtime_min = scrape_runtime // 60
+    runtime_sec = scrape_runtime % 60
+    scrape_runtime_str = f'{runtime_min} m {runtime_sec} s'
+    print(f'\nRuntime of this scrape: {scrape_runtime_str}')
+
+
+    # Close the Selenium driver to conclude.
+    driver.close()
+
     return friend_ratings_df
 
 
@@ -154,35 +180,23 @@ if __name__ == "__main__":
     # Specify creds and sign into Letterboxd. ('user_url' is the segment of the
     # letterboxd url that points to the user's page.)
     with open(sensitive_file, 'r') as file:
-        user, password, user_url = file.read().split()
-    driver = sign_in_to_lb(user, password)
+        lb_creds = file.read().split()
+    user_url = lb_creds[2]
 
     # Read in the list of letterboxd film links (as scraped by 'lb_scrape_diary.py'.)
-    lb_diary_df = pd.read_csv(f'data/scraped/lb_diary_{user_url}.csv')
+    lb_diary_df = pd.read_csv(f'data/csv/letterboxd/lb_diary_{user_url}.csv')
     lb_diary_links = lb_diary_df['Letterboxd Link'].values
     
-    # (For the dev's reference) time the imminent scraping.
-    scrape_start = time.time()
 
     # Call this script's method to scrape that users' friends' ratings
     # (of shared watches.)
     # lb_friends_ratings_df = get_friends_ratings(lb_diary_links, driver)
-    lb_friends_ratings_df = get_friends_ratings(lb_diary_links, driver, test_n_films=3)
+    lb_friends_ratings_df = lb_scrape_friends_ratings(lb_creds,
+                                                      lb_diary_links,
+                                                    #   test_n_films=3,
+                                                      )
 
     # # (For the dev's reference) print the dataframe of the user's friends' ratings.
     print('Scraped ratings from friends on Letterboxd:', 
           lb_friends_ratings_df,
           sep='\n\n')
-
-    # (For the dev's reference) print the runtime of the scrape.
-    scrape_runtime = time.time() - scrape_start
-    scrape_runtime = round(scrape_runtime)
-    runtime_min = scrape_runtime // 60
-    runtime_sec = scrape_runtime % 60
-    scrape_runtime_str = f'{runtime_min} m {runtime_sec} s'
-    print(f'\nRuntime of this scrape: {scrape_runtime_str}')
-
-    
-
-    # Close the Selenium driver to conclude.
-    driver.close()

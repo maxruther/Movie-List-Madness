@@ -11,14 +11,10 @@ import csv
 
 import pandas as pd
 
-# Set up Selenium driver
-options = webdriver.ChromeOptions()
-options.add_argument('--ignore-certificate-errors')
-options.add_argument('--ignore-ssl-errors')
-driver = webdriver.Chrome(options)
 
-
-def get_users_diary_links(user_url: str, driver: webdriver.Chrome) -> list[str]:
+def get_users_diary_links(user_url: str, 
+                          driver: webdriver.Chrome,
+                          output_parentdir='letterboxd') -> list[str]:
     # Navigate to user's film diary page.
     driver.get(f"https://letterboxd.com/{user_url}/films/diary/")
 
@@ -64,14 +60,20 @@ def get_users_diary_links(user_url: str, driver: webdriver.Chrome) -> list[str]:
                   'Letterboxd Link': all_film_links})
     
     # Write the dataframe of the user's film diary links to a csv file.
-    full_filename = f'data/scraped/lb_diary_{my_user_url}'
-    letterboxd_diary_df.to_csv(f'{full_filename}.csv', index=False)
-    letterboxd_diary_df.to_pickle(f'{full_filename}.pkl')
+    letterboxd_diary_df.to_csv(f'data/csv/{output_parentdir}/lb_diary_{my_user_url}.csv', index=False)
+    letterboxd_diary_df.to_pickle(f'data/pkl/{output_parentdir}/lb_diary_{my_user_url}.pkl')
     
     return letterboxd_diary_df
 
 
 if __name__ == '__main__':
+
+    # Set up Selenium driver
+    options = webdriver.ChromeOptions()
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument('--ignore-ssl-errors')
+    options.page_load_strategy = 'eager'
+    driver = webdriver.Chrome(options)
 
     # Specify the URL segment that leads to the page of the desired user.
     my_user_url = 'yoyoyodaboy'
