@@ -1,6 +1,6 @@
 from selenium import webdriver
 
-from scrapers.siskel_scrape import siskel_scrape
+from its_showtimes.scrapers.siskel_showtime_scrape import siskel_showtime_scrape
 from scrapers.musicbox_scrape import musicbox_scrape
 
 from schedulers.schedule_musicbox_shows import schedule_musicbox_shows

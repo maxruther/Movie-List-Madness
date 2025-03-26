@@ -8,9 +8,9 @@ import pandas as pd
 
 import os
 
-from mc_info_scrape import mc_info_scrape
-from mc_review_scrape import mc_review_scrape
-from mc_get_films_link import mc_get_films_link
+from mc_utilities.mc_info_scrape import mc_info_scrape
+from mc_utilities.mc_review_scrape import mc_review_scrape
+from mc_utilities.mc_get_films_link import mc_get_films_link
 
 
 def combine_and_save_data(new_data: list[dict[str: str]],
@@ -29,16 +29,18 @@ def combine_and_save_data(new_data: list[dict[str: str]],
     
 
     # Save the final dataframe of critic reviews to a csv file.
-    existing_df.to_csv(f'{output_filepath}.csv', index=False)
-    existing_df.to_pickle(f'{output_filepath}.pkl')
+    existing_df.to_csv(f'data/csv/{output_filepath}.csv', index=False)
+    existing_df.to_pickle(f'data/pkl/{output_filepath}.pkl')
 
 
 def mc_search_and_scrape(
         target_film_df: pd.DataFrame,
         test_n_films: int = 0,
-        cr_filename: str = 'mc_reviews',
-        info_filename: str = 'mc_info',
-        searchresults_filename: str = 'mc_searchresults',
+        # cr_filename: str = 'mc_reviews',
+        # info_filename: str = 'mc_info',
+        # searchresults_filename: str = 'mc_searchresults',
+        output_filename: str = 'searchnscrape',
+        output_parentdir: str = 'metacritic',
         adding_to_existing_df: bool = True,
         ) -> pd.DataFrame:
     
@@ -52,22 +54,23 @@ def mc_search_and_scrape(
 
     driver = webdriver.Chrome(options=options)
 
+
     ## SET UP AND/OR LOAD EXISTING FILES
 
     # If this is a test run, only run this scrape for the first films.
     # Also, create a prefix of 'test_' for the names of any saved files.
-    filename_suffix_test = ''
+    filename_prefix_test = ''
     if test_n_films:
         if len(target_film_df) >= test_n_films:
             target_film_df = target_film_df[:test_n_films]
 
-        filename_suffix_test = '_test'
-
+        filename_prefix_test = 'test_'
+    output_filename = filename_prefix_test + output_filename
     
     # Set the complete filepaths for the outputs.
-    search_results_df_filepath = f'data/scraped/{searchresults_filename}{filename_suffix_test}'
-    info_df_filepath = f'data/scraped/{info_filename}{filename_suffix_test}'
-    review_df_filepath = f'data/scraped/{cr_filename}{filename_suffix_test}'
+    search_results_df_filepath_partial = f'{output_parentdir}/{output_filename}_mc_searchresults'
+    info_df_filepath_partial = f'{output_parentdir}/{output_filename}_mc_info'
+    review_df_filepath_partial = f'{output_parentdir}/{output_filename}_mc_reviews'
 
     # For these outputs, initialize empty dataframes to start. But if the
     # preceding filenames are present and this method is set to "add to 
@@ -77,14 +80,14 @@ def mc_search_and_scrape(
     review_df = pd.DataFrame()
 
     if adding_to_existing_df:
-        if os.path.exists(f'{search_results_df_filepath}.pkl'):
-            search_result_df = pd.read_pickle(f'{search_results_df_filepath}.pkl')
+        if os.path.exists(f'data/pkl/{search_results_df_filepath_partial}.pkl'):
+            search_result_df = pd.read_pickle(f'data/pkl/{search_results_df_filepath_partial}.pkl')
 
-        if os.path.exists(f'{info_df_filepath}.pkl'):
-            info_df = pd.read_pickle(f'{info_df_filepath}.pkl')
+        if os.path.exists(f'data/pkl/{info_df_filepath_partial}.pkl'):
+            info_df = pd.read_pickle(f'data/pkl/{info_df_filepath_partial}.pkl')
 
-        if os.path.exists(f'{review_df_filepath}.pkl'):
-            review_df = pd.read_pickle(f'{review_df_filepath}.pkl')
+        if os.path.exists(f'data/pkl/{review_df_filepath_partial}.pkl'):
+            review_df = pd.read_pickle(f'data/pkl/{review_df_filepath_partial}.pkl')
 
     
     # Identify the film year attribute from the given dataset. It's
@@ -103,6 +106,9 @@ def mc_search_and_scrape(
     search_results_dict_list = []
     info_dict_list = []
     review_dict_list = []
+
+    # Start timing the imminent scraping.
+    scrape_start = time.time()
 
     # For each film record, search that film on Metacritic and record 
     # the link of the best-matching result. The match is based on the
@@ -146,11 +152,11 @@ def mc_search_and_scrape(
         already_searched = None
         already_scraped_info, already_scraped_reviews = None, None
         if adding_to_existing_df:
-            if os.path.exists(f'{search_results_df_filepath}.pkl'):
+            if os.path.exists(f'data/pkl/{search_results_df_filepath_partial}.pkl'):
                 already_searched = not search_result_df.loc[(search_result_df['Title Searched'] == film_title) & (search_result_df['Year Searched'] == film_year)].empty
-            if os.path.exists(f'{info_df_filepath}.pkl'):
+            if os.path.exists(f'data/pkl/{info_df_filepath_partial}.pkl'):
                 already_scraped_info = not info_df.loc[(info_df['Title'] == film_title) & (info_df['Year'] == film_year)].empty
-            if os.path.exists(f'{review_df_filepath}.pkl'):
+            if os.path.exists(f'data/pkl/{review_df_filepath_partial}.pkl'):
                 already_scraped_reviews = not review_df.loc[(review_df['Title'] == film_title) & (review_df['Year'] == film_year)].empty
             
             # Skip the scrape if the film's details and critical reviews appear to
@@ -209,13 +215,22 @@ def mc_search_and_scrape(
     ## SAVE DATA TO FILE
 
     various_output_necessities = [
-        [review_dict_list, review_df, review_df_filepath],
-        [info_dict_list, info_df, info_df_filepath],
-        [search_results_dict_list, search_result_df, search_results_df_filepath]
+        [review_dict_list, review_df, review_df_filepath_partial],
+        [info_dict_list, info_df, info_df_filepath_partial],
+        [search_results_dict_list, search_result_df, search_results_df_filepath_partial]
     ]
     
     for new_records, existing_data, output_filepath in various_output_necessities:
         combine_and_save_data(new_records, existing_data, output_filepath)
+
+
+    # NOTE SCRAPE'S RUNTIME.
+    scrape_runtime = time.time() - scrape_start
+    scrape_runtime = round(scrape_runtime)
+    runtime_min = scrape_runtime // 60
+    runtime_sec = scrape_runtime % 60
+    scrape_runtime_str = f'{runtime_min} m {runtime_sec} s'
+    print(f'\nRuntime of this scrape: {scrape_runtime_str}')
 
     
     ## CLOSE THE WEBDRIVER
@@ -223,31 +238,23 @@ def mc_search_and_scrape(
 
 
 if __name__ == '__main__':
-    
-    # Specify the URL segment that leads to the page of the desired user.
-    my_user_url = 'yoyoyodaboy'
 
-    # Read in dataset that contains movie titles and release years.
-    target_films_df = pd.read_csv(f'data/scraped/lb_diary_{my_user_url}.csv')
+    # For testing, read in my scraped Letterboxd Diary. Currently lacks directors!
+    target_films_df = pd.read_csv(f'data/csv/letterboxd/lb_diary_yoyoyodaboy.csv')
     target_films_df['Release Year'] = target_films_df['Release Year'].astype(str) 
     
-    # ALTERNATE FILE: Read in dataset with titles, release years, and directors.
-    target_films_df = pd.read_csv(f'data\showtimes\showtime_master_titles_yrs.csv')
+    # # ALTERNATE FILE: Read in dataset with titles, release years, and directors.
+    # target_films_df = pd.read_csv(f'data\showtimes\showtime_master_titles_yrs.csv')
 
-    # Start timing the imminent scraping.
-    scrape_start = time.time()
 
     # Call method to search for and scrape the films' Metacritic pages.
-    prod_detail_df = mc_search_and_scrape(target_films_df, test_n_films=18, cr_filename='comp_mc_reviews', info_filename='comp_mc_info', searchresults_filename='comp_mc_searchresults')
+    prod_detail_df = mc_search_and_scrape(target_films_df, 
+                                          test_n_films=10, 
+                                          output_filename='test_searchscrape',
+                                          output_parentdir='metacritic',
+                                          adding_to_existing_df=False,
+                                          )
     # prod_detail_df = complete_mc_scrape(target_films_df, test_n_films=10, cr_filename='comp_mc_reviews', info_filename='comp_mc_info', searchresults_filename='comp_mc_searchresults', adding_to_existing_df=False)
-
-    # Print the runtime of the scrape.
-    scrape_runtime = time.time() - scrape_start
-    scrape_runtime = round(scrape_runtime)
-    runtime_min = scrape_runtime // 60
-    runtime_sec = scrape_runtime % 60
-    scrape_runtime_str = f'{runtime_min} m {runtime_sec} s'
-    print(f'\nRuntime of this scrape: {scrape_runtime_str}')
 
     # (For the dev's reference: print this final dataframe.)
     print(prod_detail_df)

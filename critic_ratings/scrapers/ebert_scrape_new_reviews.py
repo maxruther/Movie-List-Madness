@@ -1,8 +1,6 @@
-import pickle
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 from bs4 import BeautifulSoup
 
@@ -12,6 +10,7 @@ import re
 
 def ebert_scrape_new_reviews(test_n_films: int = 0,
                              ) -> pd.DataFrame:
+    
     # Driver setup
     options = webdriver.ChromeOptions()
     options.add_argument('--ignore-certificate-errors')
@@ -126,14 +125,13 @@ def ebert_scrape_new_reviews(test_n_films: int = 0,
     movie_df = pd.DataFrame(movie_dict_list)
 
     if test_n_films:
-        movie_df.to_csv('data/csv/ebert/ebert_radar_test.csv', index=False)
-        movie_df.to_pickle('data/pkl/ebert/ebert_radar_test.pkl')
+        movie_df.to_csv('data/csv/ebert/ebert_recent_reviews_test.csv', index=False)
+        movie_df.to_pickle('data/pkl/ebert/ebert_recent_reviews_test.pkl')
     else:
-        movie_df.to_csv('data/csv/ebert/ebert_radar.csv', index=False)
-        movie_df.to_pickle('data/pkl/ebert/ebert_radar.pkl')
+        movie_df.to_csv('data/csv/ebert/ebert_recent_reviews.csv', index=False)
+        movie_df.to_pickle('data/pkl/ebert/ebert_recent_reviews.pkl')
     
-    print(movie_df)
-    print(tv_show_list)
+    # print(tv_show_list)
 
 
     driver.quit()
@@ -142,5 +140,7 @@ def ebert_scrape_new_reviews(test_n_films: int = 0,
 
 
 if __name__ == '__main__':
-    # ebert_scrape_new_reviews(test_n_films=3)
-    ebert_scrape_new_reviews()
+    # recent_review_df = ebert_scrape_new_reviews(test_n_films=3)
+    recent_review_df = ebert_scrape_new_reviews()
+
+    print(recent_review_df.head())

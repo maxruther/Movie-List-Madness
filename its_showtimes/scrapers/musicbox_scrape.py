@@ -21,11 +21,20 @@ else:
     from utils import tech_summary_list_to_dict
 
 
-def musicbox_scrape(driver: webdriver.Chrome,
-                  ) -> Tuple[
-                      Dict[str, datetime],
-                      Dict[str, Dict[str, str]]
-                      ]:
+def musicbox_scrape(
+        testing: bool = False,
+        ) -> Tuple[
+            Dict[str, datetime],
+            pd.DataFrame
+            ]:
+    
+    # Set up the Selenium ChromeDriver
+    options = webdriver.ChromeOptions()
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument('--ignore-ssl-errors')
+    options.page_load_strategy = 'eager'
+
+    driver = webdriver.Chrome(options)
 
     # Navigate the driver to the Music Box calendar page.
     mb_calendar_link = 'https://musicboxtheatre.com/films-and-events'
@@ -62,6 +71,9 @@ def musicbox_scrape(driver: webdriver.Chrome,
     scrape_start = time.time()
 
     # Iterate through each calendar page, scraping the showtimes and film details.
+    if testing:
+        # Test on just this month's calendar.
+        calendar_page_links = [mb_calendar_link]
     for cal_link in calendar_page_links:
         driver.get(cal_link)
 
@@ -69,15 +81,13 @@ def musicbox_scrape(driver: webdriver.Chrome,
         calendar_text = driver.find_element(By.XPATH, calendar_elem_xpath).get_attribute('innerHTML')
         soup = BeautifulSoup(calendar_text, 'html.parser')
 
-        # calendar_days = soup.select('div.Item')
-        # calendar_days = soup.select('td.InsideDate', limit=1)
         calendar_days = soup.select('div.calendar-cell')
 
         
-
+        if testing:
+            # Test on just the last handful of days in the calendar.
+            calendar_days = calendar_days[-10:]
         for day in calendar_days:
-        # for day in calendar_days[27:32]:
-            # print(day.get('class'))
             if 'calendar-head' in day.get('class'):
                 # print('EMPTY CALENDAR CELL - HEADER')
                 pass
@@ -171,27 +181,35 @@ def musicbox_scrape(driver: webdriver.Chrome,
                             if showtime_datetime not in films_showtimes[show_title]:
                                 films_showtimes[show_title].append(showtime_datetime)
 
+    
     # # Printing the various outputs of the scrape.
     # for pair in film_details.items():
     #     print(pair)
     # print()
-
     # print(films_showtimes, '\n\n')
     # print(film_details)
 
+
+    # Saving the scraped data to files.
+    testing_prefix = ''
+    if testing:
+        testing_prefix = 'test_'
+
+    # Create a dataframe from the dictionary of the scraped show info.
     film_details_df = pd.DataFrame.from_dict(film_details, orient='index').reset_index()
     film_details_df.rename(columns={'index': 'Title'}, inplace=True)
-    film_details_df.to_csv('data/showtimes/musicbox_radar.csv', index=False)
-    film_details_df.to_pickle('data/showtimes/musicbox_radar.pkl')
 
-    # Saving the scraped data to pickle files.
-    with open('data/showtimes/musicbox_films_showtimes_dict.pkl', 'wb') as file:
+    # Save the dataframe to files, csv and pkl.
+    film_details_df.to_csv(f'data/csv/musicbox/{testing_prefix}musicbox_show_info.csv', index=False)
+    film_details_df.to_pickle(f'data/pkl/musicbox/{testing_prefix}musicbox_show_info.pkl')
+
+    # Save the showtimes and show info dictionaries to pkl files.
+    with open(f'data/pkl/musicbox/{testing_prefix}musicbox_showtimes_dict.pkl', 'wb') as file:
         pickle.dump(films_showtimes, file)
-
-    with open('data/showtimes/musicbox_film_details_dict.pkl', 'wb') as file:
+    with open(f'data/pkl/musicbox/{testing_prefix}musicbox_show_info_dict.pkl', 'wb') as file:
         pickle.dump(film_details, file)
 
-    # (For the dev's reference) print the runtime of the scrape.
+    # Note the scrape's runtime.
     scrape_runtime = time.time() - scrape_start
     scrape_runtime = round(scrape_runtime)
     runtime_min = scrape_runtime // 60
@@ -199,22 +217,29 @@ def musicbox_scrape(driver: webdriver.Chrome,
     scrape_runtime_str = f'{runtime_min} m {runtime_sec} s'
     print(f'\nRuntime of this scrape: {scrape_runtime_str}')
 
-    return films_showtimes, film_details
+    # Quit and close the driver, to conclude.
+    driver.quit()
+
+    return films_showtimes, film_details_df
 
 
 if __name__ == '__main__':
 
-    options = webdriver.ChromeOptions()
-    options.add_argument('--ignore-certificate-errors')
-    options.add_argument('--ignore-ssl-errors')
-
-    driver = webdriver.Chrome(options)
-
     # Run the Music Box scrape
-    showtime_dict, prod_info_dict = musicbox_scrape(driver)
+    # showtime_dict, prod_info_dict = musicbox_scrape(testing=True)
+    showtime_dict, show_info_df = musicbox_scrape()
 
-    # # Print the dictionaries
-    print(showtime_dict, prod_info_dict, sep='\n\n')
+    # Print previews of the scraped output:
+    
+    # Showtimes
+    for movie, showtime_list in list(showtime_dict.items())[:5]:
+        print(movie)
+        for showtime in showtime_list:
+            print(f'\t{showtime}')
+        print()
+    
+    # A separator
+    print('\n' + '-'*80 + '\n')
 
-    # Quit and close the driver, to conclude.
-    driver.quit()
+    # Show info
+    print(show_info_df.head(), '\n')

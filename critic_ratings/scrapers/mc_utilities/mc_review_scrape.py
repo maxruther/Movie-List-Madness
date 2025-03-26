@@ -3,8 +3,10 @@ from selenium.webdriver.common.by import By
 
 from bs4 import BeautifulSoup
 
-from select_text_from_soup import select_text_from_soup
-
+if __name__ == '__main__':
+    from select_text_from_soup import select_text_from_soup
+else:
+    from mc_utilities.select_text_from_soup import select_text_from_soup
 
 def mc_review_scrape(film_title: str,
                      film_year: str,

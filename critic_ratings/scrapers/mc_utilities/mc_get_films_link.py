@@ -147,14 +147,21 @@ def mc_get_films_link(
         # If there is only one result that might fit.
         result_title, result_dict = top_results.popitem()
 
-        # If the result's title and director are (cosine) similar enough to those of the searched film, then it is chosen as the match.
         result_year = result_dict['Year Result']
 
-        if result_dict['Titles Cosine Sim'] == 1 and result_dict['Directors Cosine Sim'] >= 0.5:
-            chosen_link = result_dict['Link']
-        elif result_dict['Titles Cosine Sim'] < 1:
-            if result_dict['Directors Cosine Sim'] >= 0.5:
+        # If the searched film's director is known, use its similarity 
+        # to the result's to determine selection.
+        if film_director:
+            if result_dict['Titles Cosine Sim'] == 1 and result_dict['Directors Cosine Sim'] >= 0.5:
                 chosen_link = result_dict['Link']
+            elif result_dict['Titles Cosine Sim'] < 1:
+                if result_dict['Directors Cosine Sim'] >= 0.5:
+                    chosen_link = result_dict['Link']
+        # If the director is not known
+        else:
+            if result_dict['Titles Cosine Sim'] == 1 and abs(int(result_year) - int(film_year)) <= 1:
+                chosen_link = result_dict['Link']
+
         
         if not chosen_link:
             print("NO METACRITIC PAGE IDENTIFIED for film",
@@ -168,30 +175,36 @@ def mc_get_films_link(
         # with the highest 'fuzzy' similiarity to the searched title is
         # chosen.
         max_fuzzy_sim = 0
-        maximally_fuzzy_res_dict = {}
+        chosen_result_dict = {}
         for result in top_results:
             if top_results[result]['Titles Fuzzy Sim'] > max_fuzzy_sim:
-                maximally_fuzzy_res_dict = top_results[result]
+                chosen_result_dict = top_results[result]
                 max_fuzzy_sim = top_results[result]['Titles Fuzzy Sim']
+
+        result_year = chosen_result_dict['Year Result']
 
         # if test_n_films:
         #     print(f'\n\n{film_title_and_year}\n{top_results}\n')
         
         # If the result's title and director are (cosine) similar enough
         # to those of the searched film, then it is chosen as the match.
-        if maximally_fuzzy_res_dict['Titles Cosine Sim'] == 1:
+        if chosen_result_dict['Titles Cosine Sim'] == 1:
             # Scrutinize further if director similarity is available.
             if film_director:
-                if maximally_fuzzy_res_dict['Directors Cosine Sim'] >= 0.5:
-                    chosen_link = maximally_fuzzy_res_dict['Link']
+                if chosen_result_dict['Directors Cosine Sim'] >= 0.5:
+                    chosen_link = chosen_result_dict['Link']
             # Otherwise, just choose this result.
             else:
-                chosen_link = maximally_fuzzy_res_dict['Link']
+                if chosen_result_dict['Titles Cosine Sim'] == 1 and abs(int(result_year) - int(film_year)) <= 1:
+                    chosen_link = chosen_result_dict['Link']
         
-        elif maximally_fuzzy_res_dict['Titles Cosine Sim'] < 1:
+        elif chosen_result_dict['Titles Cosine Sim'] < 1:
             if film_director:
-                if maximally_fuzzy_res_dict['Directors Cosine Sim'] >= 0.5:
-                    chosen_link = maximally_fuzzy_res_dict['Link']
+                if chosen_result_dict['Directors Cosine Sim'] >= 0.5:
+                    chosen_link = chosen_result_dict['Link']
+            else:
+                if chosen_result_dict['Titles Cosine Sim'] > 0.66:
+                    chosen_link = chosen_result_dict['Link']
         
         if not chosen_link:
             print("NO METACRITIC PAGE IDENTIFIED for film",
