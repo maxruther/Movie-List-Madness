@@ -2,20 +2,71 @@ import pandas as pd
 import pickle
 import os
 
-mb_showtimes = None
-with open('data/pkl/musicbox/musicbox_showtimes_dict.pkl', 'rb') as file:
-    mb_showtimes = pickle.load(file)
 
-new_dict = {}
-for movie in list(mb_showtimes.keys())[:5]:
-    new_dict[movie] = mb_showtimes[movie]
-print(new_dict, '\n\n')
+def parse_show_name(show_name: str,
+                        ) -> str:
+        """Parse a Siskel show's title into those of the series and film,
+        which sometimes comprise it.
+        
+        An auxiliary method of the siskel_scrape."""
 
-df1 = pd.DataFrame.from_dict(new_dict, orient='index')
-df_stacked = df1.stack().reset_index()
-df_stacked.columns = ['Movie', 'Showtime_Index', 'Showtime']
-df_stacked = df_stacked[['Movie', 'Showtime']]
-print(df_stacked)
+        film_title = None
+        series_prepends = None
+
+
+        if ': ' in show_name:
+            parsed_show_name = show_name.split(': ')
+
+            # In the event that the film title contains a single
+            # colon, detect and combine its erroneously split 
+            # segments.
+            if len(parsed_show_name) >= 2:
+                potential_title_segment = parsed_show_name[-2]
+
+                some_valid_series_names = ['OFF CENTER', 
+                                        'ARTHUR ERICKSON',
+                                        'ADFF',
+                                        ]
+
+                if potential_title_segment not in some_valid_series_names and \
+                not any(char.islower() for char in potential_title_segment):
+                    film_title = ': '.join(parsed_show_name[-2:])
+                    series_prepends = parsed_show_name[:-2]
+                else:
+                    film_title = parsed_show_name[-1]
+                    series_prepends = parsed_show_name[:-1]
+        else:
+            film_title = show_name
+            series_prepends = None
+
+        return film_title, series_prepends
+
+
+siskel_sup_info_dict = None
+with open('data/pkl/siskel/siskel_show_info_dict.pkl', 'rb') as file:
+    siskel_sup_info_dict = pickle.load(file)
+
+# print(siskel_sup_info_dict.keys())
+# print(siskel_sup_info_dict.get('DR. STRANGELOVE'))
+
+for show_name in siskel_sup_info_dict.keys():
+     print(show_name, '\t\t', parse_show_name(show_name)[0])
+
+
+# mb_showtimes = None
+# with open('data/pkl/musicbox/musicbox_showtimes_dict.pkl', 'rb') as file:
+#     mb_showtimes = pickle.load(file)
+
+# new_dict = {}
+# for movie in list(mb_showtimes.keys())[:5]:
+#     new_dict[movie] = mb_showtimes[movie]
+# print(new_dict, '\n\n')
+
+# df1 = pd.DataFrame.from_dict(new_dict, orient='index')
+# df_stacked = df1.stack().reset_index()
+# df_stacked.columns = ['Movie', 'Showtime_Index', 'Showtime']
+# df_stacked = df_stacked[['Movie', 'Showtime']]
+# print(df_stacked)
 
 # for movie, showtime_list in list(mb_showtimes.items())[:5]:
 #                   print(movie)

@@ -30,20 +30,22 @@ def schedule_siskel_shows():
         movies_missing_runtime = []
 
         siskel_showtimes_dict = None
-        with open('data/showtimes/siskel_films_showtimes_dict.pkl', 'rb') as file:
+        # with open('data/showtimes/siskel_films_showtimes_dict.pkl', 'rb') as file:
+        with open('data/pkl/siskel/siskel_showtimes_dict.pkl', 'rb') as file:
             siskel_showtimes_dict = pickle.load(file)
 
-        siskel_film_details_dict = None
-        with open('data/showtimes/siskel_films_details_dict.pkl', 'rb') as file:
-            siskel_film_details_dict = pickle.load(file)
+        siskel_inf_info_dict = None
+        # with open('data/showtimes/siskel_films_details_dict.pkl', 'rb') as file:
+        with open('data/pkl/siskel/siskel_inferior_show_info_dict.pkl', 'rb') as file:
+            siskel_inf_info_dict = pickle.load(file)
 
         mc_scrape_df = None
-        with open('data/scraped/showtime_mc_detail_scrape.pkl', 'rb') as file:
+        with open('data/pkl/siskel/siskel_inferior_show_info_mc_info.pkl', 'rb') as file:
             mc_scrape_df = pickle.load(file)
 
-        siskel_info_scr_dict = None
-        with open('data/showtimes/siskel_show_info_scr_dict.pkl', 'rb') as file:
-            siskel_info_scr_dict = pickle.load(file)
+        siskel_sup_info_dict = None
+        with open('data/pkl/siskel/siskel_show_info_dict.pkl', 'rb') as file:
+            siskel_sup_info_dict = pickle.load(file)
 
 
         missing_from_mc_scrape = []
@@ -58,7 +60,7 @@ def schedule_siskel_shows():
 
             print(f'Slating showtimes for: {movie_title}')
 
-            if movie_title in siskel_info_scr_dict and 'Mystery Movie Monday' not in movie_title:
+            if movie_title in siskel_sup_info_dict and 'Mystery Movie Monday' not in movie_title:
 
                 metascore = None
                 if movie_title in mc_scrape_df['Title'].values:
@@ -66,7 +68,7 @@ def schedule_siskel_shows():
                     mc_film_detail_dict = mc_scrape_record.to_dict(orient='records')[0]
                     metascore = mc_film_detail_dict.get('Metascore', 'N/A')
 
-                film_detail_dict = siskel_info_scr_dict[movie_title]
+                film_detail_dict = siskel_sup_info_dict[movie_title]
 
                 runtime = int(film_detail_dict["Runtime"])
 
@@ -86,8 +88,7 @@ def schedule_siskel_shows():
                     '\n' + \
                     f'{film_detail_dict["Meta"]}' + \
                     '\n\n' + \
-                    f''
-                    # f'{film_detail_dict["Summary"]}'
+                    f'{film_detail_dict["Description"]}'
 
 
             # If the movie is in the Metacritic-scraped film details, then 
@@ -120,7 +121,7 @@ def schedule_siskel_shows():
 
                 # If the siskel scrape didn't get the runtime for the movie,
                 # then set that to a default of 120 minutes.
-                if 'Runtime' not in siskel_film_details_dict[movie_title]:
+                if 'Runtime' not in siskel_inf_info_dict[movie_title]:
                     # print(f'RUNTIME MISSING FOR FILM "{movie_title}"')
                     movies_missing_runtime.append(movie_title)
                     runtime = 120
@@ -128,7 +129,7 @@ def schedule_siskel_shows():
 
                 # Otherwise, use the runtime scraped from the Siskel page.
                 else:
-                    runtime = siskel_film_details_dict[movie_title]['Runtime']
+                    runtime = siskel_inf_info_dict[movie_title]['Runtime']
 
 
             print('-'*80)
@@ -180,47 +181,3 @@ def schedule_siskel_shows():
 
 if __name__ == '__main__':
     schedule_siskel_shows()
-
-
-    # siskel_showtimes_dict = None
-    # with open('data/showtimes/siskel_films_showtimes_dict.pkl', 'rb') as file:
-    #     siskel_showtimes_dict = pickle.load(file)
-
-    # siskel_film_details_dict = None
-    # with open('data/showtimes/siskel_films_details_dict.pkl', 'rb') as file:
-    #     siskel_film_details_dict = pickle.load(file)
-
-
-    # mc_scrape_df = None
-    # with open('data/scraped/showtime_mc_detail_scrape.pkl', 'rb') as file:
-    #     mc_scrape_df = pickle.load(file)
-
-    # missing_from_mc_scrape = []
-
-    # for movie_title in siskel_showtimes_dict:
-
-    #     if movie_title not in mc_scrape_df['Title'].values:
-    #         missing_from_mc_scrape.append(movie_title)
-        
-    #     else:
-    #         film_detail_record = mc_scrape_df[mc_scrape_df['Title'] == movie_title]
-    #         film_detail_dict = film_detail_record.to_dict(orient='records')[0]
-
-    #         movie_event_desc = \
-    #             f'{film_detail_dict["Year"]} | ' + \
-    #             f'{film_detail_dict["Runtime"]} min. | ' + \
-    #             f'{film_detail_dict.get("Metascore", 'N/A')}' + \
-    #             '\n' + \
-    #             f'Directed by: {film_detail_dict["Directors"]}\n' + \
-    #             f'Written by: {film_detail_dict["Writers"]}\n' + \
-    #             '\n' + \
-    #             f'{film_detail_dict["Summary"]}'
-    #         print(movie_title, '\n')
-    #         print(movie_event_desc)
-    #         print('\n', '-'*80, '\n', sep='')
-
-    # print(f'Missing from Metacritic scrape: {missing_from_mc_scrape}')
-
-    # print(mc_scrape_df.keys())
-
-    # print(mc_scrape_df[mc_scrape_df['Title'] == 'INCENDIES']['Year'])

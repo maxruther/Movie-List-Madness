@@ -1,6 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+
 from bs4 import BeautifulSoup
 
 import time
@@ -10,6 +14,11 @@ import pickle
 import re
 
 import pandas as pd
+
+if __name__ == '__main__':
+    from utils import parse_show_name
+else:
+    from scrapers.utils import parse_show_name
 
 
 def siskel_info_scrape():
@@ -23,7 +32,9 @@ def siskel_info_scrape():
     options = webdriver.ChromeOptions()
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--ignore-ssl-errors')
+    options.page_load_strategy = 'eager'
     driver = webdriver.Chrome(options)
+    driver.implicitly_wait(5)
 
 
     # Get HTML of the "Coming Soon" page.
@@ -46,6 +57,8 @@ def siskel_info_scrape():
     #     coming_soon_html = pickle.load(file)
 
 
+    show_info_dict = {}
+
     screening_pages = [now_playing_html, coming_soon_html]
     for page_html in screening_pages:
 
@@ -53,9 +66,9 @@ def siskel_info_scrape():
         page_soup = BeautifulSoup(page_html, 'html.parser')
         movie_tiles = page_soup.find_all('div', class_='grid-all-overlay-inner')
 
-        show_info_dict = {}
         for movie_tile in movie_tiles:
             show_name, dir_and_yr = movie_tile.text.strip().split('\n')
+            film_title, _ = parse_show_name(show_name)
 
             # Get director and year from the movie tile. This might not
             # be necessary, since both of these might likely be
@@ -89,10 +102,16 @@ def siskel_info_scrape():
                 # object therefrom.
                 # driver.get(show_info_dict[show_name]['Link'])
                 driver.get(link)
+
                 
             
                 film_details_html = driver.page_source
                 film_details_soup = BeautifulSoup(film_details_html, 'html.parser')
+
+                try:
+                    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div.content')))
+                except TimeoutException:
+                    print ("Loading took too much time - 'div.content' not found.")
 
                 # print(show_name)
                 film_header_elem = film_details_soup.select_one('div.content')
@@ -150,8 +169,20 @@ def siskel_info_scrape():
                 meta_elem = film_header_elem.select_one('div.film-header-meta')
                 if meta_elem:
                     meta = meta_elem.text.strip()
+
                 
-                show_info_dict[show_name] = {
+                description = None
+                main_content_elem = film_details_soup.select_one('div.main-container.container')
+                if main_content_elem:
+                    summary_text_elem = main_content_elem.select_one('div.field--type-text-with-summary')
+                    if summary_text_elem:
+                        desc_elem = summary_text_elem.select_one('p')
+                        if desc_elem:
+                            description = desc_elem.text.strip()
+                            if '|' in description:
+                                description = description.split('|')[1].strip()
+                
+                show_info_dict[film_title] = {
                     'Year': year,
                     'Director': directors,
                     'Runtime': runtime,
@@ -160,6 +191,8 @@ def siskel_info_scrape():
                     'Country': country,
                     'Meta': meta,
                     'Link': link,
+                    'Show': show_name,
+                    'Description': description,
                     }
 
     # Save the scraped show info to files, as a dictionary, dataframe, and csv.
