@@ -42,6 +42,7 @@ def mc_search_and_scrape(
         output_filename: str = 'searchnscrape',
         output_parentdir: str = 'metacritic',
         adding_to_existing_df: bool = True,
+        consult_master_files: bool = False,
         ) -> pd.DataFrame:
     
     ## SET UP WEBDRIVER
@@ -79,15 +80,30 @@ def mc_search_and_scrape(
     info_df = pd.DataFrame()
     review_df = pd.DataFrame()
 
-    if adding_to_existing_df:
-        if os.path.exists(f'data/pkl/{search_results_df_filepath_partial}.pkl'):
-            search_result_df = pd.read_pickle(f'data/pkl/{search_results_df_filepath_partial}.pkl')
+    master_searchresults_filepath = f'data/pkl/metacritic/master_files/master_mc_searchresults.pkl'
+    master_info_filepath = f'data/pkl/metacritic/master_files/master_mc_info.pkl'
+    master_reviews_filepath = f'data/pkl/metacritic/master_files/master_mc_reviews.pkl'
 
-        if os.path.exists(f'data/pkl/{info_df_filepath_partial}.pkl'):
-            info_df = pd.read_pickle(f'data/pkl/{info_df_filepath_partial}.pkl')
+    if consult_master_files:
+        if os.path.exists(master_searchresults_filepath):
+            master_searchresults_df = pd.read_pickle(master_searchresults_filepath)
 
-        if os.path.exists(f'data/pkl/{review_df_filepath_partial}.pkl'):
-            review_df = pd.read_pickle(f'data/pkl/{review_df_filepath_partial}.pkl')
+        if os.path.exists(master_info_filepath):
+            master_info_df = pd.read_pickle(master_info_filepath)
+
+        if os.path.exists(master_reviews_filepath):
+            master_reviews_df = pd.read_pickle(master_reviews_filepath)
+
+    else:
+        if adding_to_existing_df:
+            if os.path.exists(f'data/pkl/{search_results_df_filepath_partial}.pkl'):
+                search_result_df = pd.read_pickle(f'data/pkl/{search_results_df_filepath_partial}.pkl')
+
+            if os.path.exists(f'data/pkl/{info_df_filepath_partial}.pkl'):
+                info_df = pd.read_pickle(f'data/pkl/{info_df_filepath_partial}.pkl')
+
+            if os.path.exists(f'data/pkl/{review_df_filepath_partial}.pkl'):
+                review_df = pd.read_pickle(f'data/pkl/{review_df_filepath_partial}.pkl')
 
     
     # Identify the film year attribute from the given dataset. It's
@@ -125,8 +141,7 @@ def mc_search_and_scrape(
         print(f'\nCurrent scrape:\t{film_title} ({film_year})')
 
         if pd.isna(film_year):
-            print(f'NO YEAR GIVEN for film {film_title}.'
-                  '\nAborting scrape, as this field is required.')
+            print(f'ABORTING SCRAPE: Required field \'Year\' was empty for film {film_title}.')
             continue
 
         # Check for bogus year entry, which Siskel submissions sometimes have.
@@ -149,15 +164,30 @@ def mc_search_and_scrape(
 
         # Check to see if the film's details and reviews have already been
         # scraped. If so for both, skip this film.
+
+        # Checking the master file for a previous scrape of this film.
+        already_searched, already_scraped_info, already_scraped_reviews = None, None, None
+        if consult_master_files:
+            if film_director:
+                already_searched = not master_searchresults_df.loc[(master_searchresults_df['Title Searched'] == film_title) & (master_searchresults_df['Year Searched'] == film_year) & (master_searchresults_df['Director Searched'] ==  film_director)].empty
+                already_scraped_info = not master_info_df.loc[(master_info_df['Title Searched'] == film_title) & (master_info_df['Year Searched'] == film_year) & (master_info_df['Director Searched'] ==  film_director)].empty
+                already_scraped_reviews = not master_reviews_df.loc[(master_reviews_df['Title Searched'] == film_title) & (master_reviews_df['Year Searched'] == film_year) & (master_reviews_df['Director Searched'] ==  film_director)].empty
+            else:
+                already_searched = not master_searchresults_df.loc[(master_searchresults_df['Title Searched'] == film_title) & (master_searchresults_df['Year Searched'] == film_year)].empty
+                already_scraped_info = not master_info_df.loc[(master_info_df['Title Searched'] == film_title) & (master_info_df['Year Searched'] == film_year)].empty
+                already_scraped_reviews = not master_reviews_df.loc[(master_reviews_df['Title Searched'] == film_title) & (master_reviews_df['Year Searched'] == film_year)].empty
+        
+
+        # Checking existing file for a previous scrape.
         already_searched = None
         already_scraped_info, already_scraped_reviews = None, None
         if adding_to_existing_df:
             if os.path.exists(f'data/pkl/{search_results_df_filepath_partial}.pkl'):
-                already_searched = not search_result_df.loc[(search_result_df['Title Searched'] == film_title) & (search_result_df['Year Searched'] == film_year)].empty
+                already_searched = not search_result_df.loc[(search_result_df['Title Searched'] == film_title) & (search_result_df['Year Searched'] == film_year) & (search_result_df['Director Searched'] ==  film_director)].empty
             if os.path.exists(f'data/pkl/{info_df_filepath_partial}.pkl'):
-                already_scraped_info = not info_df.loc[(info_df['Title Searched'] == film_title) & (info_df['Year Searched'] == film_year)].empty
+                already_scraped_info = not info_df.loc[(info_df['Title Searched'] == film_title) & (info_df['Year Searched'] == film_year) & (info_df['Director Searched'] ==  film_director)].empty
             if os.path.exists(f'data/pkl/{review_df_filepath_partial}.pkl'):
-                already_scraped_reviews = not review_df.loc[(review_df['Title'] == film_title) & (review_df['Year'] == film_year)].empty
+                already_scraped_reviews = not review_df.loc[(review_df['Title Searched'] == film_title) & (review_df['Year Searched'] == film_year) & (review_df['Director Searched'] ==  film_director)].empty
             
             # Skip the scrape if the film's details and critical reviews appear to
             # already have been scraped.
@@ -194,12 +224,12 @@ def mc_search_and_scrape(
 
             if not already_scraped_info:
                 mc_info_scrape(film_title,
-                                    film_year,
-                                    chosen_link,
-                                    info_dict_list,
-                                    driver,
-                                    director_searched=film_director,
-                                    )
+                               film_year,
+                               chosen_link,
+                               info_dict_list,
+                               driver,
+                               director_searched=film_director,
+                               )
             else:
                 print(f"Skipping detail scrape for {film_title} ({film_year})")
             
@@ -209,6 +239,7 @@ def mc_search_and_scrape(
                                     chosen_link,
                                     review_dict_list,
                                     driver,
+                                    director_searched=film_director,
                                     )
             else:
                 print(f"Skipping review scrape for {film_title} ({film_year})")
@@ -246,15 +277,15 @@ if __name__ == '__main__':
     # target_films_df['Release Year'] = target_films_df['Release Year'].astype(str) 
     
     # ALTERNATE FILE: Read in dataset with titles, release years, and directors.
-    target_films_df = pd.read_csv(f'data\showtimes\showtime_master_titles_yrs.csv')
+    target_films_df = pd.read_pickle(f'data\pkl\siskel\siskel_inferior_show_info.pkl')
 
 
     # Call method to search for and scrape the films' Metacritic pages.
     prod_detail_df = mc_search_and_scrape(target_films_df, 
-                                          test_n_films=10, 
-                                          output_filename='test_searchscrape',
-                                          output_parentdir='metacritic',
-                                          adding_to_existing_df=False,
+                                          test_n_films=5, 
+                                          output_filename='siskel_inferior_show_info',
+                                          output_parentdir='siskel',
+                                        #   adding_to_existing_df=False,
                                           )
     # prod_detail_df = complete_mc_scrape(target_films_df, test_n_films=10, cr_filename='comp_mc_reviews', info_filename='comp_mc_info', searchresults_filename='comp_mc_searchresults', adding_to_existing_df=False)
 

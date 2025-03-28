@@ -8,11 +8,12 @@ if __name__ == '__main__':
 else:
     from mc_utilities.select_text_from_soup import select_text_from_soup
 
-def mc_review_scrape(film_title: str,
-                     film_year: str,
+def mc_review_scrape(title_searched: str,
+                     year_searched: str,
                      film_link: str,
                      list_of_review_dicts: list[dict[str: str]],
                      driver: webdriver,
+                     director_searched: str = None,
                      ) -> None:
     
     film_review_link = f'https://www.metacritic.com' + film_link + \
@@ -42,8 +43,9 @@ def mc_review_scrape(film_title: str,
         # Initialize this critic review's data dictionary as only
         # containing the film's title.
         cr_dict = {
-            'Title': film_title,
-            'Year': film_year,
+            'Title Searched': title_searched,
+            'Year Searched': year_searched,
+            'Director Searched': director_searched,
             }
 
         # Create a BeautifulSoup object from this review.

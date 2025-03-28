@@ -71,13 +71,13 @@ def radar_mc_scrape(
 
 if __name__ == '__main__':
     # radar_mc_scrape('data/pkl/ebert/ebert_recent_reviews.pkl',
-    #                 # test_n_films=5,
+    #                 test_n_films=10,
     #                 )
     
     # radar_mc_scrape('data/pkl/musicbox/musicbox_show_info.pkl')
 
-    # radar_mc_scrape('data/pkl/siskel/siskel_inferior_show_info.pkl',
-    #                 # test_n_films=3,
-    #                 )
+    radar_mc_scrape('data/pkl/siskel/siskel_inferior_show_info.pkl',
+                    test_n_films=15,
+                    )
 
     pass

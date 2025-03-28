@@ -169,6 +169,14 @@ def mc_get_films_link(
                     "\nOne search result showed a similar year, but its",
                     "title and/or director(s) were too dissimilar to",
                     "indicate a match.\n")
+            
+            # Add a record to signify that this film's page was searched for (with 
+            # the given title, year, and director.)
+            list_of_searchresult_dicts.append({
+                    'Title Searched': film_title,
+                    'Year Searched': film_year,
+                    'Director Searched': film_director,
+                })
 
     elif len(top_results) > 1:
         # If there are multiple results to decide from, then the one
@@ -213,6 +221,14 @@ def mc_get_films_link(
                       "a closely matching title, but either their",
                       "titles or directors were too dissimilar to",
                       "indicate a match.\n")
+        
+            # Add a record to signify that this film's page was searched for (with 
+            # the given title, year, and director.)
+            list_of_searchresult_dicts.append({
+                    'Title Searched': film_title,
+                    'Year Searched': film_year,
+                    'Director Searched': film_director,
+                })
 
         
         # # (For the dev's reference: print the title and link of the
@@ -231,9 +247,12 @@ def mc_get_films_link(
         print("\nWARNING: No movie results show a matching year for the queried film!\n",
             f'{film_title=}\n{film_year=}\n')
         
+        # Add a record to signify that this film's page was searched for (with 
+        # the given title, year, and director.)
         list_of_searchresult_dicts.append({
                 'Title Searched': film_title,
                 'Year Searched': film_year,
+                'Director Searched': film_director,
             })
     
     return chosen_link

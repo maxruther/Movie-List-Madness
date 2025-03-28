@@ -3,7 +3,7 @@ from scrapers.siskel_showtime_scrape import siskel_showtime_scrape
 from scrapers.siskel_info_scrape import siskel_info_scrape
 
 from schedulers.schedule_musicbox_shows import schedule_musicbox_shows
-from schedulers.schedule_siskel_shows import schedule_siskel_shows\
+from schedulers.schedule_siskel_shows import schedule_siskel_shows
 
 
 def scrape_and_sched(
@@ -54,11 +54,11 @@ def scrape_and_sched(
             print(musicbox_info_df.head(), '\n')
 
 
-      # # Schedule the Music Box shows
-      # schedule_siskel_shows()
-      # schedule_musicbox_shows()
+      # Schedule the Music Box shows
+      schedule_siskel_shows()
+      schedule_musicbox_shows()
 
 
 if __name__ == '__main__':
-      # scrape_and_sched()
-      scrape_and_sched(preview_output=True)
+      scrape_and_sched()
+      # scrape_and_sched(preview_output=True)
