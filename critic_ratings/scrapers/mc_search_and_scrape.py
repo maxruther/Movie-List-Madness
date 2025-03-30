@@ -251,10 +251,10 @@ if __name__ == '__main__':
 
     # Call method to search for and scrape the films' Metacritic pages.
     prod_detail_df = mc_search_and_scrape(target_films_df, 
-                                          test_n_films=10, 
+                                          test_n_films=5, 
                                           output_filename='test_searchscrape',
                                           output_parentdir='metacritic',
-                                          adding_to_existing_df=False,
+                                          adding_to_existing_df=True,
                                           )
     # prod_detail_df = complete_mc_scrape(target_films_df, test_n_films=10, cr_filename='comp_mc_reviews', info_filename='comp_mc_info', searchresults_filename='comp_mc_searchresults', adding_to_existing_df=False)
 

@@ -198,7 +198,7 @@ def mc_get_films_link(
         # to those of the searched film, then it is chosen as the match.
         if chosen_result_dict['Titles Cosine Sim'] == 1:
             # Scrutinize further if director similarity is available.
-            if film_director:
+            if chosen_result_dict['Directors Cosine Sim']:
                 if chosen_result_dict['Directors Cosine Sim'] >= 0.5:
                     chosen_link = chosen_result_dict['Link']
             # Otherwise, just choose this result.
@@ -207,7 +207,7 @@ def mc_get_films_link(
                     chosen_link = chosen_result_dict['Link']
         
         elif chosen_result_dict['Titles Cosine Sim'] < 1:
-            if film_director:
+            if chosen_result_dict['Directors Cosine Sim']:
                 if chosen_result_dict['Directors Cosine Sim'] >= 0.5:
                     chosen_link = chosen_result_dict['Link']
             else:

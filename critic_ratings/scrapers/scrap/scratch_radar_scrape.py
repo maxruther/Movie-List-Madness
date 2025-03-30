@@ -1,10 +1,118 @@
 import pandas as pd
+import numpy as np
+
 import pickle
 import os
 
 from datetime import datetime
 from selenium import webdriver
 from bs4 import BeautifulSoup
+from sqlalchemy import create_engine, types
+
+
+test_str = 'data/pkl/ebert/ebert_recent_reviews_mc_searchresults.pkl'
+
+filename_with_extension = os.path.basename(test_str)
+filename, extension = os.path.splitext(filename_with_extension)
+print(filename_with_extension)
+print(filename, extension)
+
+print(os.path.dirname(test_str))
+print(os.path.splitext(test_str)[0])
+
+print(test_str[:9])
+
+# def check_for_prev_scrape(title, year, director):
+#     if director
+
+
+# siskel_target_films_df = pd.read_pickle('data/pkl/siskel/siskel_inferior_show_info.pkl')
+# siskel_searchresults_df = pd.read_pickle('data/pkl/siskel/siskel_inferior_show_info_mc_searchresults.pkl')
+
+# film_title = siskel_target_films_df['Title']
+# film_year = siskel_target_films_df['Release Year']
+# film_director = siskel_target_films_df['Director']
+
+# director_attr_exists = True
+# def filmsearch_mask(df: pd.DataFrame, title: str, year: str, director: str) -> pd.Series:
+#             if director_attr_exists:
+#                 return (df['Title Searched'] == title) & (df['Year Searched'] == year) & ((df['Director Searched'] ==  director) | (df['Director Searched'].isna() & pd.isna(director)))
+#             else:
+#                 return (df['Title Searched'] == title) & (df['Year Searched'] == year)
+
+# siskel_searchresults_df[filmsearch_mask(siskel_searchresults_df, 'OSCAR NOMINATED ANIMATED SHORTS', '2025', np.nan)]
+
+# print(siskel_searchresults_df[filmsearch_mask(siskel_searchresults_df, 'OSCAR NOMINATED ANIMATED SHORTS', '2025', np.nan)])
+
+# print(siskel_searchresults_df[filmsearch_mask(siskel_searchresults_df, 'OSCAR NOMINATED ANIMATED SHORTS', '2025', np.nan)].to_dict(orient='records')[0])
+
+# if pd.isna(film_director):
+#     condition = siskel_searchresults_df[(siskel_searchresults_df['Title Searched'] == 'OSCAR NOMINATED ANIMATED SHORTS') & (siskel_searchresults_df['Year Searched'] == '2025') & (pd.isna(siskel_searchresults_df['Director Searched']))].empty
+# else:
+#     condition = siskel_searchresults_df[(siskel_searchresults_df['Title Searched'] == 'OSCAR NOMINATED ANIMATED SHORTS') & (siskel_searchresults_df['Year Searched'] == '2025') & (siskel_searchresults_df['Director Searched'].fillna('').astype(str) == film_director)].empty
+
+# blank_df = pd.DataFrame()
+
+# print((siskel_searchresults_df['Title Searched'] == 'OSCAR NOMINATED ANIMATED SHORTS') & (siskel_searchresults_df['Year Searched'] == '2025') & (pd.isna(siskel_searchresults_df['Director Searched'])))
+
+# test_rows = siskel_searchresults_df[(siskel_searchresults_df['Title Searched'] == 'OSCAR NOMINATED ANIMATED SHORTS') & (siskel_searchresults_df['Year Searched'] == '2025') & (pd.isna(siskel_searchresults_df['Director Searched']))]
+# print(test_rows)
+
+# updated_df = pd.concat([blank_df, test_rows], ignore_index=True)
+
+# print(updated_df)
+
+
+# print(siskel_searchresults_df[siskel_searchresults_df['Title Searched'] == 'OSCAR NOMINATED ANIMATED SHORTS']['Director Searched'])
+# print(siskel_searchresults_df[(siskel_searchresults_df['Title Searched'] == 'OSCAR NOMINATED ANIMATED SHORTS') & (siskel_searchresults_df['Year Searched'] == '2025') & (pd.isna(siskel_searchresults_df['Director Searched']))].empty)
+# print(siskel_searchresults_df[(siskel_searchresults_df['Title Searched'] == 'OSCAR NOMINATED ANIMATED SHORTS') & (siskel_searchresults_df['Year Searched'] == '2025') & (siskel_searchresults_df['Director Searched'] == np.nan)].empty)
+
+
+# print(siskel_searchresults_df[(siskel_searchresults_df['Title Searched'] == 'OSCAR NOMINATED ANIMATED SHORTS') & (siskel_searchresults_df['Year Searched'] == '2025') & (siskel_searchresults_df['Director Searched'] == )].empty)
+
+# print(siskel_searchresults_df.iloc[2, 7] == None)
+
+
+
+#  & (siskel_searchresults_df['Director Searched'] == np.nan)
+
+# input_parentdirpath = 'ebert'
+# input_filename = 'ebert_recent_reviews_mc_searchresults'
+
+# radar_film_mc_crs_df = pd.read_pickle(f'data/pkl/{input_parentdirpath}/{input_filename}.pkl')
+
+# if radar_film_mc_crs_df.empty:
+#     print(f"The '{input_filename}' file is empty.")
+# else:
+#     print(radar_film_mc_crs_df.head(5))
+
+    # # LOAD DATA TO A NEW TABLE IN THE MYSQL DB
+
+    # # Fix a couple variable types
+    # radar_film_mc_crs_df['Score'] = radar_film_mc_crs_df['Score'].astype(int)
+    # radar_film_mc_crs_df['Date Written'] = pd.to_datetime(radar_film_mc_crs_df['Date Written'], format='%b %d, %Y')
+
+    # # Define the variable type mapping for the MySQL table
+    # dtype_mapping = {
+    #     'Title': types.VARCHAR(80),
+    #     'Year': types.INT,
+    #     'Publication': types.VARCHAR(80),
+    #     'Score': types.INT,
+    #     'Critic': types.VARCHAR(80),
+    #     'Snippet': types.TEXT,
+    #     'Date Written': types.DATE,
+    # }
+
+    # # Connect to MySQL db and create table
+    # engine = create_engine('mysql://root:yos@localhost/moviedb')
+    # conn = engine.connect()
+
+    # radar_film_mc_crs_df.to_sql(con=conn, 
+    #                            name=f'{input_filename}', 
+    #                            if_exists='replace',
+    #                            index=False,
+    #                         #    dtype=dtype_mapping,
+    #                            )
 
 
 
@@ -138,9 +246,9 @@ from bs4 import BeautifulSoup
 #     'Writers': writers,
 # }
 
-# Close the driver
-driver.quit()
-# list_of_info_dicts.append(detail_dict)
+# # Close the driver
+# driver.quit()
+# # list_of_info_dicts.append(detail_dict)
 
 
 # def parse_show_name(show_name: str,
