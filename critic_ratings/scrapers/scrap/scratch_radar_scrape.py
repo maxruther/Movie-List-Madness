@@ -10,17 +10,21 @@ from bs4 import BeautifulSoup
 from sqlalchemy import create_engine, types
 
 
-test_str = 'data/pkl/ebert/ebert_recent_reviews_mc_searchresults.pkl'
+master_info_df = pd.read_pickle('data/pkl/metacritic/master_files/master_mc_info.pkl')
+print(master_info_df.head(10))
 
-filename_with_extension = os.path.basename(test_str)
-filename, extension = os.path.splitext(filename_with_extension)
-print(filename_with_extension)
-print(filename, extension)
 
-print(os.path.dirname(test_str))
-print(os.path.splitext(test_str)[0])
+# test_str = 'data/pkl/ebert/ebert_recent_reviews_mc_searchresults.pkl'
 
-print(test_str[:9])
+# filename_with_extension = os.path.basename(test_str)
+# filename, extension = os.path.splitext(filename_with_extension)
+# print(filename_with_extension)
+# print(filename, extension)
+
+# print(os.path.dirname(test_str))
+# print(os.path.splitext(test_str)[0])
+
+# print(test_str[:9])
 
 # def check_for_prev_scrape(title, year, director):
 #     if director

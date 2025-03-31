@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-
 from bs4 import BeautifulSoup
+import re
 
 if __name__ == '__main__':
     from select_text_from_soup import select_text_from_soup
@@ -19,6 +19,19 @@ def mc_review_scrape(title_searched: str,
     film_review_link = f'https://www.metacritic.com' + film_link + \
             'critic-reviews/'
     driver.get(film_review_link)
+
+    fullpage_source = driver.page_source
+    soup = BeautifulSoup(fullpage_source, 'html.parser')
+                        
+
+    review_cnt = None
+    review_cnt_elem = soup.select_one('div.c-pageProductReviews_text')
+    if review_cnt_elem:
+        review_cnt_text = review_cnt_elem.text.strip()
+        pattern = 'Showing (\d+) Critic Reviews'
+        match = re.match(pattern, review_cnt_text)
+        if match:
+            review_cnt = match.group(1)
 
     reviews_xpath = '//*[@id="__layout"]/div/div[2]/div[1]/' \
         + 'div[1]/section/div[4]/div/div'
@@ -66,6 +79,12 @@ def mc_review_scrape(title_searched: str,
             if critic_name[:3] == 'By ':
                 cr_dict['Critic'] = critic_name[3:]
         
-        
         # Add this critic review's data dictionary to their list.
         list_of_review_dicts.append(cr_dict)
+
+    scrape_success_str = f"\tCritic reviews successfully scraped"
+    if review_cnt:
+        scrape_success_str += f", {review_cnt} in total."
+    else:
+        scrape_success_str += "."
+    print(scrape_success_str)

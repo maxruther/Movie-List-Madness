@@ -8,6 +8,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from fuzzywuzzy import fuzz
 
+import pandas as pd
+
 
 def mc_get_films_link(
         film_title: str,
@@ -86,7 +88,7 @@ def mc_get_films_link(
             if abs(int(result_year) - int(film_year)) <= 1 or title_cos_sim == 1:
             # if result_year == film_year:
                 result_director, director_fuzzy_sim, director_cos_sim = None, None, None
-                if film_director:
+                if film_director and not pd.isna(film_director):
 
                     # Navigate to result film's dedicated page on Metacritic.
                     driver.get('https://www.metacritic.com' + result_link)
@@ -151,12 +153,13 @@ def mc_get_films_link(
 
         # If the searched film's director is known, use its similarity 
         # to the result's to determine selection.
-        if film_director:
+        if film_director and not pd.isna(film_director):
             if result_dict['Titles Cosine Sim'] == 1 and result_dict['Directors Cosine Sim'] >= 0.5:
                 chosen_link = result_dict['Link']
             elif result_dict['Titles Cosine Sim'] < 1:
-                if result_dict['Directors Cosine Sim'] >= 0.5:
-                    chosen_link = result_dict['Link']
+                if result_dict['Directors Cosine Sim']:
+                    if result_dict['Directors Cosine Sim'] >= 0.5:
+                        chosen_link = result_dict['Link']
         # If the director is not known
         else:
             if result_dict['Titles Cosine Sim'] == 1 and abs(int(result_year) - int(film_year)) <= 1:
@@ -164,11 +167,12 @@ def mc_get_films_link(
 
         
         if not chosen_link:
-            print("NO METACRITIC PAGE IDENTIFIED for film",
-                    f'"{film_title} ({film_year})":',
-                    "\nOne search result showed a similar year, but its",
-                    "title and/or director(s) were too dissimilar to",
-                    "indicate a match.\n")
+            print("Scrape fruitless: no Metacritic page was identified for film",
+                    f'"{film_title} ({film_year})"')
+            # print("\nOne search result showed a similar year, but its",
+            #         "title and/or director(s) were too dissimilar to",
+            #         "indicate a match.\n")
+                    
             
             # Add a record to signify that this film's page was searched for (with 
             # the given title, year, and director.)
@@ -215,12 +219,12 @@ def mc_get_films_link(
                     chosen_link = chosen_result_dict['Link']
         
         if not chosen_link:
-            print("NO METACRITIC PAGE IDENTIFIED for film",
-                      f"{film_title} ({film_year}).",
-                      "\nMultiple search results showed a similar year or",
-                      "a closely matching title, but either their",
-                      "titles or directors were too dissimilar to",
-                      "indicate a match.\n")
+            print("Scrape fruitless: no Metacritic page was identified for film",
+                    f'"{film_title} ({film_year})"')
+            # print("Multiple search results showed a similar year or",
+            #       "a closely matching title, but either their",
+            #       "titles or directors were too dissimilar to",
+            #       "indicate a match.\n")
         
             # Add a record to signify that this film's page was searched for (with 
             # the given title, year, and director.)
@@ -244,8 +248,10 @@ def mc_get_films_link(
         # link_counter += 1
     else:
         # If no results are identified for the film, print a warning.
-        print("\nWARNING: No movie results show a matching year for the queried film!\n",
-            f'{film_title=}\n{film_year=}\n')
+        print("Scrape fruitless: no Metacritic page was identified for film",
+                    f'"{film_title} ({film_year})"')
+        # print("\nWARNING: No movie results show a matching year for the queried film!\n",
+        #     f'{film_title=}\n{film_year=}\n')
         
         # Add a record to signify that this film's page was searched for (with 
         # the given title, year, and director.)

@@ -1,9 +1,15 @@
 Title Searched,Title Result,Titles Fuzzy Sim,Titles Cosine Sim,Year Searched,Year Result,Director Searched,Director Result,Directors Fuzzy Sim,Directors Cosine Sim,Link
+Art for Everybody,Art for Everybody,1.0,1.0,2025,2023,Miranda Yousef,Miranda Yousef,1.0,1.0,/movie/art-for-everybody/
+The Friend,The Friend,1.0,1.0,2025,2024,"David Siegel, Scott McGehee","Scott McGehee, David Siegel",0.48,1.0,/movie/the-friend-2024/
+Việt and Nam,Viet and Nam,0.92,0.667,2025,2024,Truong Minh Quy,Minh Quy Truong,0.53,1.0,/movie/viet-and-nam/
+Dying for Sex,Dying,0.56,0.577,2025,2024,"Chris Teague, Shannon Murphy",Matthias Glasner,0.36,0.0,/movie/dying/
+Dying for Sex,,,,2025,,"Chris Teague, Shannon Murphy",,,,
 Secret Mall Apartment,Secret Mall Apartment,1.0,1.0,2025,2024,Jeremy Workman,Jeremy Workman,1.0,1.0,/movie/secret-mall-apartment/
 Misericordia,Misericordia,1.0,1.0,2025,2024,Fernando de Miguel,Alain Guiraudie,0.36,0.0,/movie/misericordia/
-Good American Family,,,,2025,,,,,,
+Misericordia,,,,2025,,Fernando de Miguel,,,,
+Good American Family,,,,2025,,Liz Garbus,,,,
 Black Bag,Black Bag,1.0,1.0,2025,2025,Steven Soderbergh,Steven Soderbergh,1.0,1.0,/movie/black-bag/
-Adolescence,,,,2025,,,,,,
+Adolescence,,,,2025,,Philip Barantini,,,,
 Control Freak,Control Freak,1.0,1.0,2025,2025,Shal Ngo,Shal Ngo,1.0,1.0,/movie/control-freak/
 On Becoming a Guinea Fowl,On Becoming a Guinea Fowl,1.0,1.0,2025,2024,Rungano Nyoni,Rungano Nyoni,1.0,1.0,/movie/on-becoming-a-guinea-fowl/
 My Dead Friend Zoe,My Dead Friend Zoe,1.0,1.0,2025,2024,Kyle Hausmann-Stokes,Kyle Hausmann-Stokes,1.0,1.0,/movie/my-dead-friend-zoe/
@@ -15,7 +21,3 @@ The Annihilation of Fish,The Annihilation of Fish,1.0,1.0,2025,1999,Charles Burn
 Becoming Led Zeppelin,Becoming Led Zeppelin,1.0,1.0,2025,2025,Bernard MacMahon,Bernard MacMahon,1.0,1.0,/movie/becoming-led-zeppelin/
 Heart Eyes,Heart Eyes,1.0,1.0,2025,2025,Josh Ruben,Josh Ruben,1.0,1.0,/movie/heart-eyes/
 Time Passages,Time Passages,1.0,1.0,2025,2024,Kyle Henry,Kyle Henry,1.0,1.0,/movie/time-passages/
-Dog Man,Dog Man,1.0,1.0,2025,2025,Peter Hastings,Peter Hastings,1.0,1.0,/movie/dog-man/
-Presence,Presence,1.0,1.0,2025,2024,Steven Soderbergh,Steven Soderbergh,1.0,1.0,/movie/presence/
-Sly Lives! (aka The Burden of Black Genius),Sly Lives! (aka the Burden of Black Genius),1.0,1.0,2025,2025,Questlove,Questlove,1.0,1.0,/movie/sly-lives!-aka-the-burden-of-black-genius/
-Rose,Rose,1.0,1.0,2025,2021,Aurélie Saada,Aurélie Saada,1.0,1.0,/movie/rose/

@@ -25,7 +25,7 @@ def mc_info_scrape(title_searched: str,
     if title_element:
         title = title_element.text.strip()
         # detail_dict['Title'] = title
-        print(title, end='\t')
+        # print(title, end='\t')
 
     # Year (retrieved)
     year = None
@@ -34,7 +34,7 @@ def mc_info_scrape(title_searched: str,
         year_element = metadata_header_elem.select_one('li.c-heroMetadata_item')
         year = year_element.text.strip()
         # detail_dict['Year'] = year
-        print(year)
+        # print(year)
 
     # Metascore
     metascore = None
@@ -124,4 +124,5 @@ def mc_info_scrape(title_searched: str,
         'Writers': writers,
     }
 
+    print(f"\tA Metacritic page was ID'd and scraped: {title} ({year}) by {directors}.")
     list_of_info_dicts.append(detail_dict)
