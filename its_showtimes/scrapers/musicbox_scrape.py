@@ -58,6 +58,7 @@ def musicbox_scrape(
     #     calendar_text = pickle.load(file)
 
     films_showtimes = {}
+    film_showtimes_2_list = []
     film_details = {}
 
     mb_series_list = [
@@ -144,9 +145,13 @@ def musicbox_scrape(
                                 tech_summ_deets = tech_summary_elem.select('span')
                                 tech_deet_list = [deet.text.strip() for deet in tech_summ_deets]
                             film_details[show_title] = tech_summary_list_to_dict(tech_deet_list)
+                            if 'Year' not in film_details[show_title]:
+                                film_details[show_title]['Year'] = None
 
                             credit_elems = main_section_soup.select('div.credits')
                             print(f'\n\n{show_title} - Credits:')
+
+                            film_details[show_title]['Director'] = None
                             for credit_elem in credit_elems:
                                 credit_type = credit_elem.find('label').text.strip()
                                 if credit_type == 'DIRECTED BY':
@@ -180,6 +185,14 @@ def musicbox_scrape(
                         else:
                             if showtime_datetime not in films_showtimes[show_title]:
                                 films_showtimes[show_title].append(showtime_datetime)
+                        
+                        showtime_record_dict = {
+                            'Title': show_title,
+                            'Year': film_details[show_title]['Year'],
+                            'Director': film_details[show_title]['Director'],
+                            'Showtime': showtime_datetime,
+                        }
+                        film_showtimes_2_list.append(showtime_record_dict)
 
     
     # # Printing the various outputs of the scrape.
@@ -209,6 +222,16 @@ def musicbox_scrape(
     with open(f'data/pkl/musicbox/{testing_prefix}musicbox_show_info_dict.pkl', 'wb') as file:
         pickle.dump(film_details, file)
 
+    
+    # Create a dataframe of the new showtimes dataset (in testing.)
+    film_showtimes_2_df = pd.DataFrame(film_showtimes_2_list)
+    film_showtimes_2_df['Showtime_Date'] = film_showtimes_2_df['Showtime'].dt.date
+    film_showtimes_2_df['Showtime_Time'] = film_showtimes_2_df['Showtime'].dt.time
+
+    # Save the new showtimes dataset.
+    film_showtimes_2_df.to_csv(f'data/csv/musicbox/{testing_prefix}musicbox_showtimes_2.csv', index=False)
+    film_showtimes_2_df.to_pickle(f'data/pkl/musicbox/{testing_prefix}musicbox_showtimes_2.pkl')
+
     # Note the scrape's runtime.
     scrape_runtime = time.time() - scrape_start
     scrape_runtime = round(scrape_runtime)
@@ -226,7 +249,7 @@ def musicbox_scrape(
 if __name__ == '__main__':
 
     # Run the Music Box scrape
-    # showtime_dict, prod_info_dict = musicbox_scrape(testing=True)
+    # showtime_dict, show_info_df = musicbox_scrape(testing=True)
     showtime_dict, show_info_df = musicbox_scrape()
 
     # Print previews of the scraped output:

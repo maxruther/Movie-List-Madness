@@ -362,20 +362,25 @@ print(len('/movie/borat-subsequent-moviefilm-delivery-of-prodigious-bribe-to-ame
 #      print(show_name, '\t\t', parse_show_name(show_name)[0])
 
 
-# mb_showtimes = None
-# with open('data/pkl/musicbox/musicbox_showtimes_dict.pkl', 'rb') as file:
-#     mb_showtimes = pickle.load(file)
+mb_showtimes = None
+with open('data/pkl/musicbox/musicbox_showtimes_dict.pkl', 'rb') as file:
+    mb_showtimes = pickle.load(file)
 
-# new_dict = {}
-# for movie in list(mb_showtimes.keys())[:5]:
-#     new_dict[movie] = mb_showtimes[movie]
-# print(new_dict, '\n\n')
+new_dict = {}
+for movie in list(mb_showtimes.keys())[:5]:
+    new_dict[movie] = mb_showtimes[movie]
+print(new_dict, '\n\n')
 
-# df1 = pd.DataFrame.from_dict(new_dict, orient='index')
-# df_stacked = df1.stack().reset_index()
-# df_stacked.columns = ['Movie', 'Showtime_Index', 'Showtime']
-# df_stacked = df_stacked[['Movie', 'Showtime']]
-# print(df_stacked)
+df1 = pd.DataFrame.from_dict(new_dict, orient='index')
+df_stacked = df1.stack().reset_index()
+df_stacked.columns = ['Movie', 'Showtime_Index', 'Showtime']
+df_stacked = df_stacked[['Movie', 'Showtime']]
+
+df_stacked['Showtime_Date'] = df_stacked['Showtime'].dt.date
+df_stacked['Showtime_Time'] = df_stacked['Showtime'].dt.time
+
+print(df_stacked)
+print(df_stacked.dtypes)
 
 # for movie, showtime_list in list(mb_showtimes.items())[:5]:
 #                   print(movie)

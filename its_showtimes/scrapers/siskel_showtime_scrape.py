@@ -85,6 +85,8 @@ def siskel_showtime_scrape() -> Tuple[
 
     # Initialize various dictionaries
     films_showtimes = {} # Tracks each film's showtimes
+
+    film_showtimes_2_list = []
     
     film_details = {} # Tracks the runtime, release year, and director
     #                 # of each film, as given by their "MORE INFO"
@@ -169,7 +171,10 @@ def siskel_showtime_scrape() -> Tuple[
 
                         # Instantiate a dictionary for just this film's
                         # production details.
-                        this_films_details = {}
+                        this_films_details = {
+                            'Release Year': None,
+                            'Director': None,
+                        }
 
                         # Iterate through the production details shown on
                         # that page, taking only those named in the below
@@ -197,6 +202,14 @@ def siskel_showtime_scrape() -> Tuple[
                     else:
                         films_showtimes[film_name].append(showtime_datetime)
 
+                    showtime_2_record_dict = {
+                            'Title': film_name,
+                            'Year': film_details[film_name]['Release Year'],
+                            'Director': film_details[film_name]['Director'],
+                            'Showtime': showtime_datetime,
+                        }
+                    film_showtimes_2_list.append(showtime_2_record_dict)
+
 
     # # (For debugging/feedback) Print the various dictionaries.
     # print('',
@@ -217,6 +230,15 @@ def siskel_showtime_scrape() -> Tuple[
 
     with open('data/pkl/siskel/siskel_inferior_show_info_dict.pkl', 'wb') as file:
         pickle.dump(film_details, file)
+
+    # Create a dataframe of the new showtimes dataset (in testing.)
+    film_showtimes_2_df = pd.DataFrame(film_showtimes_2_list)
+    film_showtimes_2_df['Showtime_Date'] = film_showtimes_2_df['Showtime'].dt.date
+    film_showtimes_2_df['Showtime_Time'] = film_showtimes_2_df['Showtime'].dt.time
+
+    # Save the new showtimes dataset.
+    film_showtimes_2_df.to_csv(f'data/csv/siskel/siskel_showtimes_2.csv', index=False)
+    film_showtimes_2_df.to_pickle(f'data/pkl/siskel/siskel_showtimes_2.pkl')
 
     # Note and print the runtime of the scrape.
     scrape_runtime = time.time() - scrape_start
