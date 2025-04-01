@@ -8,8 +8,6 @@ filmlist_filepaths = [
     'data/pkl/my_watched_films/my_watched_films.pkl',
 ]
 
-start_time = time.time()
-
 for filepath in filmlist_filepaths:
     # Get the filename without the extension
     filename = filepath.split('/')[-1].split('.')[0]

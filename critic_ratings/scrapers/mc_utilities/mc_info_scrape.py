@@ -4,6 +4,8 @@ from selenium import webdriver
 
 from bs4 import BeautifulSoup
 
+import re
+
 
 def mc_info_scrape(title_searched: str,
                    year_searched: str,
@@ -32,7 +34,15 @@ def mc_info_scrape(title_searched: str,
     metadata_header_elem = soup.select_one('div.c-heroMetadata')
     if metadata_header_elem:
         year_element = metadata_header_elem.select_one('li.c-heroMetadata_item')
-        year = year_element.text.strip()
+        year_text = year_element.text.strip()
+        year_pattern = re.compile(r'(\d{4})')
+        year_match = year_pattern.search(year_text)
+        if year_match:
+            year = year_match.group()
+        else:
+            print(f"Year not found in text: {year_text}")
+            # print(year_text, year)
+            # detail_dict['Year'] = year
         # detail_dict['Year'] = year
         # print(year)
 

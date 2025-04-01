@@ -10,7 +10,6 @@ def db_pull_my_watched_films():
         movie_db_url = f.read().strip()
 
     engine = create_engine(movie_db_url)
-    # engine = create_engine('mysql://root:yos@localhost/moviedb')
     conn = engine.connect()
 
     watched_films_query = """

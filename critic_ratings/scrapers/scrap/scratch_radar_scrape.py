@@ -8,10 +8,67 @@ from datetime import datetime
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from sqlalchemy import create_engine, types
+import re
 
 
-master_info_df = pd.read_pickle('data/pkl/metacritic/master_files/master_mc_info.pkl')
-print(master_info_df.head(10))
+df = pd.read_pickle('data/pkl/metacritic/master_files/master_mc_info.pkl')
+df_sorted = df.sort_values(by='Link Retrieved', ascending=False, key=lambda x: x.str.len())
+print(df_sorted['Link Retrieved'])
+
+print(len('/movie/borat-subsequent-moviefilm-delivery-of-prodigious-bribe-to-american-regime-for-make-benefit-once-glo/'))
+
+# master_files = [
+#     'data/pkl/metacritic/master_files/master_mc_info.pkl',
+#     'data/pkl/metacritic/master_files/master_mc_searchresults.pkl',
+#     'data/pkl/metacritic/master_files/master_mc_reviews.pkl',
+#     'data/pkl/siskel/siskel_inferior_show_info_mc_info.pkl',
+#     'data/pkl/siskel/siskel_inferior_show_info_mc_searchresults.pkl',
+#     'data/pkl/siskel/siskel_inferior_show_info_mc_reviews.pkl',
+# ]
+
+# for file in master_files:
+
+#     df = pd.read_pickle(file)
+    
+#     # df['Year Result'] = df['Year Result'].fillna('')
+#     # result_df = df[~df['Year Result'].str.contains('\d{4}')][['Title Searched', 'Year Searched', 'Director Searched', 'Year Result']]
+#     # print(result_df)
+
+#     # title_searched = "UNDER THE VOLCANO"
+#     # year_searched = "2024"
+#     # director_searched = "Damian Kocur"
+
+#     title_searched = "TO A LAND UNKNOWN"
+#     year_searched = "2025"
+#     director_searched = "Mahdi Fleifel"
+
+#     condition = (df['Title Searched'] == title_searched) & (df['Year Searched']) & (df['Director Searched'] == director_searched)
+
+#     print(df[condition])
+    
+#     print(df.shape)
+
+#     df = df[~condition]
+
+#     print(df.shape)
+
+
+#     df.to_pickle(file)
+
+
+
+
+# df = pd.read_pickle('data/pkl/metacritic/master_files/master_mc_searchresults.pkl')
+# result_df = df[df['Title Searched'] == "UNDER THE VOLCANO"][['Title Searched', 'Year Searched', 'Director Searched', 'Year Result']]
+# result_df = df[~df['Year Result'].str.contains('\d{4}')][['Title Searched', 'Year Searched', 'Director Searched', 'Year Result']]
+# print(result_df)
+
+
+
+# year_pattern = re.compile(r'(\d{4})')
+# year_match = year_pattern.search(year_text)
+
+# UNDER THE VOLCANO,2024,Damian Kocur
 
 
 # test_str = 'data/pkl/ebert/ebert_recent_reviews_mc_searchresults.pkl'

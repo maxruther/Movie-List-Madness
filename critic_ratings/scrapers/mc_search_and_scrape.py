@@ -401,32 +401,15 @@ def mc_search_and_scrape(
 
 
 if __name__ == '__main__':
-
-    # # For testing, read in my scraped Letterboxd Diary. Currently lacks directors!
-    # target_films_df = pd.read_csv(f'data/csv/letterboxd/lb_diary_yoyoyodaboy.csv')
-    # target_films_df['Release Year'] = target_films_df['Release Year'].astype(str) 
-    
-    # # ALTERNATE FILE: Read in dataset with titles, release years, and directors.
-    # # target_films_df = pd.read_pickle(f'data\pkl\siskel\siskel_inferior_show_info.pkl')
-    # target_films_df = pd.read_pickle(f'data\pkl\ebert\ebert_recent_reviews.pkl')
-
-
-    # # Call method to search for and scrape the films' Metacritic pages.
-    # prod_detail_df = mc_search_and_scrape(target_films_df, 
-    #                                       test_n_films=5,
-    #                                       input_filename='ebert_recent_reviews',
-    #                                       output_parentdir='ebert',
-    #                                     #   adding_to_existing_df=False,
-    #                                       consult_master_files=True,
-    #                                       )
     
     
-    prod_detail_df = mc_search_and_scrape(
+    mc_search_and_scrape(
         # input_filepath='data/pkl/ebert/ebert_recent_reviews.pkl',
-        # input_filepath='data/pkl/siskel/siskel_inferior_show_info.pkl',
+        input_filepath='data/pkl/siskel/siskel_inferior_show_info.pkl',
         # input_filepath='data/pkl/musicbox/musicbox_show_info.pkl',
-        input_filepath='data/pkl/my_watched_films/my_watched_films.pkl',
-                                        #   test_n_films=5,
-                                        #   adding_to_existing_df=False,
-                                        #   consult_master_files=True,
-                                          )
+        # input_filepath='data/pkl/my_watched_films/my_watched_films.pkl',
+
+        # test_n_films=5,
+        # adding_to_existing_df=False,
+        # consult_master_files=False,
+        )
