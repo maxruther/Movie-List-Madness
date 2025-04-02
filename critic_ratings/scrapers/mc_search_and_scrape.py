@@ -26,6 +26,15 @@ def combine_and_save_data(new_data: list[dict[str: str]],
     new_data_minus_existing_df = pd.concat([new_data_df, existing_df, existing_df]).drop_duplicates(keep=False)
     existing_df = pd.concat([existing_df, new_data_minus_existing_df], ignore_index=True)
 
+    # # Create output folders, if they don't yet exist.
+    # pickle
+    pkl_output_dirname = dirname(output_filepath)
+    os.makedirs(pkl_output_dirname, exist_ok=True)
+    # csv
+    csv_output_filepath = f'{output_filepath.replace('/pkl/', '/csv/')}.csv'
+    csv_output_dirname = dirname(csv_output_filepath)
+    os.makedirs(csv_output_dirname, exist_ok=True)
+
     # Save the final dataframe of critic reviews to a csv file.
     existing_df.to_csv(f'{output_filepath.replace('/pkl/', '/csv/')}.csv', index=False)
     existing_df.to_pickle(f'{output_filepath}.pkl')
@@ -72,6 +81,7 @@ def mc_search_and_scrape(
             raise FileNotFoundError(f"Input file {input_filepath} does not exist.")
         else:
             target_film_df = pd.read_pickle(input_filepath)
+            print(target_film_df.head())
         
 
 
@@ -81,7 +91,11 @@ def mc_search_and_scrape(
         if len(target_film_df) >= test_n_films:
             target_film_df = target_film_df[:test_n_films]
 
-        input_filepath_minus_ext = input_dirname + '/test_' + input_filename
+        os.makedirs(input_dirname + '/mc_scrape_test', exist_ok=True)
+        input_filepath_minus_ext = input_dirname + '/mc_scrape_test/test_' + input_filename
+    else:
+        os.makedirs(input_dirname + '/mc_scrape', exist_ok=True)
+        input_filepath_minus_ext = input_dirname + '/mc_scrape/' + input_filename
 
     
     # Set the complete filepaths for the outputs.
@@ -196,7 +210,7 @@ def mc_search_and_scrape(
         # Check for bogus year entry, which Siskel submissions sometimes have.
         # example_str = '2017-2024'. A single, specific year is instead
         # required by my 'get_films_mc_link()' method, currently.
-        year_range_pattern = r"\d{4}–\d{4}"
+        year_range_pattern = r"\d{4}(?:–|, |-)\d{4}"
         if re.search(year_range_pattern, film_year):
             print("INVALID YEAR RECEIVED - Skipping this scrape for",
                   f'Title: {film_title}\nYear: {film_year}')
@@ -405,8 +419,9 @@ if __name__ == '__main__':
     
     mc_search_and_scrape(
         # input_filepath='data/pkl/ebert/ebert_recent_reviews.pkl',
-        # input_filepath='data/pkl/siskel/siskel_inferior_show_info.pkl',
-        input_filepath='data/pkl/musicbox/musicbox_show_info.pkl',
+        # input_filepath='data/pkl/ebert/test/test_ebert_recent_reviews.pkl',
+        input_filepath='data/pkl/siskel/scrape_v2/siskel_show_info.pkl',
+        # input_filepath='data/pkl/musicbox/musicbox_show_info.pkl',
         # input_filepath='data/pkl/my_watched_films/my_watched_films.pkl',
 
         # test_n_films=5,

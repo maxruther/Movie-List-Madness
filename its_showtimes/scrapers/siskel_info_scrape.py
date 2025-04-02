@@ -14,11 +14,12 @@ import pickle
 import re
 
 import pandas as pd
+from utils import parse_show_name
 
-if __name__ == '__main__':
-    from utils import parse_show_name
-else:
-    from scrapers.utils import parse_show_name
+# if __name__ == '__main__':
+#     from utils import parse_show_name
+# else:
+#     from scrapers.utils import parse_show_name
 
 
 def siskel_info_scrape():
@@ -196,14 +197,14 @@ def siskel_info_scrape():
                     }
 
     # Save the scraped show info to files, as a dictionary, dataframe, and csv.
-    with open("data/pkl/siskel/siskel_show_info_dict.pkl", 'wb') as file:
+    with open("data/pkl/siskel/siskel_show_info_v2_dict.pkl", 'wb') as file:
         pickle.dump(show_info_dict, file)
 
     siskel_show_info_df = pd.DataFrame(show_info_dict).T
     siskel_show_info_df = siskel_show_info_df.rename_axis('Title')
 
-    siskel_show_info_df.to_pickle('data/pkl/siskel/siskel_show_info.pkl')
-    siskel_show_info_df.to_csv('data/csv/siskel/siskel_show_info.csv')
+    siskel_show_info_df.to_pickle('data/pkl/siskel/siskel_show_info_v2.pkl')
+    siskel_show_info_df.to_csv('data/csv/siskel/siskel_show_info_v2.csv')
 
     driver.quit()
 

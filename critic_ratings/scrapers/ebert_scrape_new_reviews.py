@@ -8,8 +8,9 @@ import pandas as pd
 
 import re
 
-def ebert_scrape_new_reviews(test_n_films: int = 0,
-                             ) -> pd.DataFrame:
+def ebert_scrape_new_reviews(
+        test_n_films: int = 0,
+        ) -> pd.DataFrame:
     
     # Driver setup
     options = webdriver.ChromeOptions()
@@ -41,7 +42,6 @@ def ebert_scrape_new_reviews(test_n_films: int = 0,
         movie_tiles = list(movie_tiles)[:test_n_films]
     
     for movie_tile in movie_tiles:
-    # for movie_tile in list(movie_tiles)[:5]:
 
         link = movie_tile.get('href')
         title = movie_tile.select_one('h3.text-2xl.z-10.mt-4.inline').text.strip()
@@ -125,8 +125,8 @@ def ebert_scrape_new_reviews(test_n_films: int = 0,
     movie_df = pd.DataFrame(movie_dict_list)
 
     if test_n_films:
-        movie_df.to_csv('data/csv/ebert/ebert_recent_reviews_test.csv', index=False)
-        movie_df.to_pickle('data/pkl/ebert/ebert_recent_reviews_test.pkl')
+        movie_df.to_csv('data/csv/ebert/test/test_ebert_recent_reviews.csv', index=False)
+        movie_df.to_pickle('data/pkl/ebert/test/test_ebert_recent_reviews.pkl')
     else:
         movie_df.to_csv('data/csv/ebert/ebert_recent_reviews.csv', index=False)
         movie_df.to_pickle('data/pkl/ebert/ebert_recent_reviews.pkl')
@@ -140,7 +140,7 @@ def ebert_scrape_new_reviews(test_n_films: int = 0,
 
 
 if __name__ == '__main__':
-    # recent_review_df = ebert_scrape_new_reviews(test_n_films=3)
-    recent_review_df = ebert_scrape_new_reviews()
+    recent_review_df = ebert_scrape_new_reviews(test_n_films=3)
+    # recent_review_df = ebert_scrape_new_reviews()
 
     print(recent_review_df.head())

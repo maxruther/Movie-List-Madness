@@ -56,7 +56,7 @@ def db_load_scrapes_to_table(
 
         if showtime_df.empty:
             print(f"The showtime file is empty for '{input_filename}'.",
-                "\nEnding process without loading to database.")
+                "\nEnding this file's processing without loading to database.")
         else:
             print(f"Loading showtime data for '{input_filename}' into the database.")
 
@@ -89,7 +89,8 @@ def db_load_scrapes_to_table(
 if __name__ == '__main__':
 
     db_load_scrapes_to_table(\
-        'data/pkl/siskel/siskel_showtimes_2.pkl',
-        'data/pkl/musicbox/musicbox_showtimes_2.pkl',
+        # 'data/pkl/siskel/siskel_showtimes_2.pkl',
+        'data/pkl/siskel/scrape_v2/siskel_showtimes.pkl',
+        # 'data/pkl/musicbox/musicbox_showtimes_2.pkl',
         # 'data/pkl/musicbox/test_musicbox_showtimes_2.pkl',
         )

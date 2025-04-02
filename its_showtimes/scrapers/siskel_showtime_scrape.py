@@ -12,10 +12,12 @@ import pickle
 
 from typing import Dict, Tuple
 
-if __name__ == '__main__':
-    from utils import parse_show_name
-else:
-    from scrapers.utils import parse_show_name
+from utils import parse_show_name
+
+# if __name__ == '__main__':
+#     from utils import parse_show_name
+# else:
+#     from scrapers.utils import parse_show_name
 
 
 def siskel_showtime_scrape() -> Tuple[
@@ -42,6 +44,8 @@ def siskel_showtime_scrape() -> Tuple[
     options.add_argument('--ignore-ssl-errors')
     options.page_load_strategy = 'eager'
     driver = webdriver.Chrome(options)
+
+    driver.implicitly_wait(3)
 
     # Pull up the Siskel's show calendar, which involves navigating to
     # the calendar page and then clicking the button/link titled
@@ -221,14 +225,14 @@ def siskel_showtime_scrape() -> Tuple[
     # Form a dataframe from the dictionary of the scraped films' details.
     film_details_df = pd.DataFrame.from_dict(film_details, orient='index').reset_index()
     film_details_df.rename(columns={'index': 'Title'}, inplace=True)
-    film_details_df.to_csv('data/csv/siskel/siskel_inferior_show_info.csv', index=False)
-    film_details_df.to_pickle('data/pkl/siskel/siskel_inferior_show_info.pkl')
+    film_details_df.to_csv('data/csv/siskel/siskel_show_info.csv', index=False)
+    film_details_df.to_pickle('data/pkl/siskel/siskel_show_info.pkl')
  
     # Save to file the dictionaries of showtimes and production info.
     with open('data/pkl/siskel/siskel_showtimes_dict.pkl', 'wb') as file:
         pickle.dump(films_showtimes, file)
 
-    with open('data/pkl/siskel/siskel_inferior_show_info_dict.pkl', 'wb') as file:
+    with open('data/pkl/siskel/siskel_show_info_dict.pkl', 'wb') as file:
         pickle.dump(film_details, file)
 
     # Create a dataframe of the new showtimes dataset (in testing.)
@@ -237,8 +241,8 @@ def siskel_showtime_scrape() -> Tuple[
     film_showtimes_2_df['Showtime_Time'] = film_showtimes_2_df['Showtime'].dt.time
 
     # Save the new showtimes dataset.
-    film_showtimes_2_df.to_csv(f'data/csv/siskel/siskel_showtimes_2.csv', index=False)
-    film_showtimes_2_df.to_pickle(f'data/pkl/siskel/siskel_showtimes_2.pkl')
+    film_showtimes_2_df.to_csv(f'data/csv/siskel/siskel_showtimes_v2.csv', index=False)
+    film_showtimes_2_df.to_pickle(f'data/pkl/siskel/siskel_showtimes_v2.pkl')
 
     # Note and print the runtime of the scrape.
     scrape_runtime = time.time() - scrape_start

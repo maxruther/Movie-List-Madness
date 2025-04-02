@@ -89,7 +89,7 @@ def db_load_scrapes_to_table(
             input_filename = 'master'
         else:
             input_filename, input_extension = splitext(basename(input_filepath))
-            input_dirname = dirname(input_filepath)
+            input_dirname = dirname(input_filepath) + '/mc_scrape'
 
             if input_extension != '.pkl':
                 raise ValueError(f"Input file must be a .pkl file. Detected extension: {input_extension}")
@@ -145,15 +145,16 @@ def db_load_scrapes_to_table(
                                 dtype=dtype_mapping,
                                 )
                 
-                print(f"\tSuccessfully loaded table '{input_filename}'.\n")
+                print(f"\tSuccessfully loaded table '{scrape_df_filename}'.\n")
 
 
 if __name__ == '__main__':
 
     db_load_scrapes_to_table(
         # 'data/pkl/ebert/ebert_recent_reviews.pkl',
-        'data/pkl/siskel/siskel_inferior_show_info.pkl',
-        'data/pkl/musicbox/musicbox_show_info.pkl',
+        # 'data/pkl/siskel/siskel_inferior_show_info.pkl',
+        'data/pkl/siskel/scrape_v2/siskel_show_info.pkl',
+        # 'data/pkl/musicbox/musicbox_show_info.pkl',
         # 'data/pkl/my_watched_films/my_watched_films.pkl',
         # 'master',
         )
