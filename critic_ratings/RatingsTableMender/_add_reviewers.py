@@ -23,8 +23,10 @@ def join_in_ebert_ratings(self,
         ebert_df = pd.read_csv(ebert_filepath,
                                index_col='Movie_ID')
     else:
-        ebert_df = pd.read_csv('data/ebert_ratings.csv',
-                               index_col='Movie_ID')
+        ebert_df = pd.read_csv(
+            'data/csv/ebert/ratings_manually_gathered/ebert_ratings.csv',
+            index_col='Movie_ID'
+            )
 
     # Change 'Year' attribute's type to string (from int).
     ebert_df['Year'] = ebert_df['Year'].astype(str)

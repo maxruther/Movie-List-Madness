@@ -1,0 +1,282 @@
+Movie_ID,Title,Year,Ebert_Score
+1,Sing Sing,2023,4
+2,Y Tu Mama Tambien,2001,4
+3,Gasoline Rainbow,2023,4
+4,Evil Does Not Exist,2023,3.5
+5,Slow,2023,3.5
+6,The Old Oak,2023,4
+7,The Beast,2023,4
+8,"Are You There God? It's Me, Margaret",2023,3.5
+9,A Thousand and One,2023,3
+10,Everything Everywhere All at Once,2022,3.5
+11,The Nature of Love,2023,4
+12,Oddity,2024,3.5
+13,Challengers,2024,3.5
+14,Furiosa: A Mad Max Saga,2024,4
+15,Polite Society,2023,3.5
+16,On the Count of Three,2021,4
+17,The Piano,1993,4
+18,Jackass Forever,2022,4
+19,Happening,2021,4
+20,Asteroid City,2023,4
+21,Petite Maman,2021,4
+22,They Cloned Tyrone,2023,3
+23,Civil War,2024,4
+24,Goodfellas,1990,4
+25,All Dirt Roads Taste of Salt,2023,3.5
+26,The Wonderful Story of Henry Sugar,2023,4
+27,Frances Ha,2012,2.5
+28,Love Lies Bleeding,2024,3.5
+29,Outlaw Johnny Black,2023,2.5
+30,Monica,2022,4
+31,The Unbearable Weight of Massive Talent,2022,3.5
+32,No Hard Feelings,2023,2
+33,The Zone of Interest,2023,4
+34,Society of the Snow,2023,3
+35,El Conde,2023,3.5
+36,Ghostlight,2024,3.5
+37,Raging Grace,2023,4
+38,Return to Seoul,2022,4
+39,Suzume,2022,3
+40,The Eight Mountains,2022,3.5
+41,Anselm,2023,3
+42,The Ascent,1977,
+43,Election,1999,3.5
+44,Sicario,2015,3
+45,The French Dispatch,2021,4
+46,Free Solo,2018,3
+47,Prisoners,2013,2.5
+48,Across the Universe,2007,4
+49,Spider-man: Far from Home,2019,2.5
+50,Spider-man: No Way Home,2021,3
+51,Saltburn,2023,3
+52,Spider-Man: Into the Spider-Verse,2018,3.5
+53,Adaptation,2002,4
+54,The Mighty Ducks,1992,2
+55,The Next Karate Kid,1994,
+56,Harry and the Hendersons,1987,
+57,Kindergarten Cop,1990,3
+58,Air Bud,1997,3
+59,The Addams Family,1991,2
+60,The Santa Clause,1994,2.5
+61,Father of the Bride,1991,3
+62,Terms of Endearment,1983,4
+63,Spanglish,2004,3
+64,Ghost,1990,2.5
+65,The Teachers' Lounge,2023,3.5
+66,All of Us Strangers,2023,3.5
+67,Casablanca,1942,4
+68,May December,2023,4
+69,Anatomy of a Fall,2023,3.5
+70,Master Gardener,2022,4
+71,The Artifice Girl,2022,3
+72,Aftersun,2022,4
+73,Rodeo,2022,2
+74,Earth Mama,2023,4
+75,Showing Up,2022,3
+76,Oppenheimer,2023,4
+77,The Lighthouse,2019,3
+78,TÃ¡r,2022,4
+79,The Banshees of Inisherin,2022,3.5
+80,Thoroughbreds,2017,3.5
+81,Azor,2021,3.5
+82,Short Term 12,2013,3.5
+83,Moonlight,2016,4
+84,Parasite,2019,4
+85,Sound of Metal,2019,3.5
+86,Nomadland,2020,4
+87,The Card Counter,2021,4
+88,Raw,2016,3.5
+89,Titane,2021,3.5
+90,The Power of the Dog,2021,4
+91,In the Cut,2003,2.5
+92,Sweetie,1989,3.5
+93,Babes,2024,3.5
+94,I Used to Be Funny,2023,3.5
+95,Thelma,2024,3.5
+96,Hundreds of Beavers,2022,4
+97,Smoking Causes Coughing,2022,3
+98,Metal Lords,2022,3
+99,Funny Pages,2022,3
+100,Drive-Away Dolls,2024,3.5
+101,Barbie,2023,3.5
+102,American Fiction,2023,2.5
+103,Sanctuary,2022,3
+104,Werewolves Within,2021,3
+105,The Holdovers,2023,3.5
+106,7 Days,2021,3
+107,Shiva Baby,2020,4
+108,Bottoms,2023,3.5
+109,Joy Ride,2023,2.5
+110,"Confess, Fletch",2022,2
+111,Inspector Ike,2020,
+112,Licorice Pizza,2021,4
+113,Dinner in America,2020,3.5
+114,Brian and Charles,2022,2
+115,Borat Subsequent Moviefilm,2020,3.5
+116,Nate - A One Man Show,2020,
+117,Upgraded,2024,
+118,Molli and Max in the Future,2023,2.5
+119,Before Midnight,2013,4
+120,Before Sunset,2004,3.5
+121,Fallen Leaves,2023,4
+122,Portrait of a Lady on Fire,2019,4
+123,Before Sunrise,1995,3
+124,Rye Lane,2023,3.5
+125,Past Lives,2023,4
+126,You Hurt My Feelings,2023,3.5
+127,Crazy Rich Asians,2018,3.5
+128,Pride & Prejudice,2005,4
+129,Decision to Leave,2022,3
+130,Drive My Car,2021,4
+131,The Worst Person in the World,2021,4
+132,Your Name,2016,3.5
+133,Palm Springs,2020,3.5
+134,Skinamarink,2022,3
+135,Piggy,2022,2.5
+136,Talk to Me,2022,3
+137,Barbarian,2022,3
+138,M3GAN,2022,3
+139,Bodies Bodies Bodies,2022,3.5
+140,Under the Skin,2013,4
+141,Hellraiser,1987,2.5
+142,Possessor,2020,2.5
+143,Godzilla Minus One,2023,3
+144,Leonor Will Never Die,2022,4
+145,RoboCop,1987,3
+146,Violent Night,2022,1.5
+147,You Were Never Really Here,2017,4
+148,Dredd,2012,2
+149,Kimi,2022,3.5
+150,Sisu,2022,3.5
+151,Emily the Criminal,2022,4
+152,Nobody,2021,3
+153,Casino Royale,2006,4
+154,The Boy and the Heron,2023,4
+155,Migration,2023,1.5
+156,Marcel the Shell with Shoes On,2021,4
+157,Pokemon 2000,2000,
+158,The Last Unicorn,1982,
+159,Princess Mononoke,1997,4
+160,Millennium Actress,2001,
+161,Akira,1988,
+162,Silent Night,2023,4
+163,All the Beauty and the Bloodshed,2022,4
+164,Ex Machina,2014,4
+165,Mad Max: Fury Road,2015,4
+166,Harold & Kumar Go to White Castle,2004,3
+167,Troll 2,1990,
+168,Tank Girl,1995,2
+169,Bean,1997,2.5
+170,Twilight,2008,2.5
+171,Black Dynamite,2009,3
+172,Starship Troopers,1997,2
+173,The Man from U.N.C.L.E.,2015,2
+174,Memories,1995,
+175,Kiss Kiss Bang Bang,2005,2.5
+176,The Boondock Saints,1999,
+177,Blade Runner 2049,2017,3.5
+178,X-Men: First Class,2011,2.5
+179,Airplane!,1980,3
+180,Slumdog Millionaire,2008,4
+181,The NeverEnding Story,1984,3
+182,Scooby-Doo,2002,1
+183,A Knight's Tale,2001,3
+184,Back to the Future,1985,3.5
+185,Interview with the Vampire,1994,3
+186,Horrible Bosses,2011,3.5
+187,Grosse Pointe Blank,1997,2.5
+188,Mortal Kombat,1995,2
+189,Gone in 60 Seconds,2000,2
+190,Highlander,1986,
+191,Braveheart,1995,3.5
+192,Perfume: The Story of a Murderer,2006,4
+193,The Importance of Being Earnest,2002,3
+194,Life as a House,2001,2.5
+195,Star Trek,2009,2.5
+196,Dragonheart,1996,3
+197,Star Trek Into Darkness,2013,2.5
+198,Star Trek Beyond,2016,2.5
+199,Stardust,2007,2.5
+200,Labyrinth,1986,2
+201,Johnny Mnemonic,1995,2
+202,Bedazzled,2000,2
+203,Black Swan,2010,3.5
+204,Pokemon: The First Movie,1998,2
+205,Demolition Man,1993,
+206,Legend,1985,2
+207,Sex Drive,2008,2
+208,The Lost Boys,1987,2.5
+209,Short Circuit,1986,1.5
+210,Elf,2003,3
+211,Sister Act,1992,2.5
+212,Tommy Boy,1995,1
+213,Idle Hands,1999,2.5
+214,Reign of Fire,2002,1
+215,Rampant,2018,
+216,Sorry To Bother You,2018,3.5
+217,Brokeback Mountain,2005,4
+218,Amadeus,1984,4
+219,Fargo,1996,4
+220,Terminator,1984,
+221,Terminator 2,1991,3.5
+222,Shin Ultraman,2022,4
+223,The Piano Teacher,2001,3.5
+224,Billy Elliot,2000,3
+225,Nostalgia,2022,1.5
+226,Cha Cha Real Smooth,2022,3
+227,Minari,2020,3.5
+228,Two Days One Night,2014,2.5
+229,Train to Busan,2016,3
+230,Three Billboards,2017,4
+231,The Love Witch,2016,3.5
+232,Daughters of the Dust,1991,3
+233,Dead for a Dollar,2022,3
+234,Judas and the Black Messiah,2021,3
+235,Nightcrawler,2014,4
+236,Room,2015,3.5
+237,The Lobster,2015,3.5
+238,Lamb,2021,2.5
+239,Quiz Lady,2023,2.5
+240,Wingwomen,2023,3
+241,BlackBerry,2023,3.5
+242,A Real Pain,2024,4
+243,The People's Joker,2022,3.5
+244,Anora,2024,4
+245,Hit Man,2023,3.5
+246,Nickel Boys,2024,4
+247,The Brutalist,2024,4
+248,Hard Truths,2024,4
+249,Vermiglio, 2024,3.5
+250,Wallace & Gromit: Vengeance Most Fowl,2024,3.5
+251,TANGERINE,2015,3
+252,If Beale Street Could Talk,2018,4
+253,Babygirl,2024,3.5
+254,Inside the Yellow Cocoon Shell,2023,3.5
+255,Nosferatu,2024,4
+256,The Seed of the Sacred Fig,2024,3.5
+257,La Chimera,2023,3
+258,Janet Planet,2023,4
+259,Small Things Like These,2024,4
+260,Conclave,2024,4
+261,Tangerine,2015,3
+262,La Cocina,2024,3.5
+263,Bird,2024,3.5
+264,Do Not Expect Too Much from the End of the World,2023,3.5
+265,His Three Daughters,2023,4
+266,Good One,2024,4
+267,Your Name,2017,3.5
+268,Mad God,2021,4
+269,The Substance,2024,3.5
+270,Alien: Romulus,2024,3
+271,The Killer,2023,3.5
+272,Flow,2024,4
+273,Pokemon Detective Pikachu,2019,50
+274,"Three Billboards Outside Ebbing, Missouri",2017,4
+275,Eyes Wide Shut,1999,3.5
+276,Fish Tank,2009,4
+277,"Paris, Texas",1984,4
+278,Morvern Callar,2002,3.5
+279,Gremlins,1984,3
+280,Gladiator,2000,2
+281,Howl's Moving Castle,2004,2.5

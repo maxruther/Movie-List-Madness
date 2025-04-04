@@ -139,7 +139,8 @@ def pickle_omdb_data(omdb_data_raw: List[List[Dict[str, str | int]]],
     shortened datasets."""
 
     # Get filepath to the 'data' folder, in which we store these files.
-    data_dir_path = os.path.join(os.path.dirname(__file__), '../data/')
+    data_dir_path = os.path.join(os.path.dirname(__file__), 
+                                 '../data/pkl/omdb')
 
     # The names of the raw and feature-selected data files.
     raw_omdb_data_filename = 'OMDB_raw.pickle'
@@ -165,7 +166,8 @@ def unpickle_omdb_data(raw: bool = False) -> List[List[Dict[str, str | int]]] | 
     (the Open Movie DataBase) through its API, via
     download_omdb_data()."""
 
-    data_dir_path = os.path.join(os.path.dirname(__file__), '../data/')
+    data_dir_path = os.path.join(os.path.dirname(__file__), 
+                                 '..\data\pkl\omdb')
 
     raw_omdb_data_filename = 'OMDB_raw.pickle'
     omdb_data_filename = 'OMDB_3D_list.pickle'

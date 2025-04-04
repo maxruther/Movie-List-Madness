@@ -26,7 +26,7 @@ import re
 #     from scrapers.utils import parse_show_name
 
 
-def new_siskel_showtime_scrape(
+def new_siskel_scrape(
         test_n_films: int = 0,
 ) -> Tuple[
     Dict[str, datetime],
@@ -310,7 +310,7 @@ def new_siskel_showtime_scrape(
 if __name__ == '__main__':
 
     # Run the Siskel scrape
-    new_siskel_showtime_scrape()
+    new_siskel_scrape()
     # showtime_dict, inferior_info_df = new_siskel_showtime_scrape()
 
     # # # Print previews of the scraped output:

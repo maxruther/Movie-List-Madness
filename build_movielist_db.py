@@ -13,8 +13,8 @@ my_db = pymysql.connect(
 
 # Specify filepath of the MovieList html file, as exported from
 # Evernote.
-# movie_list_file = "movie_lists\\Movies 2024-01-28.html"
-movie_list_file = "movie_lists\\Movies.html"
+# movie_list_file = "data\\movie_lists\\Movies 2024-01-28.html"
+movie_list_file = "data\\movie_lists\\Movies.html"
 
 # Read in that movie list's data (to a multidimensional list) and
 # write its table to the MySQL database.
@@ -36,5 +36,5 @@ db_path = 'mysql://root:yos@localhost/moviedb'
 # fixes include filling in some scores that were erroneously missed by
 # OMDB, as well as adding additional reviewers' scores, like from
 # RogerEbert.com .
-# fix_critic_ratings_tbl(db_path)
+fix_critic_ratings_tbl(db_path)
 # fix_critic_ratings_tbl(db_path, na_report=True)

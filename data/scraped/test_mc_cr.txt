@@ -1,3 +1,0 @@
-,Film,Publication,Author,Snippet,Date Written
-0,"I Saw the TV Glow (2024)",/movie/i-saw-the-tv-glow/
-1,"The Brutalist (2024)",/movie/the-brutalist/
