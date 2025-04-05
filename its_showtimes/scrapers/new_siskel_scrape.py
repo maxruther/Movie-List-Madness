@@ -52,21 +52,21 @@ def new_siskel_scrape(
     options.add_argument('--ignore-ssl-errors')
     options.page_load_strategy = 'eager'
     driver = webdriver.Chrome(options)
-
     driver.implicitly_wait(3)
 
-    # # Pull up the Siskel's show calendar, which involves navigating to
-    # # the calendar page and then clicking the button/link titled
-    # # "Calendar".
-    # siskel_link = 'https://www.siskelfilmcenter.org/calendar'
-    # driver.get(siskel_link)
-    # calendar_link_xpath = '/html/body/div[1]/div[4]/div/section/div[2]/article/div/div/p/a'
-    # true_calendar_element = driver.find_element(By.XPATH, calendar_link_xpath)
-    # true_calendar_link = true_calendar_element.get_attribute('href')
+    # This is the link to the Siskel's film calendar. It show's the
+    # current month's calendar by default.
+    film_calendar_link = 'https://www.siskelfilmcenter.org/playing-this-month'
+    
+    # From that link, create a list that will also include the next
+    # month's calendar's link, if it exists.
+    calendar_links = [film_calendar_link]
 
-    true_calendar_link = 'https://www.siskelfilmcenter.org/playing-this-month'
-    driver.get(true_calendar_link)
+    # Navigate to the film calendar page.
+    driver.get(film_calendar_link)
 
+    # # Get the next month's calendar's link, if it exists.
+    # Locate the "Next Month" button.
     next_month_button_element = None
     try:
         next_month_button_element = driver.find_element(By.CSS_SELECTOR, 
@@ -75,31 +75,28 @@ def new_siskel_scrape(
         print("WARNING: Could not identify next month's calendar.")
         time.sleep(3)
     
-    calendar_links = [true_calendar_link]
-
+    # If the button exists, click it to get the next month's calendar.
     if next_month_button_element:
         next_month_button_element.click()
         calendar_links.append(driver.current_url)
 
-        driver.get(true_calendar_link)
+        # Navigate back to the current month's calendar.
+        driver.get(film_calendar_link)
 
 
-    # Initialize lists and dicts that will ultimately form the output
-    # datasets.
-
+    # Initialize a dictionary and list that will ultimately form the
+    # showtime and film info datasets, the concerns of this scrape.
     show_info_dict = {}
-
-    film_showtimes_2_list = []
+    film_showtimes_list = []
 
 
     # To time the scrape, note the current time as its start.
     scrape_start = time.time()
 
-
-    # Iterate through the month calendars. If testing, only process the
-    # first month's calendar.
+    # # Iterate through the month calendars. 
+    # (If testing, only process the first month's calendar.)
     if test_n_films:
-        calendar_links = [true_calendar_link]
+        calendar_links = [film_calendar_link]
     for cal_link in calendar_links:
 
         # Create a BeautifulSoup object from this month's calendar page.
@@ -112,13 +109,16 @@ def new_siskel_scrape(
 
         # Iterate through each of the calendar's shows to scrape the
         # films' info and showtimes.
-
-        # If testing, only check first n shows.
+        # (If testing, only scrape the first n shows.)
         if test_n_films:
             if test_n_films <= len(shows):
                 shows = shows[:test_n_films]
         for show in shows:
 
+            # Get the show title and film title from the show element.
+            # (These tend to differ when the show is part of a series,
+            # where the show title includes the series' name as a 
+            # prefix.)
             show_title, film_title = None, None
             show_title_elem = show.select_one('div.views-field.views-field-title')
             if show_title_elem:
@@ -126,6 +126,7 @@ def new_siskel_scrape(
                 # print(show_title)
                 film_title, _ = parse_show_name(show_title)
             
+            # Get the show's date and time.
             showtime_datetime = None
             show_time_elem = show.select_one('time')
             if show_time_elem:
@@ -133,53 +134,60 @@ def new_siskel_scrape(
                 showtime_datetime = datetime.fromisoformat(show_time_str)
                 # print(showtime_datetime)
 
+            # Get the link to the show's dedicated page.
+            # (This is where the film's info is found.)
             link = None
             show_link_elem = show.select_one('a')
             if show_link_elem:
                 link = 'https://www.siskelfilmcenter.org/' + show_link_elem.get('href')
                 # print(link)
 
-            
+            # If the film's title has yet to be documented in the show
+            # info dictionary, scrape its info from the film's dedicated
+            # page.
+            # (Initialize to none the variables 'year' and 'directors',
+            # which will form a primary key for many tables downstream.)
             year, directors = None, None
             if link and film_title not in show_info_dict:
                 
-                # Skip the 'Mystery Movie Monday' pages
+                # Skip processing the 'Mystery Movie Monday' pages.
                 if 'Mystery Movie Monday' in show_title:
                     continue
 
-                # Navigate to the movie's dedicated page and create a soup 
-                # object therefrom.
-                # driver.get(show_info_dict[show_title]['Link'])
+                # Navigate to the movie's dedicated page.
                 driver.get(link)
 
+                # Have the driver wait until the page's key content is
+                # loaded.
                 try:
                     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div.content')))
                 except TimeoutException:
                     print ("Loading took too much time - 'div.content' not found.")
 
+                # Create a BeautifulSoup object from the page's source 
+                # code.
                 show_page_soup = BeautifulSoup(driver.page_source, 'html.parser')
 
+                # Get the show's series name, if it exists.
                 series = None
                 film_header_elem = show_page_soup.select_one('div.content')
                 if film_header_elem:
                     series_elem = film_header_elem.select_one('div.film-header-series')
                     if series_elem:
                         series = series_elem.text.strip()
-                        # if series:
-                        #     show_info_dict[show_title]['Series'] = series
                 
+                # Get other tags of the show, if they exist.
                 tags = None
                 tags_elem = film_header_elem.select_one('div.film-header-headline')
                 if tags_elem:
                     tags = tags_elem.text.strip()
-                    # if tags:
-                    #     show_info_dict[show_title]['Tags'] = tags
                 
+                # Get the screened film's year, directors, country, and
+                # runtime. These share a string, separated by commas.
                 year, directors, country, runtime = None, None, None, None
                 country_yr_elem = film_header_elem.select_one('div.film-header-country-year')
                 if country_yr_elem:
                     country_yr_text = country_yr_elem.text.strip()
-                    # print(country_yr_text)
 
                     if country_yr_text == ', Unknown, Unknown,':
                         continue
@@ -206,7 +214,9 @@ def new_siskel_scrape(
                         print('INVALID YEAR:', show_title, year)
                     else:
                         # Take the first (earliest?) year listed. 
-                        # (Need to take only one year in order for the field to be valid as an "int" in the database, down the line.)
+                        # (Need to take only one year in order for the 
+                        # field to be valid as an "int" in the database,
+                        #  down the line.)
                         year = re.search(yr_pattern, year).group(1)
                     print(show_title, year)
 
@@ -215,12 +225,15 @@ def new_siskel_scrape(
                     else:
                         runtime = re.search(runtime_pattern, runtime).group(1)
                 
+                # Get the 'meta' info, if it exists, which tends to
+                # state the film's format (e.g. 36mm) and its spoken
+                # language.)
                 meta = None
                 meta_elem = film_header_elem.select_one('div.film-header-meta')
                 if meta_elem:
                     meta = meta_elem.text.strip()
 
-                
+                # Get the show's description.
                 description = None
                 main_content_elem = show_page_soup.select_one('div.main-container.container')
                 if main_content_elem:
@@ -232,6 +245,9 @@ def new_siskel_scrape(
                             if '|' in description:
                                 description = description.split('|')[1].strip()
                 
+                # Create the record of this show's info, by forming that
+                # info into a dictionary (within the greater 'show info'
+                # dictionary.)
                 show_info_dict[film_title] = {
                     # 'Title': film_title,
                     'Year': year,
@@ -253,11 +269,15 @@ def new_siskel_scrape(
                 #     print(field_value)
                 # print()
 
-
+            # If the film has already been documented in the show info
+            # dictionary, get its year and directors from there.
             if film_title in show_info_dict:
                 year = show_info_dict[film_title].get('Year', None)
                 directors = show_info_dict[film_title].get('Director', None)
 
+            # Create a record of this show's showtime, by forming that
+            # info into a dictionary and adding that to the list of all
+            # showtimes.
             showtime_entry = {
                 'Title': film_title,
                 'Year': year,
@@ -266,18 +286,17 @@ def new_siskel_scrape(
                 'Showtime_Date': showtime_datetime.date(),
                 'Showtime_Time': showtime_datetime.time(),
             }
-            film_showtimes_2_list.append(showtime_entry)
+            film_showtimes_list.append(showtime_entry)
 
-    # Set desired filepaths for the directories of the outputted 
-    # dataframes.
+
+    # # With the scrape now concluded, this process turns to file-saving.
+
+    # Set the filepaths of the directories that
+    # will house the scraped data.
     siskel_scrape_pkl_dir = 'data/pkl/siskel/scrape_v2'
     siskel_scrape_csv_dir = 'data/csv/siskel/scrape_v2'
 
-    # Create and save a dataframe of the show info scraped.
-
-    # info_df = pd.DataFrame(show_info_dict).T
-    # info_df = info_df.rename_axis('Title')
-
+    # Create and save a dataframe of the scraped show info.
     info_df = pd.DataFrame.from_dict(show_info_dict, orient='index')
     info_df.index.name = 'Title'
     info_df = info_df.reset_index()
@@ -286,8 +305,8 @@ def new_siskel_scrape(
     info_df.to_pickle(f'{siskel_scrape_pkl_dir}/{info_filename}.pkl')
     info_df.to_csv(f'{siskel_scrape_csv_dir}/{info_filename}.csv')
 
-    # Create and save a dataframe of the showtimes scraped.
-    showtimes_df = pd.DataFrame(film_showtimes_2_list)
+    # Create and save a dataframe of the scraped showtimes.
+    showtimes_df = pd.DataFrame(film_showtimes_list)
 
     showtimes_filename = 'siskel_showtimes'
     showtimes_df.to_pickle(f'{siskel_scrape_pkl_dir}/{showtimes_filename}.pkl')
@@ -305,7 +324,7 @@ def new_siskel_scrape(
     # Quit and close the driver, to conclude.
     driver.quit()
 
-    # return films_showtimes, film_details_df
+    return show_info_dict, showtimes_df
 
 if __name__ == '__main__':
 

@@ -45,5 +45,5 @@ movie_db_url = f"mysql://{user}:{password}@{host}/{database}"
 # fixes include filling in some scores that were erroneously missed by
 # OMDB, as well as adding additional reviewers' scores, like from
 # RogerEbert.com .
-# fix_critic_ratings_tbl(movie_db_url)
-fix_critic_ratings_tbl(movie_db_url, na_report=True)
+fix_critic_ratings_tbl(movie_db_url)
+# fix_critic_ratings_tbl(movie_db_url, na_report=True)
