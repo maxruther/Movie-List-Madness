@@ -5,6 +5,8 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.exceptions import RefreshError
 from json.decoder import JSONDecodeError
 
+import pandas as pd
+
 
 def authenticate(
         SCOPES: list[str] = ['https://www.googleapis.com/auth/calendar'],
@@ -60,3 +62,51 @@ def delete_all_events_from_cal(google_cal_service,
             break
     
     print("ENDING DELETIONS!\n\n")
+
+
+def get_show_info(
+        film_title: str,
+        film_year: str,
+        film_director: str,
+        info_df: pd.DataFrame,
+        ) -> dict[str, str | int]:
+    """Returns a dictionary of the show info for a given film title, 
+    year, and director."""
+
+    # Identify which dataset of show info this is, Siskel or Metacritic.
+    info_df_name = None
+    if 'Metascore' in info_df.columns:
+        info_df_name = 'siskel_show_info_mc_info'
+        title_attr = 'Title Searched'
+        year_attr = 'Year Searched'
+        director_attr = 'Director Searched'
+    elif 'Meta' in info_df.columns:
+        info_df_name = 'siskel_show_info'
+        title_attr = 'Title'
+        year_attr = 'Year'
+        director_attr = 'Director'
+    
+    search_cond_mask = \
+        (info_df[title_attr] == film_title) & \
+        (info_df[year_attr] == film_year) & \
+        (info_df[director_attr] == film_director)
+
+    matching_info_df = info_df[search_cond_mask]
+    # print(matching_info_df)
+
+    if matching_info_df.empty:
+        print(f"No '{info_df_name}' match found for {film_title} ({film_year}) by {film_director}")
+        return None
+        
+        # raise Exception(f'ERROR: No \'siskel_info\' match found for {film_title} ({film_year}) by {film_director}')
+
+    elif len(matching_info_df) > 1:
+        raise Exception(
+            f"ERROR: Multiple '{info_df_name}' matches found for {film_title} ({film_year}) by {film_director}",
+            matching_info_df,
+            sep='\n\n')
+
+
+    matching_info_dict = matching_info_df.to_dict(orient='records')[0]
+
+    return matching_info_dict
