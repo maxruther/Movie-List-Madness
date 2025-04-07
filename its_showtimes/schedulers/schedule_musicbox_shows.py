@@ -7,10 +7,16 @@ import pickle
 
 import pandas as pd
 
-if not __name__ == '__main__':
-    from schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info
-else:
+if __name__ == '__main__':
     from utils import authenticate, delete_all_events_from_cal, get_show_info
+else:
+    try:
+        from its_showtimes.schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info
+    except:
+        try:
+            from schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info
+        except:
+            raise Exception("\n'schedule_musicbox_shows' ERROR: Failed to import all methods 'authenticate, delete_all_events_from_cal, get_show_info'\n")
 
 
 def schedule_musicbox_shows():

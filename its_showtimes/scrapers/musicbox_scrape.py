@@ -17,11 +17,16 @@ from typing import Dict, Tuple
 
 import os
 
-
-if __name__ != '__main__':
-    from scrapers.utils import tech_summary_list_to_dict
-else:
+if __name__ == '__main__':
     from utils import tech_summary_list_to_dict
+else:
+    try:
+        from its_showtimes.scrapers.utils import tech_summary_list_to_dict
+    except:
+        try:
+            from scrapers.utils import tech_summary_list_to_dict
+        except:
+            raise Exception("\n'musicbox_scrape' ERROR: Failed to import method 'tech_summary_list_to_dict'\n")
 
 
 def musicbox_scrape(
@@ -170,12 +175,6 @@ def musicbox_scrape(
                         showtime_datetime = datetime.strptime(date_and_showtime, 
                                                             '%b %d %Y %I:%M%p')
                         # print(showtime_datetime)
-
-                        # if show_title not in films_showtimes:
-                        #     films_showtimes[show_title] = [showtime_datetime]
-                        # else:
-                        #     if showtime_datetime not in films_showtimes[show_title]:
-                        #         films_showtimes[show_title].append(showtime_datetime)
                         
                         showtime_record_dict = {
                             'Title': show_title,
@@ -192,7 +191,6 @@ def musicbox_scrape(
     # print()
     # print(films_showtimes, '\n\n')
     # print(film_details)
-
 
     # # Saving the scraped data to files.
 
@@ -218,13 +216,6 @@ def musicbox_scrape(
     
     info_df.to_csv(f'{output_dir_csv}/{info_filename}.csv', index=False)
     info_df.to_pickle(f'{output_dir_pkl}/{info_filename}.pkl')
-
-    # # Save the showtimes and show info dictionaries to pkl files.
-    # with open(f'data/pkl/musicbox/musicbox_showtimes_dict.pkl', 'wb') as file:
-    #     pickle.dump(films_showtimes, file)
-    # with open(f'data/pkl/musicbox/musicbox_show_info_dict.pkl', 'wb') as file:
-    #     pickle.dump(film_details, file)
-
     
     # Create and save a dataframe of the scraped showtimes.
     showtimes_df = pd.DataFrame(showtimes_list)
@@ -256,20 +247,5 @@ def musicbox_scrape(
 if __name__ == '__main__':
 
     # Run the Music Box scrape
-    # showtime_dict, show_info_df = musicbox_scrape(testing=True)
-    showtime_dict, show_info_df = musicbox_scrape()
-
-    # Print previews of the scraped output:
-    
-    # Showtimes
-    for movie, showtime_list in list(showtime_dict.items())[:5]:
-        print(movie)
-        for showtime in showtime_list:
-            print(f'\t{showtime}')
-        print()
-    
-    # A separator
-    print('\n' + '-'*80 + '\n')
-
-    # Show info
-    print(show_info_df.head(), '\n')
+    # showtimes_df, info_df = musicbox_scrape(testing=True)
+    showtimes_df, info_df = musicbox_scrape()

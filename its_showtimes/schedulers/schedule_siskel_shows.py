@@ -5,10 +5,16 @@ from googleapiclient.errors import HttpError
 
 import pickle
 
-if not __name__ == '__main__':
-    from schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info
-else:
+if __name__ == '__main__':
     from utils import authenticate, delete_all_events_from_cal, get_show_info
+else:
+    try:
+        from its_showtimes.schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info
+    except:
+        try:
+            from schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info
+        except:
+            raise Exception("\n'schedule_siskel_shows' ERROR: Failed to import all methods 'authenticate, delete_all_events_from_cal, get_show_info'\n")
 
 
 def schedule_siskel_shows():
@@ -25,15 +31,15 @@ def schedule_siskel_shows():
 
 
         siskel_showtimes_df = None
-        with open('data\pkl\siskel\scrape_v2\siskel_showtimes.pkl', 'rb') as file:
+        with open('data\pkl\siskel\siskel_showtimes.pkl', 'rb') as file:
             siskel_showtimes_df = pickle.load(file)
 
         siskel_info_df = None
-        with open('data/pkl/siskel/scrape_v2/siskel_show_info.pkl', 'rb') as file:
+        with open('data/pkl/siskel/siskel_show_info.pkl', 'rb') as file:
             siskel_info_df = pickle.load(file)
 
         mc_scrape_df = None
-        with open('data/pkl/siskel/scrape_v2/mc_scrape/siskel_show_info_mc_info.pkl', 'rb') as file:
+        with open('data/pkl/siskel/mc_scrape/siskel_show_info_mc_info.pkl', 'rb') as file:
             mc_scrape_df = pickle.load(file)
 
 

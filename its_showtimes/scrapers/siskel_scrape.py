@@ -15,9 +15,19 @@ import pickle
 
 from typing import Dict, Tuple
 
-from utils import parse_show_name
+if __name__ == '__main__':
+    from utils import parse_show_name
+else:
+    try:
+        from its_showtimes.scrapers.utils import parse_show_name
+    except:
+        try:
+            from scrapers.utils import parse_show_name
+        except:
+            raise Exception("\n'siskel_scrape' ERROR: Failed to import method 'parse_show_name'\n")
 
 import re
+import os
 
 
 # if __name__ == '__main__':
@@ -293,27 +303,38 @@ def siskel_scrape(
 
     # Set the filepaths of the directories that
     # will house the scraped data.
-    siskel_scrape_pkl_dir = 'data/pkl/siskel/scrape_v2'
-    siskel_scrape_csv_dir = 'data/csv/siskel/scrape_v2'
+    output_dir_pkl = 'data/pkl/siskel/'
+    output_dir_csv = 'data/csv/siskel/'
+
+    if test_n_films:
+        output_dir_pkl += '/test'
+        output_dir_csv += '/test'
+
+    os.makedirs(output_dir_pkl, exist_ok=True)
+    os.makedirs(output_dir_csv, exist_ok=True)
 
     # Create and save a dataframe of the scraped show info.
-    info_df = pd.DataFrame.from_dict(show_info_dict, orient='index')
-    info_df.index.name = 'Title'
-    info_df = info_df.reset_index()
+    info_df = pd.DataFrame.from_dict(show_info_dict, orient='index').reset_index()
+    info_df.rename(columns={'index': 'Title'}, inplace=True)
     
     info_filename = 'siskel_show_info'
-    info_df.to_pickle(f'{siskel_scrape_pkl_dir}/{info_filename}.pkl')
-    info_df.to_csv(f'{siskel_scrape_csv_dir}/{info_filename}.csv')
+    if test_n_films:
+        info_filename = 'test_' + info_filename
+
+    info_df.to_csv(f'{output_dir_csv}/{info_filename}.csv', index=False)
+    info_df.to_pickle(f'{output_dir_pkl}/{info_filename}.pkl')
 
     # Create and save a dataframe of the scraped showtimes.
     showtimes_df = pd.DataFrame(film_showtimes_list)
 
     showtimes_filename = 'siskel_showtimes'
-    showtimes_df.to_pickle(f'{siskel_scrape_pkl_dir}/{showtimes_filename}.pkl')
-    showtimes_df.to_csv(f'{siskel_scrape_csv_dir}/{showtimes_filename}.csv', index=False)
+    if test_n_films:
+        info_filename = 'test_' + info_filename
+    showtimes_df.to_pickle(f'{output_dir_pkl}/{showtimes_filename}.pkl')
+    showtimes_df.to_csv(f'{output_dir_csv}/{showtimes_filename}.csv', index=False)
 
 
-    # Note and print the runtime of the scrape.
+    # Note and print scrape's runtime.
     scrape_runtime = time.time() - scrape_start
     scrape_runtime = round(scrape_runtime)
     runtime_min = scrape_runtime // 60
@@ -329,21 +350,4 @@ def siskel_scrape(
 if __name__ == '__main__':
 
     # Run the Siskel scrape
-    siskel_scrape()
-    # showtime_dict, inferior_info_df = new_siskel_showtime_scrape()
-
-    # # # Print previews of the scraped output:
-    
-    # # Showtimes
-    # for movie, showtime_list in list(showtime_dict.items())[:5]:
-    #     print(movie)
-    #     for showtime in showtime_list:
-    #         print(f'\t{showtime}')
-    #     print()
-    
-    # # A separator
-    # print('\n' + '-'*80 + '\n')
-
-    # # Show info
-    # print(inferior_info_df.head(), '\n')
-
+    showtimes_df, info_df = siskel_scrape()

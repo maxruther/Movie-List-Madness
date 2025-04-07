@@ -10,9 +10,18 @@ import numpy as np
 import os
 from os.path import basename, splitext, dirname, exists
 
-from mc_utilities.mc_info_scrape import mc_info_scrape
-from mc_utilities.mc_review_scrape import mc_review_scrape
-from mc_utilities.mc_get_films_link import mc_get_films_link
+if __name__ == '__main__':
+    from mc_utilities.mc_info_scrape import mc_info_scrape
+    from mc_utilities.mc_review_scrape import mc_review_scrape
+    from mc_utilities.mc_get_films_link import mc_get_films_link
+else:
+    try:
+        print(__name__)
+        from critic_ratings.scrapers.mc_utilities.mc_info_scrape import mc_info_scrape
+        from critic_ratings.scrapers.mc_utilities.mc_review_scrape import mc_review_scrape
+        from critic_ratings.scrapers.mc_utilities.mc_get_films_link import mc_get_films_link
+    except:
+        raise Exception(f"ERROR - {os.path.basename(__file__)}: Failed to import methods 'mc_info_scrape', 'mc_review_scrape', and 'mc_get_films_link'.")
 
 
 def combine_and_save_data(new_data: list[dict[str: str]],
@@ -74,7 +83,7 @@ def mc_search_and_scrape(
         if input_extension != '.pkl':
             raise ValueError("Input file must be a .pkl file.")
 
-        if input_dirname[:9] != 'data/pkl/':
+        if input_dirname[:9] != 'data/pkl/' and input_dirname[:9] != 'data\\pkl\\':
             raise ValueError("Input file must be in 'data/pkl/' or a subdirectory thereof.")
         
         if not os.path.exists(input_filepath):
@@ -420,8 +429,8 @@ if __name__ == '__main__':
     mc_search_and_scrape(
         # input_filepath='data/pkl/ebert/ebert_recent_reviews.pkl',
         # input_filepath='data/pkl/ebert/test/test_ebert_recent_reviews.pkl',
-        # input_filepath='data/pkl/siskel/scrape_v2/siskel_show_info.pkl',
-        input_filepath='data/pkl/musicbox/musicbox_show_info.pkl',
+        input_filepath='data/pkl/siskel/siskel_show_info.pkl',
+        # input_filepath='data/pkl/musicbox/musicbox_show_info.pkl',
         # input_filepath='data/pkl/my_watched_films/my_watched_films.pkl',
 
         # test_n_films=5,

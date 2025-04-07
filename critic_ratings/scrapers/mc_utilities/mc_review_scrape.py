@@ -6,7 +6,13 @@ import re
 if __name__ == '__main__':
     from select_text_from_soup import select_text_from_soup
 else:
-    from mc_utilities.select_text_from_soup import select_text_from_soup
+    try:
+        from mc_utilities.select_text_from_soup import select_text_from_soup
+    except:
+        try:
+            from critic_ratings.scrapers.mc_utilities.select_text_from_soup import select_text_from_soup
+        except:
+            raise Exception(f"ERROR - {os.path.basename(__file__)}: Failed to import method 'select_text_from_soup'.")
 
 def mc_review_scrape(title_searched: str,
                      year_searched: str,
