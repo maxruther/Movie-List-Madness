@@ -33,7 +33,6 @@ def musicbox_scrape(
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--ignore-ssl-errors')
     options.page_load_strategy = 'eager'
-
     driver = webdriver.Chrome(options)
 
     # Navigate the driver to the Music Box calendar page.
