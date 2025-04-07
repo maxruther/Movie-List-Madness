@@ -76,12 +76,17 @@ def get_show_info(
     # Identify which dataset of show info this is, Siskel or Metacritic.
     info_df_name = None
     if 'Metascore' in info_df.columns:
-        info_df_name = 'siskel_show_info_mc_info'
+        info_df_name = 'mc_info'
         title_attr = 'Title Searched'
         year_attr = 'Year Searched'
         director_attr = 'Director Searched'
     elif 'Meta' in info_df.columns:
         info_df_name = 'siskel_show_info'
+        title_attr = 'Title'
+        year_attr = 'Year'
+        director_attr = 'Director'
+    elif 'Format' in info_df.columns:
+        info_df_name = 'musicbox_show_info'
         title_attr = 'Title'
         year_attr = 'Year'
         director_attr = 'Director'

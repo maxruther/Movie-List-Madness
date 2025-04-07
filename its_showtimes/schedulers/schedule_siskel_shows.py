@@ -59,15 +59,16 @@ def schedule_siskel_shows():
             runtime = None
             if siskel_film_info_dict:
 
-                metascore = siskel_film_info_dict.get('Metascore', None)
                 runtime = int(siskel_film_info_dict.get("Runtime", "120"))
 
                 movie_event_desc_header = \
                     f'{film_year} | ' + \
                     f'{str(runtime)} min.'
-
-                if metascore:
-                    movie_event_desc_header += f' | {metascore}'
+                
+                if mc_film_info_dict:
+                    metascore = mc_film_info_dict.get('Metascore', None)
+                    if metascore:
+                        movie_event_desc_header += f' | {metascore}'
 
                 movie_event_desc = \
                     movie_event_desc_header + \

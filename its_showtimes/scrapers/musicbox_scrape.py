@@ -15,6 +15,9 @@ import pandas as pd
 
 from typing import Dict, Tuple
 
+import os
+
+
 if __name__ != '__main__':
     from scrapers.utils import tech_summary_list_to_dict
 else:
@@ -56,15 +59,9 @@ def musicbox_scrape(
     # with open('data/showtimes/test_mb_calendar_text.pkl', 'rb') as file:
     #     calendar_text = pickle.load(file)
 
-    films_showtimes = {}
-    film_showtimes_2_list = []
+    # films_showtimes = {}
+    showtimes_list = []
     film_details = {}
-
-    mb_series_list = [
-        # 'Music Box Movie Trivia',
-        # 'Strange and Found',
-        ]
-
 
     # Time the imminent scraping by first
     # noting its start (for the dev's reference.)
@@ -99,10 +96,6 @@ def musicbox_scrape(
                 date_text_all = calendar_date_elem.text.strip().split(', ')
                 date_str = ' '.join(date_text_all[-2:])
 
-                day_datetime = datetime.strptime(date_str, '%b %d %Y')
-                # print(f'\n\n{day_datetime}\n')
-                # print(f'\n\n{date_str}\n')
-
             
             shows = day.select('div.programming-content')
             for show in shows:
@@ -130,44 +123,43 @@ def musicbox_scrape(
                 if showtimes_elem:
 
                     if show_title not in film_details:
-                        if show_title not in mb_series_list:
-                            show_rel_link = show.select_one('a').get('href')
-                            show_link = 'https://musicboxtheatre.com' + show_rel_link
-                            # print(show_link)
-                            driver.get(show_link)
-                            main_section_xpath = '/html/body/div[1]/main'
-                            main_section_text = driver.find_element(By.XPATH, value=main_section_xpath).get_attribute('innerHTML')
-                            main_section_soup = BeautifulSoup(main_section_text, 'html.parser')
+                        show_rel_link = show.select_one('a').get('href')
+                        show_link = 'https://musicboxtheatre.com' + show_rel_link
+                        # print(show_link)
+                        driver.get(show_link)
+                        main_section_xpath = '/html/body/div[1]/main'
+                        main_section_text = driver.find_element(By.XPATH, value=main_section_xpath).get_attribute('innerHTML')
+                        main_section_soup = BeautifulSoup(main_section_text, 'html.parser')
 
-                            tech_summary_elem = main_section_soup.select_one('p.tech-summary')
-                            if tech_summary_elem:
-                                tech_summ_deets = tech_summary_elem.select('span')
-                                tech_deet_list = [deet.text.strip() for deet in tech_summ_deets]
-                            film_details[show_title] = tech_summary_list_to_dict(tech_deet_list)
-                            if 'Year' not in film_details[show_title]:
-                                film_details[show_title]['Year'] = None
+                        tech_summary_elem = main_section_soup.select_one('p.tech-summary')
+                        if tech_summary_elem:
+                            tech_summ_deets = tech_summary_elem.select('span')
+                            tech_deet_list = [deet.text.strip() for deet in tech_summ_deets]
+                        film_details[show_title] = tech_summary_list_to_dict(tech_deet_list)
+                        if 'Year' not in film_details[show_title]:
+                            film_details[show_title]['Year'] = None
 
-                            credit_elems = main_section_soup.select('div.credits')
-                            print(f'\n\n{show_title} - Credits:')
+                        credit_elems = main_section_soup.select('div.credits')
+                        print(f'\n\n{show_title} - Credits:')
 
-                            film_details[show_title]['Director'] = None
-                            for credit_elem in credit_elems:
-                                credit_type = credit_elem.find('label').text.strip()
-                                if credit_type == 'DIRECTED BY':
-                                    director_elems = credit_elem.select('span')
-                                    director = ', '.join([director_elem.text.strip(' ,') for director_elem in director_elems])
-                                    print(f'{credit_type}: {director}')
-                                    film_details[show_title]['Director'] = director
-                                elif credit_type == 'WRITTEN BY':
-                                    writer_elems = credit_elem.select('span')
-                                    writer = ', '.join([writer_elem.text.strip(' ,') for writer_elem in writer_elems])
-                                    print(f'{credit_type}: {writer}')
-                                    film_details[show_title]['Writer'] = writer
-                                elif credit_type == 'STARRING':
-                                    cast_elems = credit_elem.select('span')
-                                    cast = ', '.join([cast_elem.text.strip(' ,') for cast_elem in cast_elems])
-                                    print(f'{credit_type}: {cast}')
-                                    film_details[show_title]['Cast'] = cast
+                        film_details[show_title]['Director'] = None
+                        for credit_elem in credit_elems:
+                            credit_type = credit_elem.find('label').text.strip()
+                            if credit_type == 'DIRECTED BY':
+                                director_elems = credit_elem.select('span')
+                                director = ', '.join([director_elem.text.strip(' ,') for director_elem in director_elems])
+                                print(f'{credit_type}: {director}')
+                                film_details[show_title]['Director'] = director
+                            elif credit_type == 'WRITTEN BY':
+                                writer_elems = credit_elem.select('span')
+                                writer = ', '.join([writer_elem.text.strip(' ,') for writer_elem in writer_elems])
+                                print(f'{credit_type}: {writer}')
+                                film_details[show_title]['Writer'] = writer
+                            elif credit_type == 'STARRING':
+                                cast_elems = credit_elem.select('span')
+                                cast = ', '.join([cast_elem.text.strip(' ,') for cast_elem in cast_elems])
+                                print(f'{credit_type}: {cast}')
+                                film_details[show_title]['Cast'] = cast
 
                     showtimes = showtimes_elem.select('a.use-ajax')
                     # print(f'Showtimes:')
@@ -179,11 +171,11 @@ def musicbox_scrape(
                                                             '%b %d %Y %I:%M%p')
                         # print(showtime_datetime)
 
-                        if show_title not in films_showtimes:
-                            films_showtimes[show_title] = [showtime_datetime]
-                        else:
-                            if showtime_datetime not in films_showtimes[show_title]:
-                                films_showtimes[show_title].append(showtime_datetime)
+                        # if show_title not in films_showtimes:
+                        #     films_showtimes[show_title] = [showtime_datetime]
+                        # else:
+                        #     if showtime_datetime not in films_showtimes[show_title]:
+                        #         films_showtimes[show_title].append(showtime_datetime)
                         
                         showtime_record_dict = {
                             'Title': show_title,
@@ -191,7 +183,7 @@ def musicbox_scrape(
                             'Director': film_details[show_title]['Director'],
                             'Showtime': showtime_datetime,
                         }
-                        film_showtimes_2_list.append(showtime_record_dict)
+                        showtimes_list.append(showtime_record_dict)
 
     
     # # Printing the various outputs of the scrape.
@@ -202,34 +194,50 @@ def musicbox_scrape(
     # print(film_details)
 
 
-    # Saving the scraped data to files.
-    testing_prefix = ''
+    # # Saving the scraped data to files.
+
+    # Set the filepaths of the directories that
+    # will house the scraped data.
+    output_dir_pkl = 'data/pkl/musicbox'
+    output_dir_csv = 'data/csv/musicbox'
+
     if testing:
-        testing_prefix = 'test_'
+        output_dir_pkl += '/test'
+        output_dir_csv += '/test'
 
-    # Create a dataframe from the dictionary of the scraped show info.
-    film_details_df = pd.DataFrame.from_dict(film_details, orient='index').reset_index()
-    film_details_df.rename(columns={'index': 'Title'}, inplace=True)
+    os.makedirs(output_dir_pkl, exist_ok=True)
+    os.makedirs(output_dir_csv, exist_ok=True)
 
-    # Save the dataframe to files, csv and pkl.
-    film_details_df.to_csv(f'data/csv/musicbox/{testing_prefix}musicbox_show_info.csv', index=False)
-    film_details_df.to_pickle(f'data/pkl/musicbox/{testing_prefix}musicbox_show_info.pkl')
+    # Create and save a dataframe of the scraped show info.
+    info_df = pd.DataFrame.from_dict(film_details, orient='index').reset_index()
+    info_df.rename(columns={'index': 'Title'}, inplace=True)
 
-    # Save the showtimes and show info dictionaries to pkl files.
-    with open(f'data/pkl/musicbox/{testing_prefix}musicbox_showtimes_dict.pkl', 'wb') as file:
-        pickle.dump(films_showtimes, file)
-    with open(f'data/pkl/musicbox/{testing_prefix}musicbox_show_info_dict.pkl', 'wb') as file:
-        pickle.dump(film_details, file)
+    info_filename = 'musicbox_show_info'
+    if testing:
+        info_filename = 'test_' + info_filename
+    
+    info_df.to_csv(f'{output_dir_csv}/{info_filename}.csv', index=False)
+    info_df.to_pickle(f'{output_dir_pkl}/{info_filename}.pkl')
+
+    # # Save the showtimes and show info dictionaries to pkl files.
+    # with open(f'data/pkl/musicbox/musicbox_showtimes_dict.pkl', 'wb') as file:
+    #     pickle.dump(films_showtimes, file)
+    # with open(f'data/pkl/musicbox/musicbox_show_info_dict.pkl', 'wb') as file:
+    #     pickle.dump(film_details, file)
 
     
-    # Create a dataframe of the new showtimes dataset (in testing.)
-    film_showtimes_2_df = pd.DataFrame(film_showtimes_2_list)
-    film_showtimes_2_df['Showtime_Date'] = film_showtimes_2_df['Showtime'].dt.date
-    film_showtimes_2_df['Showtime_Time'] = film_showtimes_2_df['Showtime'].dt.time
+    # Create and save a dataframe of the scraped showtimes.
+    showtimes_df = pd.DataFrame(showtimes_list)
+    showtimes_df['Showtime_Date'] = showtimes_df['Showtime'].dt.date
+    showtimes_df['Showtime_Time'] = showtimes_df['Showtime'].dt.time
 
-    # Save the new showtimes dataset.
-    film_showtimes_2_df.to_csv(f'data/csv/musicbox/{testing_prefix}musicbox_showtimes_2.csv', index=False)
-    film_showtimes_2_df.to_pickle(f'data/pkl/musicbox/{testing_prefix}musicbox_showtimes_2.pkl')
+    showtimes_filename = 'musicbox_showtimes'
+    if testing:
+        showtimes_filename = 'test_' + showtimes_filename
+    
+    showtimes_df.to_csv(f'{output_dir_csv}/{showtimes_filename}.csv', index=False)
+    showtimes_df.to_pickle(f'{output_dir_pkl}/{showtimes_filename}.pkl')
+
 
     # Note the scrape's runtime.
     scrape_runtime = time.time() - scrape_start
@@ -242,7 +250,7 @@ def musicbox_scrape(
     # Quit and close the driver, to conclude.
     driver.quit()
 
-    return films_showtimes, film_details_df
+    return showtimes_df, info_df
 
 
 if __name__ == '__main__':

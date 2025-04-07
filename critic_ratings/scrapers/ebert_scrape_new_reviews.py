@@ -109,7 +109,7 @@ def ebert_scrape_new_reviews(
         
         movie_dict = {
             'Title': title,
-            'Release Year': year,
+            'Year': year,
             'Director': director,
             'Rating': rating,
             'Reviewer': reviewer,
@@ -140,7 +140,7 @@ def ebert_scrape_new_reviews(
 
 
 if __name__ == '__main__':
-    recent_review_df = ebert_scrape_new_reviews(test_n_films=3)
-    # recent_review_df = ebert_scrape_new_reviews()
+    # recent_review_df = ebert_scrape_new_reviews(test_n_films=3)
+    recent_review_df = ebert_scrape_new_reviews()
 
     print(recent_review_df.head())

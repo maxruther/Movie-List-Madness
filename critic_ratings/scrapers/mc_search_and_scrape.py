@@ -420,8 +420,8 @@ if __name__ == '__main__':
     mc_search_and_scrape(
         # input_filepath='data/pkl/ebert/ebert_recent_reviews.pkl',
         # input_filepath='data/pkl/ebert/test/test_ebert_recent_reviews.pkl',
-        input_filepath='data/pkl/siskel/scrape_v2/siskel_show_info.pkl',
-        # input_filepath='data/pkl/musicbox/musicbox_show_info.pkl',
+        # input_filepath='data/pkl/siskel/scrape_v2/siskel_show_info.pkl',
+        input_filepath='data/pkl/musicbox/musicbox_show_info.pkl',
         # input_filepath='data/pkl/my_watched_films/my_watched_films.pkl',
 
         # test_n_films=5,

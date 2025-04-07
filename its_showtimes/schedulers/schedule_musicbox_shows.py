@@ -5,10 +5,12 @@ from googleapiclient.errors import HttpError
 
 import pickle
 
+import pandas as pd
+
 if not __name__ == '__main__':
-    from schedulers.utils import authenticate, delete_all_events_from_cal
+    from schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info
 else:
-    from utils import authenticate, delete_all_events_from_cal
+    from utils import authenticate, delete_all_events_from_cal, get_show_info
 
 
 def schedule_musicbox_shows():
@@ -22,52 +24,116 @@ def schedule_musicbox_shows():
 
         delete_all_events_from_cal(service, movie_radar_cal_id)
 
-        
-        mb_showtimes_dict = None
-        with open('data/showtimes/musicbox_films_showtimes_dict.pkl', 'rb') as file:
-            mb_showtimes_dict = pickle.load(file)
 
-        mb_film_details_dict = None
-        with open('data/showtimes/musicbox_film_details_dict.pkl', 'rb') as file:
-            mb_film_details_dict = pickle.load(file)
+        mb_showtimes_df = None
+        with open('data/pkl/musicbox/musicbox_showtimes.pkl', 'rb') as file:
+            mb_showtimes_df = pickle.load(file)
+
+        mb_info_df = None
+        with open('data/pkl/musicbox/musicbox_show_info.pkl', 'rb') as file:
+            mb_info_df = pickle.load(file)
+
+        mc_scrape_df = None
+        with open('data/pkl/musicbox/mc_scrape/musicbox_show_info_mc_info.pkl', 'rb') as file:
+            mc_scrape_df = pickle.load(file)
 
 
-        for movie_title in mb_showtimes_dict:
-            if 'Runtime' not in mb_film_details_dict[movie_title]:
-                print(f'RUNTIME MISSING FOR FILM "{movie_title}"')
-                continue
+        for _ , row in mb_showtimes_df.iterrows():
+            film_title = row['Title']
+            film_year = row['Year']
+            film_director = row['Director']
+            showtime = row['Showtime'].to_pydatetime()
+            # print(film_title, film_year, film_director, showtime, sep='\n')
+
+            this_films_info_musicbox = get_show_info(
+                film_title, film_year, film_director,
+                mb_info_df
+                )
+            
+            this_films_info_mc = get_show_info(
+                film_title, film_year, film_director,
+                mc_scrape_df
+                )
+
+            # Initialize the movie's event description and runtime.
+            movie_event_desc = None
+            runtime = None
+            if this_films_info_musicbox:
+
+                runtime = int(this_films_info_musicbox.get("Runtime", "120"))
+                
+                movie_event_desc_header = \
+                    f'{film_year} | ' + \
+                    f'{str(runtime)} min.'
+
+                if this_films_info_mc:
+                    metascore = this_films_info_mc.get('Metascore', None)
+                    if metascore:
+                        movie_event_desc_header += f' | {metascore}'
+                
+                if pd.notna(this_films_info_musicbox["Format"]):
+                    movie_event_desc_header += f' | {this_films_info_musicbox["Format"]}'
+
+                movie_event_desc = \
+                    movie_event_desc_header + \
+                    '\n\n' + \
+                    f'Director(s): {film_director}' + \
+                    '\n' + \
+                    f'Writers: {this_films_info_musicbox["Writer"]}' + \
+                    '\n' + \
+                    f'Cast: {this_films_info_musicbox["Cast"]}'
+                
+            elif this_films_info_mc:
+
+                runtime = int(this_films_info_mc['Runtime'])
+
+                movie_event_desc = \
+                    f'{this_films_info_mc["Year"]} | ' + \
+                    f'{this_films_info_mc["Runtime"]} min. | ' + \
+                    f'{this_films_info_mc.get("Metascore", 'N/A')}' + \
+                    '\n\n' + \
+                    f'Directed by: {this_films_info_mc["Directors"]}' + \
+                    '\n' + \
+                    f'Written by: {this_films_info_mc["Writers"]}' + \
+                    '\n\n' + \
+                    f'{this_films_info_mc["Summary"]}'
+                
             else:
-                runtime = mb_film_details_dict[movie_title]['Runtime']
-                print(f'\nFilm: {movie_title}\t\tRuntime: {runtime} minutes')
-                for showtime in mb_showtimes_dict[movie_title]:
-                    runtime_delta = dt.timedelta(minutes=runtime)
-                    movie_start_str = showtime.strftime('%Y-%m-%dT%H:%M:%S')
-                    movie_end = showtime + runtime_delta
-                    movie_end_str = movie_end.strftime('%Y-%m-%dT%H:%M:%S')
+                movie_event_desc = 'No details available. Runtime set to ' \
+                '120-minute default.'
 
-                    event = {
-                        "summary": movie_title,
-                        "location": "3733 N Southport Ave, Chicago, IL 60613",
-                        "description": "Some more details on this awesome event",
-                        "colorId": 6,
-                        "start": {
-                            "dateTime": movie_start_str,
-                            "timeZone": "America/Chicago"
-                        },
-                        "end": {
-                            "dateTime": movie_end_str,
-                            "timeZone": "America/Chicago"
-                        }
-                    }
-                    
-                    event = service.events().insert(calendarId=movie_radar_cal_id, body=event).execute()
+                runtime = 120
+            
 
-                    print("Show added:",
-                          f'start={movie_start_str}', 
-                          f'end={movie_end_str}', 
-                          f'\tlink={event.get('htmlLink')}',
-                           sep='\t')
-                    # print(f"Event created: {movie_title} at {movie_start_str} \t\t {event.get('htmlLink')}\n")
+            # Calculate the show's end time from its start time and runtime.
+            runtime_delta = dt.timedelta(minutes=runtime)
+            movie_start_str = showtime.strftime('%Y-%m-%dT%H:%M:%S')
+            movie_end = showtime + runtime_delta
+            movie_end_str = movie_end.strftime('%Y-%m-%dT%H:%M:%S')
+            # print(film_title, runtime, movie_start_str, movie_end_str, sep='\t')
+            # print(movie_event_desc, '\n\n')
+
+            # Construct the event object for insertion into the calendar.
+            event = {
+                "summary": film_title,
+                "location": "164 N State St, Chicago, IL 60601",
+                "description": movie_event_desc,
+                "colorId": 5,
+                "start": {
+                    "dateTime": movie_start_str,
+                    "timeZone": "America/Chicago"
+                },
+                "end": {
+                    "dateTime": movie_end_str,
+                    "timeZone": "America/Chicago"
+                }
+            }
+                
+            event = service.events().insert(calendarId=movie_radar_cal_id, body=event).execute()
+
+            # Acknowledge the addition of the show to the calendar.
+            print(f"Event created: {film_title} at {movie_start_str} \t\t {event.get('htmlLink')}\n")
+            
 
     except HttpError as error:
         print("An error occurred:", error)
