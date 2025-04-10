@@ -11,11 +11,19 @@ from sqlalchemy import create_engine, types
 import re
 
 
-df = pd.read_pickle('data/pkl/metacritic/master_files/master_mc_info.pkl')
-df_sorted = df.sort_values(by='Link Retrieved', ascending=False, key=lambda x: x.str.len())
-print(df_sorted['Link Retrieved'])
+# for i in []:
+#     print("barfy")
 
-print(len('/movie/borat-subsequent-moviefilm-delivery-of-prodigious-bribe-to-american-regime-for-make-benefit-once-glo/'))
+
+
+# df = pd.read_pickle('data/pkl/metacritic/master_files/master_mc_info.pkl')
+# df_sorted = df.sort_values(by='Link Retrieved', ascending=False, key=lambda x: x.str.len())
+# print(df_sorted['Link Retrieved'])
+
+# print(len('/movie/borat-subsequent-moviefilm-delivery-of-prodigious-bribe-to-american-regime-for-make-benefit-once-glo/'))
+
+
+
 
 # master_files = [
 #     'data/pkl/metacritic/master_files/master_mc_info.pkl',
@@ -362,25 +370,25 @@ print(len('/movie/borat-subsequent-moviefilm-delivery-of-prodigious-bribe-to-ame
 #      print(show_name, '\t\t', parse_show_name(show_name)[0])
 
 
-mb_showtimes = None
-with open('data/pkl/musicbox/musicbox_showtimes_dict.pkl', 'rb') as file:
-    mb_showtimes = pickle.load(file)
+# mb_showtimes = None
+# with open('data/pkl/musicbox/musicbox_showtimes_dict.pkl', 'rb') as file:
+#     mb_showtimes = pickle.load(file)
 
-new_dict = {}
-for movie in list(mb_showtimes.keys())[:5]:
-    new_dict[movie] = mb_showtimes[movie]
-print(new_dict, '\n\n')
+# new_dict = {}
+# for movie in list(mb_showtimes.keys())[:5]:
+#     new_dict[movie] = mb_showtimes[movie]
+# print(new_dict, '\n\n')
 
-df1 = pd.DataFrame.from_dict(new_dict, orient='index')
-df_stacked = df1.stack().reset_index()
-df_stacked.columns = ['Movie', 'Showtime_Index', 'Showtime']
-df_stacked = df_stacked[['Movie', 'Showtime']]
+# df1 = pd.DataFrame.from_dict(new_dict, orient='index')
+# df_stacked = df1.stack().reset_index()
+# df_stacked.columns = ['Movie', 'Showtime_Index', 'Showtime']
+# df_stacked = df_stacked[['Movie', 'Showtime']]
 
-df_stacked['Showtime_Date'] = df_stacked['Showtime'].dt.date
-df_stacked['Showtime_Time'] = df_stacked['Showtime'].dt.time
+# df_stacked['Showtime_Date'] = df_stacked['Showtime'].dt.date
+# df_stacked['Showtime_Time'] = df_stacked['Showtime'].dt.time
 
-print(df_stacked)
-print(df_stacked.dtypes)
+# print(df_stacked)
+# print(df_stacked.dtypes)
 
 # for movie, showtime_list in list(mb_showtimes.items())[:5]:
 #                   print(movie)

@@ -5,7 +5,6 @@ import pandas as pd
 
 import os
 
-from mc_search_and_scrape import mc_search_and_scrape
 from sqlalchemy import create_engine, types
 from os.path import splitext, basename, dirname, exists
 
@@ -77,7 +76,7 @@ def prepare_scrape_df(
     return scrape_df, dtype_mapping
 
 
-def db_load_scrapes_to_table(
+def load_mc_scrapes(
         *input_filepaths: str,
         ) -> None:
 
@@ -150,11 +149,10 @@ def db_load_scrapes_to_table(
 
 if __name__ == '__main__':
 
-    db_load_scrapes_to_table(
+    load_mc_scrapes(
         # 'data/pkl/ebert/ebert_recent_reviews.pkl',
-        # 'data/pkl/siskel/siskel_inferior_show_info.pkl',
-        'data/pkl/siskel/scrape_v2/siskel_show_info.pkl',
+        # 'data/pkl/siskel/siskel_show_info.pkl',
         # 'data/pkl/musicbox/musicbox_show_info.pkl',
         # 'data/pkl/my_watched_films/my_watched_films.pkl',
-        # 'master',
+        'master',
         )

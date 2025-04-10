@@ -33,7 +33,7 @@ def prepare_scrape_df(
     return showtime_df, dtype_mapping
 
 
-def db_load_scrapes_to_table(
+def load_showtimes(
         *input_filepath_list: str,
         ) -> None:
 
@@ -88,9 +88,7 @@ def db_load_scrapes_to_table(
 
 if __name__ == '__main__':
 
-    db_load_scrapes_to_table(\
-        # 'data/pkl/siskel/siskel_showtimes_2.pkl',
-        'data/pkl/siskel/scrape_v2/siskel_showtimes.pkl',
-        # 'data/pkl/musicbox/musicbox_showtimes_2.pkl',
-        # 'data/pkl/musicbox/test_musicbox_showtimes_2.pkl',
+    load_showtimes(
+        'data/pkl/siskel/siskel_showtimes.pkl',
+        'data/pkl/musicbox/musicbox_showtimes.pkl',
         )

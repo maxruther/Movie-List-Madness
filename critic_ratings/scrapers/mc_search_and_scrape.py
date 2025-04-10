@@ -24,10 +24,11 @@ else:
         raise Exception(f"ERROR - {os.path.basename(__file__)}: Failed to import methods 'mc_info_scrape', 'mc_review_scrape', and 'mc_get_films_link'.")
 
 
-def combine_and_save_data(new_data: list[dict[str: str]],
-                            existing_df: pd.DataFrame,
-                            output_filepath: str,
-                            ) -> None:
+def combine_and_save_data(
+        new_data: list[dict[str: str]],
+        existing_df: pd.DataFrame,
+        output_filepath: str,
+        ) -> None:
 
     new_data_df = pd.DataFrame(new_data)
 

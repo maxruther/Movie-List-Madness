@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 import re
+import os
 
 if __name__ == '__main__':
     from select_text_from_soup import select_text_from_soup
