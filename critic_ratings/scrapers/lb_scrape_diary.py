@@ -10,6 +10,8 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from os import makedirs
 
+from utils import create_chromedriver, save_output_df_to_dirs
+
 
 def lb_scrape_diary(
         user_url: str = 'yoyoyodaboy',
@@ -17,14 +19,17 @@ def lb_scrape_diary(
         test_n_films: int = 0,
         ) -> list[str]:
     
-    # Set up the Selenium Chromium driver
-    options = webdriver.ChromeOptions()
-    options.add_argument('--ignore-certificate-errors')
-    options.add_argument('--ignore-ssl-errors')
-    # options.page_load_strategy = 'eager'
-    options.page_load_strategy = 'none'
+    # # Set up the Selenium Chromium driver
+    # options = webdriver.ChromeOptions()
+    # options.add_argument('--ignore-certificate-errors')
+    # options.add_argument('--ignore-ssl-errors')
+    # # options.page_load_strategy = 'eager'
+    # options.page_load_strategy = 'none'
 
-    driver = webdriver.Chrome(options)
+    # driver = webdriver.Chrome(options)
+
+    # Set up the Selenium Chromium driver
+    driver = create_chromedriver('none')
     driver.implicitly_wait(3)
 
     # Navigate to user's film diary page.
@@ -82,7 +87,8 @@ def lb_scrape_diary(
         # Iterate through each diary entry. (If testing, only iterate
         # through <test_n_films> entries.)
         if test_n_films:
-            diary_entry_elems = list(diary_entry_elems)[:test_n_films]
+            if test_n_films < len(diary_entry_elems):
+                diary_entry_elems = list(diary_entry_elems)[:test_n_films]
         for entry_elem in diary_entry_elems:
 
             # Film title
@@ -225,26 +231,15 @@ def lb_scrape_diary(
     diary_df = pd.DataFrame(diary_record_list)
     # diary_df['Watch Date'] = pd.to_datetime(diary_df['Watch Date'], format='%Y-%m-%d')
 
-    # Set the filepath of the directories that
-    # will house the scraped data.
-    output_dir_pkl = f'data/pkl/{output_subdir}'
-    output_dir_csv = f'data/csv/{output_subdir}'
+    # Save this output dataframe to csv and pkl files.
+    output_filename = f'lb_diary_{user_url}'
 
-    # If testing, output to a subdir named 'test'.
-    if test_n_films:
-        output_dir_pkl += '/test'
-        output_dir_csv += '/test'
-
-    # Create the output directories, if they don't already exist.
-    makedirs(output_dir_pkl, exist_ok=True)
-    makedirs(output_dir_csv, exist_ok=True)
-    
-    # If testing, prepend the output filenames with 'test_'.
-    testing_prefix = 'test_' if test_n_films else ''
-
-    # Save to file the dataframe of the scraped Letterboxd diary.
-    diary_df.to_pickle(f'{output_dir_pkl}/{testing_prefix}lb_diary_{user_url}.pkl')
-    diary_df.to_csv(f'{output_dir_csv}/{testing_prefix}lb_diary_{user_url}.csv', index=False)
+    save_output_df_to_dirs(
+        diary_df,
+        test_n_films,
+        output_filename,
+        output_subdir,
+        )
 
     driver.close()
 
@@ -257,8 +252,8 @@ if __name__ == '__main__':
     user_url = 'yoyoyodaboy'
 
     # Retrieve the links in the letterboxd user's film diary, through scraping.
+    # users_lb_diary_df = lb_scrape_diary(user_url, test_n_films=3)
     users_lb_diary_df = lb_scrape_diary(user_url)
-    # users_lb_diary_df = lb_scrape_diary(my_user_url, test_n_films=5)
 
 
     # Print the dataframe (for the developer to check at a glance.)

@@ -2,41 +2,57 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
+from utils import create_chromedriver, save_output_df_to_dirs, add_new_data_to_existing, get_existing_df_if_exists
+
 from bs4 import BeautifulSoup
 
 import pandas as pd
 
 import re
 
+from os.path import exists
+
 def ebert_scrape_new_reviews(
         test_n_films: int = 0,
         ) -> pd.DataFrame:
     
-    # Driver setup
-    options = webdriver.ChromeOptions()
-    options.add_argument('--ignore-certificate-errors')
-    options.add_argument('--ignore-ssl-errors')
-    options.page_load_strategy = 'eager'
+    # Set file's name and parent dir within the data/pkl and data/csv
+    # folders.
+    output_filename = 'ebert_recent_reviews'
+    output_subdir = 'ebert'
 
-    driver = webdriver.Chrome(options=options)
+    # Load the relevant data-scrape file if it exists (in pkl format).
+    # Otherwise, instantiate an empty dataframe in its place.
+    existing_df = get_existing_df_if_exists(
+        output_filename,
+        output_subdir,
+        test_n_films
+    )
 
+    
+    # Initialize lists that will store the data scraped for each film
+    # review (into dictionaries.)
+    movie_dict_list = []
+    tv_show_list = []
+    
 
+    # Instantiate the webdriver
+    driver = create_chromedriver()
+
+    # Set links to RogerEbert.com's recent review page, filtered by two
+    # different minimum star-ratings.
     review_pg_3_5_and_4_stars = 'https://www.rogerebert.com/reviews?_rating_filter=35%2C40'
     review_pg_4_stars = 'https://www.rogerebert.com/reviews?_rating_filter=40%2C40'
 
     # reviews_page = review_pg_4_stars
     reviews_page = review_pg_3_5_and_4_stars
 
-
+    # Navigate to the recent review page and create a BeautifulSoup
+    # object thereof, for parsing.
     driver.get(reviews_page)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
 
-
     movie_tiles = soup.select('a.image-hover.cursor-pointer.relative.rounded.flex.flex-col.justify-end')
-
-    movie_dict_list = []
-
-    tv_show_list = []
 
     if test_n_films:
         movie_tiles = list(movie_tiles)[:test_n_films]
@@ -60,7 +76,12 @@ def ebert_scrape_new_reviews(
 
         driver.get(link)
 
-        more_details = WebDriverWait(driver, timeout=3).until(lambda d: d.find_element(By.CSS_SELECTOR, 'div.mt-4.text-label-grey.font-heading-sans.text-sm'))
+        more_details = WebDriverWait(driver, timeout=3).until(
+            lambda d: d.find_element(
+                By.CSS_SELECTOR, 
+                'div.mt-4.text-label-grey.font-heading-sans.text-sm'
+                )
+            )
 
         details_list = [deet.strip() for deet in more_details.text.split('‧')]
 
@@ -122,25 +143,28 @@ def ebert_scrape_new_reviews(
 
         movie_dict_list.append(movie_dict)
 
-    movie_df = pd.DataFrame(movie_dict_list)
+    # Create a dataframe from the scraped movie review data.
+    new_data_df = pd.DataFrame(movie_dict_list)
 
-    if test_n_films:
-        movie_df.to_csv('data/csv/ebert/test/test_ebert_recent_reviews.csv', index=False)
-        movie_df.to_pickle('data/pkl/ebert/test/test_ebert_recent_reviews.pkl')
-    else:
-        movie_df.to_csv('data/csv/ebert/ebert_recent_reviews.csv', index=False)
-        movie_df.to_pickle('data/pkl/ebert/ebert_recent_reviews.pkl')
-    
-    # print(tv_show_list)
+    # Combine this new data with that existing, to form the final
+    # dataframe of scraped data.
+    final_df = add_new_data_to_existing(new_data_df, existing_df)
 
+    # Save this final dataframe to csv and pkl files.
+    save_output_df_to_dirs(
+        final_df,
+        test_n_films,
+        output_filename,
+        output_subdir,
+        )
 
     driver.quit()
 
-    return movie_df
+    return final_df
 
 
 if __name__ == '__main__':
-    # recent_review_df = ebert_scrape_new_reviews(test_n_films=3)
+    # recent_review_df = ebert_scrape_new_reviews(test_n_films=5)
     recent_review_df = ebert_scrape_new_reviews()
 
-    print(recent_review_df.head())
+    print(recent_review_df.head(10))

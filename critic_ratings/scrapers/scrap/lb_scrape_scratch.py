@@ -75,13 +75,13 @@ def sign_in_to_lb(
 
 # driver = sign_in_to_lb('yoyoyodaboy', '')
 
-# # Set up the Selenium driver.
-# options = webdriver.ChromeOptions()
-# options.add_argument('--ignore-certificate-errors')
-# options.add_argument('--ignore-ssl-errors')
-# # options.page_load_strategy = 'eager'
-# options.page_load_strategy = 'none'
-# driver = webdriver.Chrome(options)
+# Set up the Selenium driver.
+options = webdriver.ChromeOptions()
+options.add_argument('--ignore-certificate-errors')
+options.add_argument('--ignore-ssl-errors')
+# options.page_load_strategy = 'eager'
+options.page_load_strategy = 'none'
+driver = webdriver.Chrome(options)
 
 # link = 'https://letterboxd.com//film/the-peoples-joker/'
 

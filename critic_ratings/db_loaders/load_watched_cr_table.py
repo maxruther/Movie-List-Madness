@@ -15,6 +15,9 @@ import seaborn as sns
 
 
 def load_watched_cr_table() -> None:
+    """Takes the critical reviews scraped from Metacritic, joins them
+    with my own reviews of my watches, then pivots that result wider
+    so that every reviewer (including myself) is an attribute. (Every watched film is a row.)"""
 
     # Connect to the MySQL db
     movie_db_url = None

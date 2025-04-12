@@ -6,25 +6,28 @@ import time
 from bs4 import BeautifulSoup
 import re
 
+print('abcd'[:0], end='')
 
-# Initialize WebDriver (Chrome)
-options = webdriver.ChromeOptions()
-options.add_argument('--ignore-certificate-errors')
-options.add_argument('--ignore-ssl-errors')
+# print(bool(0))
 
-driver = webdriver.Chrome(options)
+# # Initialize WebDriver (Chrome)
+# options = webdriver.ChromeOptions()
+# options.add_argument('--ignore-certificate-errors')
+# options.add_argument('--ignore-ssl-errors')
 
-# Go to the website
-# driver.get('https://www.metacritic.com/publication/paste-magazine/?sort-options=date')  # Replace with the URL of the website you want to scrape
-driver.get('https://www.metacritic.com/movie/the-piano/critic-reviews/')
-# first_paste_review_cell_xpath = '//*[@id="__layout"]/div/div[2]/div[1]/div[1]/section/div/div[contains(@class, "c-siteReview")]'
-# review_cell_elements = driver.find_elements(By.XPATH, first_paste_review_cell_xpath)
+# driver = webdriver.Chrome(options)
 
-# first_paste_review_cell_xpath = '//*[@id="__layout"]/div/div[2]/div[1]/div[1]/section/div[4]/div'
-# review_cell_element = driver.find_element(By.XPATH, first_paste_review_cell_xpath)
-problem_piano_review_xpath = '//*[@id="__layout"]/div/div[2]/div[1]/div[1]/section/div[4]/div[18]/div'
-review_cell_element = driver.find_element(By.XPATH, problem_piano_review_xpath)
-print(review_cell_element.text.split('\n'))
+# # Go to the website
+# # driver.get('https://www.metacritic.com/publication/paste-magazine/?sort-options=date')  # Replace with the URL of the website you want to scrape
+# driver.get('https://www.metacritic.com/movie/the-piano/critic-reviews/')
+# # first_paste_review_cell_xpath = '//*[@id="__layout"]/div/div[2]/div[1]/div[1]/section/div/div[contains(@class, "c-siteReview")]'
+# # review_cell_elements = driver.find_elements(By.XPATH, first_paste_review_cell_xpath)
+
+# # first_paste_review_cell_xpath = '//*[@id="__layout"]/div/div[2]/div[1]/div[1]/section/div[4]/div'
+# # review_cell_element = driver.find_element(By.XPATH, first_paste_review_cell_xpath)
+# problem_piano_review_xpath = '//*[@id="__layout"]/div/div[2]/div[1]/div[1]/section/div[4]/div[18]/div'
+# review_cell_element = driver.find_element(By.XPATH, problem_piano_review_xpath)
+# print(review_cell_element.text.split('\n'))
 
 # review_cell_html_str = review_cell_element.get_attribute('innerHTML')
 # soup = BeautifulSoup(review_cell_html_str, features="html.parser")
@@ -67,4 +70,4 @@ print(review_cell_element.text.split('\n'))
 #     print(item.text)
 
 # # Close the browser
-driver.quit()
+# driver.quit()
