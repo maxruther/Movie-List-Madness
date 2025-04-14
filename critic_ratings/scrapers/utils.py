@@ -30,7 +30,7 @@ def add_new_data_to_existing(
 def save_output_df_to_dirs(df: pd.DataFrame,
                            testing: int | bool,
                            output_filename: str,
-                           output_subdir,
+                           output_subdir: str,
                            ) -> None:
 
     # Set the filepath of the directories that
@@ -87,6 +87,32 @@ def print_runtime_of_scrape(
     runtime_min = scrape_runtime // 60
     runtime_sec = scrape_runtime % 60
     scrape_runtime_str = f'{runtime_min} m {runtime_sec} s'
-    print(f'\nRuntime of this scrape: {scrape_runtime_str}')
+    print(f'\n\nRuntime of this scrape: {scrape_runtime_str}\n')
 
     return scrape_runtime
+
+# # DEPRECATED:
+# def combine_and_save_data(
+#         new_data: list[dict[str: str]],
+#         existing_df: pd.DataFrame,
+#         output_filepath: str,
+#         ) -> None:
+
+#     new_data_df = pd.DataFrame(new_data)
+
+#     # Create dataframe of new records minus those preexisting.
+#     new_data_minus_existing_df = pd.concat([new_data_df, existing_df, existing_df]).drop_duplicates(keep=False)
+#     existing_df = pd.concat([existing_df, new_data_minus_existing_df], ignore_index=True)
+
+#     # # Create output folders, if they don't yet exist.
+#     # pickle
+#     pkl_output_dirname = dirname(output_filepath)
+#     makedirs(pkl_output_dirname, exist_ok=True)
+#     # csv
+#     csv_output_filepath = f'{output_filepath.replace('/pkl/', '/csv/')}.csv'
+#     csv_output_dirname = dirname(csv_output_filepath)
+#     makedirs(csv_output_dirname, exist_ok=True)
+
+#     # Save the final dataframe of critic reviews to a csv file.
+#     existing_df.to_csv(f'{output_filepath.replace('/pkl/', '/csv/')}.csv', index=False)
+#     existing_df.to_pickle(f'{output_filepath}.pkl')

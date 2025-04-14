@@ -5,8 +5,18 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 from bs4 import BeautifulSoup
 import re
+import pandas as pd
 
-print('abcd'[:0], end='')
+search_result_df, info_df, review_df = [pd.DataFrame()] * 3
+for df in [search_result_df, info_df, review_df]:
+    print(df)
+
+# print(['a'] * 3)
+
+# print('data/pkl/letterboxd/boobs'[9:])
+# print('data\\pkl\\letterboxd\\boobs'[9:])
+
+# print('abcd'[:0], end='')
 
 # print(bool(0))
 
