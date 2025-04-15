@@ -1,16 +1,11 @@
 import time
-
-from selenium import webdriver
-
 import re
-
 import pandas as pd
-import numpy as np
+from os.path import basename, splitext, dirname, makedirs, exists
 
-import os
-from os.path import basename, splitext, dirname, exists
-
-from utils import create_chromedriver, get_existing_df_if_exists, add_new_data_to_existing, save_output_df_to_dirs, print_runtime_of_scrape
+from utils import create_chromedriver, get_existing_df_if_exists
+from utils import add_new_data_to_existing, save_output_df_to_dirs
+from utils import print_runtime_of_scrape
 
 if __name__ == '__main__':
     from mc_utilities.mc_info_scrape import mc_info_scrape
@@ -23,33 +18,7 @@ else:
         from critic_ratings.scrapers.mc_utilities.mc_review_scrape import mc_review_scrape
         from critic_ratings.scrapers.mc_utilities.mc_get_films_link import mc_get_films_link
     except:
-        raise Exception(f"ERROR - {os.path.basename(__file__)}: Failed to import methods 'mc_info_scrape', 'mc_review_scrape', and 'mc_get_films_link'.")
-
-
-def combine_and_save_data(
-        new_data: list[dict[str: str]],
-        existing_df: pd.DataFrame,
-        output_filepath: str,
-        ) -> None:
-
-    new_data_df = pd.DataFrame(new_data)
-
-    # Create dataframe of new records minus those preexisting.
-    new_data_minus_existing_df = pd.concat([new_data_df, existing_df, existing_df]).drop_duplicates(keep=False)
-    existing_df = pd.concat([existing_df, new_data_minus_existing_df], ignore_index=True)
-
-    # # Create output folders, if they don't yet exist.
-    # pickle
-    pkl_output_dirname = dirname(output_filepath)
-    os.makedirs(pkl_output_dirname, exist_ok=True)
-    # csv
-    csv_output_filepath = f'{output_filepath.replace('/pkl/', '/csv/')}.csv'
-    csv_output_dirname = dirname(csv_output_filepath)
-    os.makedirs(csv_output_dirname, exist_ok=True)
-
-    # Save the final dataframe of critic reviews to a csv file.
-    existing_df.to_csv(f'{output_filepath.replace('/pkl/', '/csv/')}.csv', index=False)
-    existing_df.to_pickle(f'{output_filepath}.pkl')
+        raise Exception(f"ERROR - {basename(__file__)}: Failed to import methods 'mc_info_scrape', 'mc_review_scrape', and 'mc_get_films_link'.")
 
 
 def mc_search_and_scrape(
@@ -81,7 +50,7 @@ def mc_search_and_scrape(
         if input_dirname[:9] != 'data/pkl/' and input_dirname[:9] != 'data\\pkl\\':
             raise ValueError("Input file must be in 'data/pkl/' or a subdirectory thereof.")
         
-        if not os.path.exists(input_filepath):
+        if not exists(input_filepath):
             raise FileNotFoundError(f"Input file {input_filepath} does not exist.")
         else:
             target_film_df = pd.read_pickle(input_filepath)
@@ -123,7 +92,7 @@ def mc_search_and_scrape(
                 mc_scrape_subdir,
                 test_n_films,
             )
-            
+
         # Assign the loaded df's of existing data (or blank df's) to
         # the variables that will be referred to henceforth. (The
         # dictionary 'master_dfs' was only created for the purpose of

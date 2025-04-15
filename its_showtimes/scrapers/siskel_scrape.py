@@ -10,39 +10,33 @@ import pandas as pd
 
 import time
 from datetime import datetime
+import pytz
 
 import pickle
 
 from typing import Dict, Tuple
 
 if __name__ == '__main__':
-    from utils import parse_show_name
+    from utils import parse_show_name, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs
 else:
     try:
-        from its_showtimes.scrapers.utils import parse_show_name
+        from its_showtimes.scrapers.utils import parse_show_name, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs
     except:
         try:
-            from scrapers.utils import parse_show_name
+            from scrapers.utils import parse_show_name, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs
         except:
-            raise Exception("\n'siskel_scrape' ERROR: Failed to import method 'parse_show_name'\n")
+            raise Exception("\n'siskel_scrape' ERROR: Failed to import methods from my utils.py\n")
 
 import re
 import os
 
 
-# if __name__ == '__main__':
-#     from utils import parse_show_name
-# else:
-#     from scrapers.utils import parse_show_name
-
-
 def siskel_scrape(
         test_n_films: int = 0,
-) -> Tuple[
-    Dict[str, datetime],
-    pd.DataFrame
-    #   Dict[str, Dict[str, str]]
-    ]:
+        ) -> Tuple[
+            Dict[str, datetime],
+            pd.DataFrame,
+            ]:
     """Scrape the Siskel Film Center's show calendar to get showtimes
     and some info on those films.
     
@@ -57,11 +51,7 @@ def siskel_scrape(
     """
 
     # Set up the Selenium Chromium driver
-    options = webdriver.ChromeOptions()
-    options.add_argument('--ignore-certificate-errors')
-    options.add_argument('--ignore-ssl-errors')
-    options.page_load_strategy = 'eager'
-    driver = webdriver.Chrome(options)
+    driver = create_chromedriver()
     driver.implicitly_wait(3)
 
     # This is the link to the Siskel's film calendar. It show's the
@@ -140,8 +130,8 @@ def siskel_scrape(
             showtime_datetime = None
             show_time_elem = show.select_one('time')
             if show_time_elem:
-                show_time_str = show_time_elem.get('datetime')
-                showtime_datetime = datetime.fromisoformat(show_time_str)
+                showtime_str = show_time_elem.get('datetime')
+                showtime_datetime = datetime.fromisoformat(showtime_str).astimezone()
                 # print(showtime_datetime)
 
             # Get the link to the show's dedicated page.
@@ -301,53 +291,35 @@ def siskel_scrape(
 
     # # With the scrape now concluded, this process turns to file-saving.
 
-    # Set the filepaths of the directories that
-    # will house the scraped data.
-    output_dir_pkl = 'data/pkl/siskel/'
-    output_dir_csv = 'data/csv/siskel/'
 
-    if test_n_films:
-        output_dir_pkl += '/test'
-        output_dir_csv += '/test'
-
-    os.makedirs(output_dir_pkl, exist_ok=True)
-    os.makedirs(output_dir_csv, exist_ok=True)
-
-    # Create and save a dataframe of the scraped show info.
-    info_df = pd.DataFrame.from_dict(show_info_dict, orient='index').reset_index()
-    info_df.rename(columns={'index': 'Title'}, inplace=True)
-    
-    info_filename = 'siskel_show_info'
-    if test_n_films:
-        info_filename = 'test_' + info_filename
-
-    info_df.to_csv(f'{output_dir_csv}/{info_filename}.csv', index=False)
-    info_df.to_pickle(f'{output_dir_pkl}/{info_filename}.pkl')
-
-    # Create and save a dataframe of the scraped showtimes.
+    # Create dataframes of the scraped showtimes and show info.
     showtimes_df = pd.DataFrame(film_showtimes_list)
 
-    showtimes_filename = 'siskel_showtimes'
-    if test_n_films:
-        info_filename = 'test_' + info_filename
-    showtimes_df.to_pickle(f'{output_dir_pkl}/{showtimes_filename}.pkl')
-    showtimes_df.to_csv(f'{output_dir_csv}/{showtimes_filename}.csv', index=False)
+    info_df = pd.DataFrame.from_dict(show_info_dict, orient='index').reset_index()
+    info_df.rename(columns={'index': 'Title'}, inplace=True)
 
+
+    # Set the names of the output files and their parent dir (as the 
+    # subdir of 'data/pkl' and 'data/csv'.)
+    showtimes_filename = 'siskel_showtimes'
+    info_filename = 'siskel_show_info'
+    output_subdir = 'siskel'
+
+    # Accordingly, save the dataframes as pkl and csv files.
+    save_output_df_to_dirs(showtimes_df, test_n_films, showtimes_filename, output_subdir)
+    save_output_df_to_dirs(info_df, test_n_films, info_filename, output_subdir)
 
     # Note and print scrape's runtime.
-    scrape_runtime = time.time() - scrape_start
-    scrape_runtime = round(scrape_runtime)
-    runtime_min = scrape_runtime // 60
-    runtime_sec = scrape_runtime % 60
-    scrape_runtime_str = f'{runtime_min} m {runtime_sec} s'
-    print(f'\nRuntime of this Siskel scrape: {scrape_runtime_str}')
+    print_runtime_of_scrape(scrape_start)
 
     # Quit and close the driver, to conclude.
     driver.quit()
 
     return showtimes_df, info_df
 
+
 if __name__ == '__main__':
 
     # Run the Siskel scrape
-    showtimes_df, info_df = siskel_scrape()
+    # showtimes_df, info_df = siskel_scrape()
+    showtimes_df, info_df = siskel_scrape(test_n_films=5)

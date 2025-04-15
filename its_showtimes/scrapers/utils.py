@@ -1,5 +1,10 @@
 import re
+from selenium import webdriver
 
+import pandas as pd
+from os import makedirs
+from os.path import dirname, exists
+import time
 
 def tech_summary_list_to_dict(tech_summary_list: list[str],
                                 ) -> dict[str: int | str]:
@@ -73,3 +78,60 @@ def parse_show_name(show_name: str,
             series_prepends = None
 
         return film_title, series_prepends
+
+
+def create_chromedriver(
+          page_load_strategy: str = 'eager',
+          ) -> webdriver.Chrome:
+     options = webdriver.ChromeOptions()
+     options.add_argument('--ignore-certificate-errors')
+     options.add_argument('--ignore-ssl-errors')
+     options.page_load_strategy = page_load_strategy
+     
+     driver = webdriver.Chrome(options=options)
+     return driver
+
+
+def print_runtime_of_scrape(
+          scrape_start: int,
+          ) -> None:
+        """Calculate and print the runtime of the scrape in minutes and
+        seconds, given the time of scrape's start (in seconds)."""
+
+        scrape_runtime = time.time() - scrape_start
+        scrape_runtime = round(scrape_runtime)
+
+        runtime_min = scrape_runtime // 60
+        runtime_sec = scrape_runtime % 60
+        scrape_runtime_str = f'{runtime_min} m {runtime_sec} s'
+        print(f'\n\nRuntime of this scrape: {scrape_runtime_str}\n')
+
+        return scrape_runtime
+
+
+def save_output_df_to_dirs(df: pd.DataFrame,
+                           testing: int | bool,
+                           output_filename: str,
+                           output_subdir: str,
+                           ) -> None:
+
+    # Set the filepath of the directories that
+    # will house the scraped data.
+    output_dir_pkl = f'data/pkl/{output_subdir}'
+    output_dir_csv = f'data/csv/{output_subdir}'
+
+    # If testing, output to a subdir named 'test'.
+    if testing:
+        output_dir_pkl += '/test'
+        output_dir_csv += '/test'
+
+    # Create the output directories, if they don't already exist.
+    makedirs(output_dir_pkl, exist_ok=True)
+    makedirs(output_dir_csv, exist_ok=True)
+    
+    # If testing, prepend the output filenames with 'test_'.
+    testing_prefix = 'test_' if testing else ''
+
+    # Save to file the dataframe of the scraped Letterboxd diary.
+    df.to_pickle(f'{output_dir_pkl}/{testing_prefix}{output_filename}.pkl')
+    df.to_csv(f'{output_dir_csv}/{testing_prefix}{output_filename}.csv', index=False)

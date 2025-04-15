@@ -7,41 +7,34 @@ from bs4 import BeautifulSoup
 
 import time
 from datetime import datetime
-
-import pickle
 import re
 
 import pandas as pd
 
 from typing import Dict, Tuple
 
-import os
 
 if __name__ == '__main__':
-    from utils import tech_summary_list_to_dict
+    from utils import tech_summary_list_to_dict, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs
 else:
     try:
-        from its_showtimes.scrapers.utils import tech_summary_list_to_dict
+        from its_showtimes.scrapers.utils import tech_summary_list_to_dict, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs
     except:
         try:
-            from scrapers.utils import tech_summary_list_to_dict
+            from scrapers.utils import tech_summary_list_to_dict, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs
         except:
             raise Exception("\n'musicbox_scrape' ERROR: Failed to import method 'tech_summary_list_to_dict'\n")
 
 
 def musicbox_scrape(
-        testing: bool = False,
+        test_n_days: bool = False,
         ) -> Tuple[
             Dict[str, datetime],
             pd.DataFrame
             ]:
     
     # Set up the Selenium ChromeDriver
-    options = webdriver.ChromeOptions()
-    options.add_argument('--ignore-certificate-errors')
-    options.add_argument('--ignore-ssl-errors')
-    options.page_load_strategy = 'eager'
-    driver = webdriver.Chrome(options)
+    driver = create_chromedriver()
 
     # Navigate the driver to the Music Box calendar page.
     mb_calendar_link = 'https://musicboxtheatre.com/films-and-events'
@@ -73,7 +66,7 @@ def musicbox_scrape(
     scrape_start = time.time()
 
     # Iterate through each calendar page, scraping the showtimes and film details.
-    if testing:
+    if test_n_days:
         # Test on just this month's calendar.
         calendar_page_links = [mb_calendar_link]
     for cal_link in calendar_page_links:
@@ -83,13 +76,18 @@ def musicbox_scrape(
         calendar_text = driver.find_element(By.XPATH, calendar_elem_xpath).get_attribute('innerHTML')
         soup = BeautifulSoup(calendar_text, 'html.parser')
 
-        calendar_days = soup.select('div.calendar-cell')
+        calendar_days_ahead = soup.select('div.calendar-cell:not(.past):not(.empty):not(.calendar-head)')
+        for day in list(calendar_days_ahead)[:test_n_days]:
+            print(day.text.strip(), end='\n' + '-'*80 + '\n\n')
 
         
-        if testing:
-            # Test on just the last handful of days in the calendar.
-            calendar_days = calendar_days[-10:]
-        for day in calendar_days:
+        if test_n_days:
+            if test_n_days < len(calendar_days_ahead):
+                calendar_days_ahead = list(calendar_days_ahead)[:test_n_days]
+            else:
+                raise ValueError(f"ERROR: In this current month, there aren't {test_n_days} days ahead for testing.")
+            
+        for day in calendar_days_ahead:
             if 'calendar-head' in day.get('class'):
                 # print('EMPTY CALENDAR CELL - HEADER')
                 pass
@@ -145,7 +143,7 @@ def musicbox_scrape(
                             film_details[show_title]['Year'] = None
 
                         credit_elems = main_section_soup.select('div.credits')
-                        print(f'\n\n{show_title} - Credits:')
+                        # print(f'\n\n{show_title} - Credits:')
 
                         film_details[show_title]['Director'] = None
                         for credit_elem in credit_elems:
@@ -153,17 +151,17 @@ def musicbox_scrape(
                             if credit_type == 'DIRECTED BY':
                                 director_elems = credit_elem.select('span')
                                 director = ', '.join([director_elem.text.strip(' ,') for director_elem in director_elems])
-                                print(f'{credit_type}: {director}')
+                                # print(f'{credit_type}: {director}')
                                 film_details[show_title]['Director'] = director
                             elif credit_type == 'WRITTEN BY':
                                 writer_elems = credit_elem.select('span')
                                 writer = ', '.join([writer_elem.text.strip(' ,') for writer_elem in writer_elems])
-                                print(f'{credit_type}: {writer}')
+                                # print(f'{credit_type}: {writer}')
                                 film_details[show_title]['Writer'] = writer
                             elif credit_type == 'STARRING':
                                 cast_elems = credit_elem.select('span')
                                 cast = ', '.join([cast_elem.text.strip(' ,') for cast_elem in cast_elems])
-                                print(f'{credit_type}: {cast}')
+                                # print(f'{credit_type}: {cast}')
                                 film_details[show_title]['Cast'] = cast
 
                     showtimes = showtimes_elem.select('a.use-ajax')
@@ -181,62 +179,33 @@ def musicbox_scrape(
                             'Year': film_details[show_title]['Year'],
                             'Director': film_details[show_title]['Director'],
                             'Showtime': showtime_datetime,
+                            'Showtime_Date': showtime_datetime.date(),
+                            'Showtime_Time': showtime_datetime.time(),
                         }
                         showtimes_list.append(showtime_record_dict)
 
-    
-    # # Printing the various outputs of the scrape.
-    # for pair in film_details.items():
-    #     print(pair)
-    # print()
-    # print(films_showtimes, '\n\n')
-    # print(film_details)
 
     # # Saving the scraped data to files.
 
-    # Set the filepaths of the directories that
-    # will house the scraped data.
-    output_dir_pkl = 'data/pkl/musicbox'
-    output_dir_csv = 'data/csv/musicbox'
+    # Create dataframes of the scraped showtimes and show info.
+    showtimes_df = pd.DataFrame(showtimes_list)
 
-    if testing:
-        output_dir_pkl += '/test'
-        output_dir_csv += '/test'
-
-    os.makedirs(output_dir_pkl, exist_ok=True)
-    os.makedirs(output_dir_csv, exist_ok=True)
-
-    # Create and save a dataframe of the scraped show info.
     info_df = pd.DataFrame.from_dict(film_details, orient='index').reset_index()
     info_df.rename(columns={'index': 'Title'}, inplace=True)
 
-    info_filename = 'musicbox_show_info'
-    if testing:
-        info_filename = 'test_' + info_filename
-    
-    info_df.to_csv(f'{output_dir_csv}/{info_filename}.csv', index=False)
-    info_df.to_pickle(f'{output_dir_pkl}/{info_filename}.pkl')
-    
-    # Create and save a dataframe of the scraped showtimes.
-    showtimes_df = pd.DataFrame(showtimes_list)
-    showtimes_df['Showtime_Date'] = showtimes_df['Showtime'].dt.date
-    showtimes_df['Showtime_Time'] = showtimes_df['Showtime'].dt.time
-
+    # Set the names of the output files and their parent dir (as the 
+    # subdir of 'data/pkl' and 'data/csv'.)
     showtimes_filename = 'musicbox_showtimes'
-    if testing:
-        showtimes_filename = 'test_' + showtimes_filename
-    
-    showtimes_df.to_csv(f'{output_dir_csv}/{showtimes_filename}.csv', index=False)
-    showtimes_df.to_pickle(f'{output_dir_pkl}/{showtimes_filename}.pkl')
+    info_filename = 'musicbox_show_info'
+    output_subdir = 'musicbox'
+
+    # Accordingly, save the dataframes as pkl and csv files.
+    save_output_df_to_dirs(showtimes_df, test_n_days, showtimes_filename, output_subdir)
+    save_output_df_to_dirs(info_df, test_n_days, info_filename, output_subdir)
 
 
     # Note the scrape's runtime.
-    scrape_runtime = time.time() - scrape_start
-    scrape_runtime = round(scrape_runtime)
-    runtime_min = scrape_runtime // 60
-    runtime_sec = scrape_runtime % 60
-    scrape_runtime_str = f'{runtime_min} m {runtime_sec} s'
-    print(f'\nRuntime of this scrape: {scrape_runtime_str}')
+    print_runtime_of_scrape(scrape_start)
 
     # Quit and close the driver, to conclude.
     driver.quit()
@@ -247,5 +216,5 @@ def musicbox_scrape(
 if __name__ == '__main__':
 
     # Run the Music Box scrape
-    # showtimes_df, info_df = musicbox_scrape(testing=True)
+    # showtimes_df, info_df = musicbox_scrape(test_n_days=2)
     showtimes_df, info_df = musicbox_scrape()
