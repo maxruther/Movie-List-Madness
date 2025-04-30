@@ -91,6 +91,7 @@ def print_runtime_of_scrape(
 
     return scrape_runtime
 
+
 # # DEPRECATED:
 # def combine_and_save_data(
 #         new_data: list[dict[str: str]],

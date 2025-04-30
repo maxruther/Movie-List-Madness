@@ -149,10 +149,20 @@ def load_mc_scrapes(
 
 if __name__ == '__main__':
 
+    input_paths = [
+        'data/pkl/ebert/ebert_recent_reviews.pkl',
+        'data/pkl/my_watched_films/my_watched_films.pkl',
+    ]
+
     load_mc_scrapes(
-        # 'data/pkl/ebert/ebert_recent_reviews.pkl',
-        # 'data/pkl/siskel/siskel_show_info.pkl',
-        # 'data/pkl/musicbox/musicbox_show_info.pkl',
-        # 'data/pkl/my_watched_films/my_watched_films.pkl',
+        *input_paths,
         'master',
-        )
+    )
+
+    # load_mc_scrapes(
+    #     # 'data/pkl/ebert/ebert_recent_reviews.pkl',
+    #     # 'data/pkl/siskel/siskel_show_info.pkl',
+    #     # 'data/pkl/musicbox/musicbox_show_info.pkl',
+    #     # 'data/pkl/my_watched_films/my_watched_films.pkl',
+    #     'master',
+    #     )

@@ -40,7 +40,8 @@ def mc_info_scrape(title_searched: str,
         if year_match:
             year = year_match.group()
         else:
-            print(f"Year not found in text: {year_text}")
+            print(f"\tYear not found on film's Metacritic page.", 
+                  f"Possible year text: {year_text}")
             # print(year_text, year)
             # detail_dict['Year'] = year
         # detail_dict['Year'] = year

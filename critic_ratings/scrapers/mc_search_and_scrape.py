@@ -1,22 +1,25 @@
 import time
 import re
 import pandas as pd
-from os.path import basename, splitext, dirname, makedirs, exists
-
-from utils import create_chromedriver, get_existing_df_if_exists
-from utils import add_new_data_to_existing, save_output_df_to_dirs
-from utils import print_runtime_of_scrape
+from os.path import basename, splitext, dirname, exists
 
 if __name__ == '__main__':
     from mc_utilities.mc_info_scrape import mc_info_scrape
     from mc_utilities.mc_review_scrape import mc_review_scrape
     from mc_utilities.mc_get_films_link import mc_get_films_link
+
+    from utils import create_chromedriver, get_existing_df_if_exists
+    from utils import add_new_data_to_existing, save_output_df_to_dirs
+    from utils import print_runtime_of_scrape
 else:
     try:
-        print(__name__)
         from critic_ratings.scrapers.mc_utilities.mc_info_scrape import mc_info_scrape
         from critic_ratings.scrapers.mc_utilities.mc_review_scrape import mc_review_scrape
         from critic_ratings.scrapers.mc_utilities.mc_get_films_link import mc_get_films_link
+
+        from critic_ratings.scrapers.utils import create_chromedriver, get_existing_df_if_exists
+        from critic_ratings.scrapers.utils import add_new_data_to_existing, save_output_df_to_dirs
+        from critic_ratings.scrapers.utils import print_runtime_of_scrape
     except:
         raise Exception(f"ERROR - {basename(__file__)}: Failed to import methods 'mc_info_scrape', 'mc_review_scrape', and 'mc_get_films_link'.")
 
@@ -443,8 +446,8 @@ if __name__ == '__main__':
         # input_filepath='data/pkl/ebert/ebert_recent_reviews.pkl',
         # input_filepath='data/pkl/ebert/test/test_ebert_recent_reviews.pkl',
         # input_filepath='data/pkl/siskel/siskel_show_info.pkl',
-        # input_filepath='data/pkl/musicbox/musicbox_show_info.pkl',
-        input_filepath='data/pkl/my_watched_films/my_watched_films.pkl',
+        input_filepath='data/pkl/musicbox/musicbox_show_info.pkl',
+        # input_filepath='data/pkl/my_watched_films/my_watched_films.pkl',
 
         # test_n_films=3,
         # adding_to_existing_df=False,

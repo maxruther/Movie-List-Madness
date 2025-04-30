@@ -6,10 +6,64 @@ import time
 from bs4 import BeautifulSoup
 import re
 import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+from fuzzywuzzy import fuzz
 
-search_result_df, info_df, review_df = [pd.DataFrame()] * 3
-for df in [search_result_df, info_df, review_df]:
-    print(df)
+
+# def preprocess_title(title):
+#     """
+#     Preprocesses a title if it lacks whitespace but contains periods.
+#     Otherwise, returns the title as is.
+
+#     Titles that lack whitespace but contain punctuation (IME, the title
+#     "D.E.B.S.") cause an error with the CountVectorizer object, which I
+#     use to compare titles searched and resulting.
+#     """
+#     if not any(char.isspace() for char in title) and '.' in title:
+#         return title.replace('.', '')
+#     return title
+
+
+def preprocess_title_for_vectorizer(title):
+    """
+    Preprocesses a title if it lacks whitespace but contains periods.
+    Otherwise, returns the title as is.
+
+    Titles that lack whitespace but contain punctuation (IME, the title
+    "D.E.B.S.") can cause an error with the CountVectorizer object, which I
+    use to compare titles searched and resulting.
+    """
+    preprocessed_title = title
+    if not any(char.isspace() for char in title) and '.' in title:
+        preprocessed_title =  title.replace('.', '')
+    preprocessed_title = preprocessed_title.lower()
+
+    return preprocessed_title
+
+film_title = 'D.E.B.S.'
+result_title = 'D.E.B.S.'
+
+vectorizer = CountVectorizer()
+
+preprocessed_film_title = preprocess_title_for_vectorizer(film_title)
+preprocessed_result_title = preprocess_title_for_vectorizer(result_title)
+
+print(film_title, result_title)
+print(preprocessed_film_title, preprocessed_result_title)
+
+vectors = vectorizer.fit_transform([preprocessed_film_title, preprocessed_result_title])
+title_cos_sim = cosine_similarity(vectors[0], vectors[1])[0][0]
+title_cos_sim = round(title_cos_sim, 3)
+title_fuzzy_sim = fuzz.ratio(film_title.lower(), result_title.lower())
+title_fuzzy_sim = round(title_fuzzy_sim / 100, 3)
+
+print([title_cos_sim, title_fuzzy_sim])
+
+
+# search_result_df, info_df, review_df = [pd.DataFrame()] * 3
+# for df in [search_result_df, info_df, review_df]:
+#     print(df)
 
 # print(['a'] * 3)
 

@@ -18,15 +18,6 @@ def lb_scrape_diary(
         output_subdir: str = 'letterboxd',
         test_n_films: int = 0,
         ) -> list[str]:
-    
-    # # Set up the Selenium Chromium driver
-    # options = webdriver.ChromeOptions()
-    # options.add_argument('--ignore-certificate-errors')
-    # options.add_argument('--ignore-ssl-errors')
-    # # options.page_load_strategy = 'eager'
-    # options.page_load_strategy = 'none'
-
-    # driver = webdriver.Chrome(options)
 
     # Set up the Selenium Chromium driver
     driver = create_chromedriver('none')
@@ -45,8 +36,6 @@ def lb_scrape_diary(
         pass
 
     # From that page, retrieve the diary's page count.
-    # diary_pages_xpath = '//*[@id="content"]/div/section[2]/div[2]/div[3]/ul/li/a'
-    # diary_page_elems = driver.find_elements(By.XPATH, diary_pages_xpath)
     diary_page_elems = driver.find_elements(
         By.CSS_SELECTOR, 
         'li.paginate-page'

@@ -11,6 +11,23 @@ from fuzzywuzzy import fuzz
 import pandas as pd
 
 
+def preprocess_title_for_vectorizer(title):
+    """
+    Preprocesses a title if it lacks whitespace but contains periods.
+    Otherwise, returns the title as is.
+
+    Titles that lack whitespace but contain punctuation (IME, the title
+    "D.E.B.S.") can cause an error with the CountVectorizer object, which I
+    use to compare titles searched and resulting.
+    """
+    preprocessed_title = title
+    if not any(char.isspace() for char in title) and '.' in title:
+        preprocessed_title =  title.replace('.', '')
+    preprocessed_title = preprocessed_title.lower()
+
+    return preprocessed_title
+
+
 def mc_get_films_link(
         film_title: str,
         film_year: str,
@@ -74,7 +91,10 @@ def mc_get_films_link(
 
             # Similarities between the searched film title and the result
             # are computed, both cosine and 'fuzzy' ones. 
-            vectors = vectorizer.fit_transform([film_title.lower(), result_title.lower()])
+            preprocessed_film_title = preprocess_title_for_vectorizer(film_title)
+            preprocessed_result_title = preprocess_title_for_vectorizer(result_title)
+
+            vectors = vectorizer.fit_transform([preprocessed_film_title, preprocessed_result_title])
             title_cos_sim = cosine_similarity(vectors[0], vectors[1])[0][0]
             title_cos_sim = round(title_cos_sim, 3)
             title_fuzzy_sim = fuzz.ratio(film_title.lower(), result_title.lower())

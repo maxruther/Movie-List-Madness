@@ -1,82 +1,94 @@
-Title,Year,Runtime,Director,Cast,Format,Writer
-I DON'T KNOW JACK,2002,96,Chris Leavens,"Jack Nance, John Achorn, Leo Bulgarini",,
-THE BALLAD OF WALLIS ISLAND,2025,100,James Griffiths,"Tom Basden, Tim Key, Carey Mulligan",DCP,"Tom Basden, Tim Key"
-ERASERHEAD,1977,89,David Lynch,"Jack Nance, Charlotte Stewart, Allen Joseph",35mm,David Lynch
-DUNE,1984,137,David Lynch,"Kyle MacLachlan, Virginia Madsen, Francesca Annis, Patrick Stewart, Sting",35mm,"Frank Herbert (novel), David Lynch (screenplay)"
-BLUE VELVET REVISITED,2016,85,Peter Braatz,David Lynch,DCP,Peter Braatz
-BLUE VELVET,1986,120,David Lynch,"Isabella Rossellini, Kyle MacLachlan, Dennis Hopper",35mm,David Lynch
-FROM THE HEAD,2011,95,George Griffith,"George Griffith, Matthew Lillard, Jeffrey Doornbos",35mm,George Griffith
-RED ROCK WEST,1993,98,John Dahl,"Nicolas Cage, Dennis Hopper, Lara Flynn Boyle",35mm,"John Dahl, Rick Dahl"
-WILD AT HEART,1990,125,David Lynch,"Nicolas Cage, Laura Dern, Willem Dafoe",DCP,"Barry Gifford (novel), David Lynch (screenplay)"
-TWIN PEAKS: FIRE WALK WITH ME,1992,135,David Lynch,"Sheryl Lee, Ray Wise, Mädchen Amick, Dana Ashbrook",DCP,"David Lynch, Robert Engels"
-DAVID LYNCH: THE ART LIFE,2016,93,"Jon Nguyen, Rick Barnes",David Lynch,DCP,
-SUNSET BOULEVARD,1950,110,Billy Wilder,"William Holden, Gloria Swanson, Erich von Stroheim",35mm,"Charles Brackett, Billy Wilder"
-SECRET MALL APARTMENT,2024,91,Jeremy Workman,"Michael Townsend, Adriana Valdez Young, Colin Bliss",DCP,Jeremy Workman
-MULHOLLAND DRIVE,2001,147,David Lynch,"Naomi Watts, Laura Harring, Justin Theroux",35mm,David Lynch
-ADVENTURES OF ELECTRIC ROD BOY,1987,47,Shin'ya Tsukamoto,"Nariaki Senba, Nobu Kanaoka, Kei Fujiwara",DCP,Shin'ya Tsukamoto
-ON THE AIR EPISODES 1 & 7,1992,100,"Mark Frost, David Lynch","Ian Buchanan, Nancye Ferguson, Miguel Ferrer",,
-THE SHORT FILMS OF DAVID LYNCH,,85,David Lynch,,DCP,
-RIVER'S EDGE,1986,99,Tim Hunter,"Crispin Glover, Keanu Reeves, Ione Skye",35mm,Neal Jimenez
-MUSIC IN THE AIR: EXPLORING THE MUSICAL WORLDS OF DAVID LYNCH,,90,David Lynch,,,
-TETSUO: THE IRON MAN,1989,67,Shin'ya Tsukamoto,"Tomorô Taguchi, Kei Fujiwara, Nobu Kanaoka",DCP,Shin'ya Tsukamoto
-THE STRAIGHT STORY,1999,112,David Lynch,"Richard Farnsworth, Sissy Spacek, Jane Galloway Heitz",35mm,"John Roach, Mary Sweeney"
-LOST HIGHWAY,1997,134,David Lynch,"Bill Pullman, Patricia Arquette, John Roselius",DCP,"David Lynch, Barry Gifford"
-INLAND EMPIRE,2006,180,David Lynch,"Laura Dern, Jeremy Irons, Justin Theroux",DCP,David Lynch
-"RABBITS, LYNCH (ONE) & MORE THINGS THAT HAPPENED…",2007,84,Jason Scheunemann,David Lynch,DCP,
-HARAKIRI,1962,133,Masaki Kobayashi,"Tatsuya Nakadai, Akira Ishihama, Shima Iwashita",35mm,Masaki Kobayashi
-WHEN FALL IS COMING,2024,102,François Ozon,"Hélène Vincent, Josiane Balasko, Ludivine Sagnie",DCP,"François Ozon, Philippe Piazzo"
-MADONNA: TRUTH OR DARE,1991,120,Alek Keshishian,Madonna,DCP,
-THE PEE PEE POO POO MAN,2024,79,Braden Sitter,"Rishi Rodriguez, Spencer Rice, Paul Bellini",DCP,Braden Sitter
-NIGHT SCHOOL,2025,90,,,DCP,
-THE SHROUDS,2024,119,David Cronenberg,"Vincent Cassel, Diane Kruger, Guy Pearce",DCP,David Cronenberg
-BASKET CASE,1982,91,Frank Henenlotter,"Kevin Van Hentenryck, Terri Susan Smith, Beverly Bonner",DCP,Frank Henenlotter
-ISHTAR,1987,107,Elaine May,"Warren Beatty, Dustin Hoffman, Isabelle Adjani",35mm,Elaine May
-INHERENT VICE,2014,148,Paul Thomas Anderson,"Joaquin Phoenix, Josh Brolin, Owen Wilson",70mm,"Paul Thomas Anderson, Thomas Pynchon"
-BLOW OUT,1981,107,Brian De Palma,"John Travolta, Nancy Allen, John Lithgow",DCP,"Brian De Palma, Bill Mesce Jr."
-ROCKY HORROR PICTURE SHOW,1975,100,Jim Sharman,"Tim Curry, Susan Sarandon, Richard O'Brien, Charles Gray, Meatloaf, Barry Bostwick",35mm,
-COOLEY HIGH,1975,107,Michael Schultz,"Glynn Turman, Lawrence Hilton-Jacobs, Garrett Morris",35mm,Eric Monte
-MAGIC FARM,2025,92,Amalia Ulman,"Joe Apollonio, Camila del Campo, Guillermo Jacubowicz",DCP,Amalia Ulman
+Title,Year,Runtime,Format,Director,Cast,Writer
+DAVID LYNCH: THE ART LIFE,2016,93,DCP,"Jon Nguyen, Rick Barnes",David Lynch,
+THE BALLAD OF WALLIS ISLAND,2025,100,DCP,James Griffiths,"Tom Basden, Tim Key, Carey Mulligan","Tom Basden, Tim Key"
+SUNSET BOULEVARD,1950,110,35mm,Billy Wilder,"William Holden, Gloria Swanson, Erich von Stroheim","Charles Brackett, Billy Wilder"
+SECRET MALL APARTMENT,2024,91,DCP,Jeremy Workman,"Michael Townsend, Adriana Valdez Young, Colin Bliss",Jeremy Workman
+MULHOLLAND DRIVE,2001,147,35mm,David Lynch,"Naomi Watts, Laura Harring, Justin Theroux",David Lynch
+ADVENTURES OF ELECTRIC ROD BOY,1987,47,DCP,Shin'ya Tsukamoto,"Nariaki Senba, Nobu Kanaoka, Kei Fujiwara",Shin'ya Tsukamoto
+BLUE VELVET,1986,120,35mm,David Lynch,"Isabella Rossellini, Kyle MacLachlan, Dennis Hopper",David Lynch
+ON THE AIR EPISODES 1 & 7,1992,100,,"Mark Frost, David Lynch","Ian Buchanan, Nancye Ferguson, Miguel Ferrer",
+THE SHORT FILMS OF DAVID LYNCH,,85,DCP,David Lynch,,
+RIVER'S EDGE,1986,99,35mm,Tim Hunter,"Crispin Glover, Keanu Reeves, Ione Skye",Neal Jimenez
+MUSIC IN THE AIR: EXPLORING THE MUSICAL WORLDS OF DAVID LYNCH,,90,,David Lynch,,
+TETSUO: THE IRON MAN,1989,67,DCP,Shin'ya Tsukamoto,"Tomorô Taguchi, Kei Fujiwara, Nobu Kanaoka",Shin'ya Tsukamoto
+TWIN PEAKS: FIRE WALK WITH ME,1992,135,DCP,David Lynch,"Sheryl Lee, Ray Wise, Mädchen Amick, Dana Ashbrook","David Lynch, Robert Engels"
+THE STRAIGHT STORY,1999,112,35mm,David Lynch,"Richard Farnsworth, Sissy Spacek, Jane Galloway Heitz","John Roach, Mary Sweeney"
+LOST HIGHWAY,1997,134,DCP,David Lynch,"Bill Pullman, Patricia Arquette, John Roselius","David Lynch, Barry Gifford"
+INLAND EMPIRE,2006,180,DCP,David Lynch,"Laura Dern, Jeremy Irons, Justin Theroux",David Lynch
+"RABBITS, LYNCH (ONE) & MORE THINGS THAT HAPPENED…",2007,84,DCP,Jason Scheunemann,David Lynch,
+HARAKIRI,1962,133,35mm,Masaki Kobayashi,"Tatsuya Nakadai, Akira Ishihama, Shima Iwashita",Masaki Kobayashi
+WHEN FALL IS COMING,2024,102,DCP,François Ozon,"Hélène Vincent, Josiane Balasko, Ludivine Sagnie","François Ozon, Philippe Piazzo"
+MADONNA: TRUTH OR DARE,1991,120,DCP,Alek Keshishian,Madonna,
+THE PEE PEE POO POO MAN,2024,79,DCP,Braden Sitter,"Rishi Rodriguez, Spencer Rice, Paul Bellini",Braden Sitter
+NIGHT SCHOOL,2025,90,DCP,,,
+THE SHROUDS,2024,119,DCP,David Cronenberg,"Vincent Cassel, Diane Kruger, Guy Pearce",David Cronenberg
+BASKET CASE,1982,91,DCP,Frank Henenlotter,"Kevin Van Hentenryck, Terri Susan Smith, Beverly Bonner",Frank Henenlotter
+ISHTAR,1987,107,35mm,Elaine May,"Warren Beatty, Dustin Hoffman, Isabelle Adjani",Elaine May
+INHERENT VICE,2014,148,70mm,Paul Thomas Anderson,"Joaquin Phoenix, Josh Brolin, Owen Wilson","Paul Thomas Anderson, Thomas Pynchon"
+BLOW OUT,1981,107,DCP,Brian De Palma,"John Travolta, Nancy Allen, John Lithgow","Brian De Palma, Bill Mesce Jr."
+ROCKY HORROR PICTURE SHOW,1975,100,35mm,Jim Sharman,"Tim Curry, Susan Sarandon, Richard O'Brien, Charles Gray, Meatloaf, Barry Bostwick",
+COOLEY HIGH,1975,107,35mm,Michael Schultz,"Glynn Turman, Lawrence Hilton-Jacobs, Garrett Morris",Eric Monte
+MAGIC FARM,2025,92,DCP,Amalia Ulman,"Joe Apollonio, Camila del Campo, Guillermo Jacubowicz",Amalia Ulman
 MUSIC BOX MOVIE TRIVIA,,120,,,,
-DUDE BRO PARTY MASSACRE III,2015,91,"Tomm Jacobsen, Michael Rousselet, Jon Salmon","Alec Owen, Ben Gigli, Olivia Taylor Dudley",DCP,"Alec Owen, Ben Gigli, Brian Firenzi"
-DAISIES,1966,75,Vera Chytilová,"Ivana Karbanová, Jitka Cerhová, Marie Cesková",35mm,"Vera Chytilová, Pavel Jurácek, Ester Krumbachová"
+DUDE BRO PARTY MASSACRE III,2015,91,DCP,"Tomm Jacobsen, Michael Rousselet, Jon Salmon","Alec Owen, Ben Gigli, Olivia Taylor Dudley","Alec Owen, Ben Gigli, Brian Firenzi"
+DAISIES,1966,75,35mm,Vera Chytilová,"Ivana Karbanová, Jitka Cerhová, Marie Cesková","Vera Chytilová, Pavel Jurácek, Ester Krumbachová"
 MUSIC BOX BINGO,,180,,,,
-CLOWN IN A CORNFIELD,2025,96,Eli Craig,"Katie Douglas, Aaron Abrams, Carson MacCormac",DCP,"Carter Blanchard, Eli Craig, Adam Cesare"
-THE BALTIMORONS,2025,99,Jay Duplass,"Michael Strassner, Liz Larsen, Olivia Luccardi",DCP,"Jay Duplass, Michael Strassner"
-LURKER,,100,Alex Russell,"Theodore Pellerin, Archie Madekwe, Sunny Suljic",DCP,Alex Russell
-THE CATHEDRAL OF NEW EMOTIONS,2006,60,Helmut Herbst,,DCP,"Helmut Herbst, Klaus Wyborny"
-BEST WISHES TO ALL,2023,89,Yûta Shimotsu,"Kotone Furukawa, Koya Matsuda",DCP,"Rumi Kakuta, Yûta Shimotsu"
-DON'T LET'S GO TO THE DOGS TONIGHT,2024,98,Embeth Davidtz,"Lexi Venter, Embeth Davidtz, Zikhona Bali",DCP,"Embeth Davidtz, Alexandra Fuller"
-CFCA SHORTS PROGRAM #1,2025,88,,,DCP,
-BROTHER VERSES BROTHER,2025,91,Ari Gold,"Ari Gold, Ethan Gold, Herbert Gold",DCP,"Ari Gold, Ethan Gold"
-TWINLESS,2025,100,James Sweeney,"Dylan O’Brien, James Sweeney, Aisling Franciosi",DCP,James Sweeney
-STRANGE DAYS,1995,145,Kathryn Bigelow,"Ralph Fiennes, Angela Bassett, Juliette Lewis",35mm,James Cameron
-MR. K,2024,94,Tallulah Hazekamp Schwab,"Crispin Glover, Sunnyi Melles, Fionnula Flanagan",DCP,Tallulah Hazekamp Schwab
-THE GREAT DICTATOR,1940,125,Charlie Chaplin,"Charlie Chaplin, Paulette Goddard, Jack Oakie",35mm,Charlie Chaplin
-CFCA SHORTS PROGRAM #2,2024,91,,,DCP,
-FRIENDSHIP,2025,100,Andrew DeYoung,"Tim Robinson, Paul Rudd, Kate Mara",DCP,Andrew DeYoung
-IT ENDS,2025,87,Alex Ullom,"Mitchell Cole, Akira Jackson, Noah Toth",DCP,Alex Ullom
-40 ACRES,2024,113,R.T. Thorne,"Danielle Deadwyler, Kataem O'Connor, Michael Greyeyes",DCP,"R.T. Thorne, Glenn Taylor, Lora Campbell"
-SWAMP DOGG GETS HIS POOL PAINTED,2024,95,"Isaac Gale, Ryan Olsen, David McMurry",,DCP,
-"SORRY, BABY",2025,103,Eva Victor,"Eva Victor, Naomi Ackie, Lucas Hedges",DCP,Eva Victor
-SISTER MIDNIGHT,2024,107,Karan Kandhari,"Radhika Apte, Ashok Pathak, Chhaya Kadam",DCP,Karan Kandhari
-APRIL,2024,134,Dea Kulumbegashvili,"Ia Sukhitashvili, Kakha Kintsurashvili, Merab Ninidze",DCP,Dea Kulumbegashvili
-FANTASY LIFE,2025,91,Matthew Shear,"Amanda Peet, Matthew Shear, Alessandro Nivola",DCP,Matthew Shear
-OBEX,2025,90,Albert Birney,"Albert Birney, Callie Hernandez, Frank Mosley",DCP,"Albert Birney, Pete Ohs"
-HAPPYEND,2024,113,Neo Sora,"Sano Shirô, Kurihara Hayao, Hidaka Yukito",DCP,Neo Sora
-FAMILIAR TOUCH,2024,90,Sarah Friedland,"Kathleen Chalfant, H. Jon Benjamin, Carolyn Michelle",DCP,Sarah Friedland
-ZODIAC KILLER PROJECT,2025,91,Charlie Shackleton,,DCP,
-DESERT ROAD,2024,90,Shannon Triplett,"Kristine Froseth, Max Mattern, Ryan Hurst",DCP,Shannon Triplett
-A LITTLE PRAYER,2023,91,Angus MacLachlan,"David Strathairn, Jane Levy, Anna Camp",DCP,Angus MacLachlan
-THE LEGEND OF KINGDOM COME,2024,80,Remsy Atassi,Alex Ross,DCP,
-TASTE THE REVOLUTION,2001,86,Daniel Klein,"Mahershala Ali, Alexander Bilu, Jeremy Dubin",DCP,Daniel Klein
-ENO,2024,100,Gary Hustwit,Brian Eno,DCP,
-ANGELHEADED HIPSTER: THE SONGS OF MARC BOLAN & T. REX,2022,99,Ethan Silverman,"Marc Bolan, Richard Barone, Rolan Bolan",DCP,Ethan Silverman
-TIMES SQUARE,1980,111,Allan Moyle,"Tim Curry, Trini Alvarado, Robin Johnson",DCP,"Jacob Brackman, Allan Moyle, Leanne Ungar"
-DINNER WITH LEATHERFACE,2024,106,Michael Kallio,"Chase Anderson, Betsy Baker, James M. Bass",DCP,Michael Kallio
-LIFERS: A LOCAL H MOVIE,2024,82,Scott Lucas,"Local H, Radkey, Gabe Rodriguez",DCP,Scott Lucas
-WALK HARD: THE DEWEY COX STORY,2007,96,Jake Kasdan,"John C. Reilly, Jenna Fischer, Tim Meadows, Margo Martindale, Kristen Wiig, Raymond J. Barry",DCP,"Judd Apatow, Jake Kasdan"
-NO OTHER LAND,2024,96,"Basel Adra, Hamdan Ballal, Yuval Abraham, Rachel Szor",,DCP,"Basel Adra, Hamdan Ballal, Yuval Abraham, Rachel Szor"
-SAVE THE CHILDREN,1973,123,Stan Lathan,"Cannonball Adderley, Jerry Butler, Sammy Davis Jr.",DCP,Matt Robinson
-I AM TRYING TO BREAK YOUR HEART,2002,92,Sam Jones,"Jeff Tweedy, John Stirratt, Leroy Bach",DCP,
-FANTASTIC MR. FOX,2009,87,Wes Anderson,"George Clooney, Meryl Streep, Bill Murray",35mm,"Roald Dahl (novel), Wes Anderson (screenplay)"
-THE COMPOUND LIVE WITH IAN HAPP AND SPECIAL GUESTS,,90,,"Ian Happ, Dakota Mekkes, Tom Prizeman",,
+CLOWN IN A CORNFIELD,2025,96,DCP,Eli Craig,"Katie Douglas, Aaron Abrams, Carson MacCormac","Carter Blanchard, Eli Craig, Adam Cesare"
+THE BALTIMORONS,2025,99,DCP,Jay Duplass,"Michael Strassner, Liz Larsen, Olivia Luccardi","Jay Duplass, Michael Strassner"
+LURKER,,100,DCP,Alex Russell,"Theodore Pellerin, Archie Madekwe, Sunny Suljic",Alex Russell
+THE CATHEDRAL OF NEW EMOTIONS,2006,60,DCP,Helmut Herbst,,"Helmut Herbst, Klaus Wyborny"
+BEST WISHES TO ALL,2023,89,DCP,Yûta Shimotsu,"Kotone Furukawa, Koya Matsuda","Rumi Kakuta, Yûta Shimotsu"
+DON'T LET'S GO TO THE DOGS TONIGHT,2024,98,DCP,Embeth Davidtz,"Lexi Venter, Embeth Davidtz, Zikhona Bali","Embeth Davidtz, Alexandra Fuller"
+CFCA SHORTS PROGRAM #1,2025,88,DCP,,,
+BROTHER VERSES BROTHER,2025,91,DCP,Ari Gold,"Ari Gold, Ethan Gold, Herbert Gold","Ari Gold, Ethan Gold"
+TWINLESS,2025,100,DCP,James Sweeney,"Dylan O’Brien, James Sweeney, Aisling Franciosi",James Sweeney
+STRANGE DAYS,1995,145,35mm,Kathryn Bigelow,"Ralph Fiennes, Angela Bassett, Juliette Lewis",James Cameron
+MR. K,2024,94,DCP,Tallulah Hazekamp Schwab,"Crispin Glover, Sunnyi Melles, Fionnula Flanagan",Tallulah Hazekamp Schwab
+THE GREAT DICTATOR,1940,125,35mm,Charlie Chaplin,"Charlie Chaplin, Paulette Goddard, Jack Oakie",Charlie Chaplin
+CFCA SHORTS PROGRAM #2,2024,91,DCP,,,
+FRIENDSHIP,2025,100,DCP,Andrew DeYoung,"Tim Robinson, Paul Rudd, Kate Mara",Andrew DeYoung
+IT ENDS,2025,87,DCP,Alex Ullom,"Mitchell Cole, Akira Jackson, Noah Toth",Alex Ullom
+40 ACRES,2024,113,DCP,R.T. Thorne,"Danielle Deadwyler, Kataem O'Connor, Michael Greyeyes","R.T. Thorne, Glenn Taylor, Lora Campbell"
+SWAMP DOGG GETS HIS POOL PAINTED,2024,95,DCP,"Isaac Gale, Ryan Olsen, David McMurry",,
+"SORRY, BABY",2025,103,DCP,Eva Victor,"Eva Victor, Naomi Ackie, Lucas Hedges",Eva Victor
+SISTER MIDNIGHT,2024,107,DCP,Karan Kandhari,"Radhika Apte, Ashok Pathak, Chhaya Kadam",Karan Kandhari
+APRIL,2024,134,DCP,Dea Kulumbegashvili,"Ia Sukhitashvili, Kakha Kintsurashvili, Merab Ninidze",Dea Kulumbegashvili
+FANTASY LIFE,2025,91,DCP,Matthew Shear,"Amanda Peet, Matthew Shear, Alessandro Nivola",Matthew Shear
+OBEX,2025,90,DCP,Albert Birney,"Albert Birney, Callie Hernandez, Frank Mosley","Albert Birney, Pete Ohs"
+HAPPYEND,2024,113,DCP,Neo Sora,"Sano Shirô, Kurihara Hayao, Hidaka Yukito",Neo Sora
+FAMILIAR TOUCH,2024,90,DCP,Sarah Friedland,"Kathleen Chalfant, H. Jon Benjamin, Carolyn Michelle",Sarah Friedland
+ZODIAC KILLER PROJECT,2025,91,DCP,Charlie Shackleton,,
+DESERT ROAD,2024,90,DCP,Shannon Triplett,"Kristine Froseth, Max Mattern, Ryan Hurst",Shannon Triplett
+A LITTLE PRAYER,2023,91,DCP,Angus MacLachlan,"David Strathairn, Jane Levy, Anna Camp",Angus MacLachlan
+TALL TALES,2025,65,DCP,Mark Pritchard,,
+THE FISHBOWL,2023,93,DCP,Glorimar Marrero-Sánchez,"Isel Rodriguez, Modesto Lacén, Magali Carrasquillo",Glorimar Marrero-Sánchez
+MURDER AND MURDER,1996,113,DCP,Yvonne Rainer,"Joanna Merlin, Kathleen Chalfant, Catherine Kellner",Yvonne Rainer
+THE LEGEND OF KINGDOM COME,2024,80,DCP,Remsy Atassi,Alex Ross,
+HUNDREDS OF BEAVERS,2022,108,35mm,Mike Cheslik,"Ryland Brickson Cole Tews, Olivia Graves, Wes Tank","Mike Cheslik, Ryland Brickson Cole Tews"
+JOHNNY GUITAR,1954,110,35mm,Nicholas Ray,"Joan Crawford, Sterling Hayden, Mercedes McCambridge","Philip Yordan, Roy Chanslor"
+BUT I'M A CHEERLEADER,1999,85,35mm,Jamie Babbit,"Natasha Lyonne, Michelle Williams, Mink Stole, RuPaul, Cathy Moriarty","Brian Peterson, Jamie Babbit"
+TASTE THE REVOLUTION,2001,86,DCP,Daniel Klein,"Mahershala Ali, Alexander Bilu, Jeremy Dubin",Daniel Klein
+QUEENS OF DRAMA,2024,115,DCP,Alexis Langlois,"Louiza Aura, Gio Ventura, Alma Jodorowsky","Carlotta Coco, Thomas Colineau, Alexis Langlois"
+ENO,2024,100,DCP,Gary Hustwit,Brian Eno,
+ANGELHEADED HIPSTER: THE SONGS OF MARC BOLAN & T. REX,2022,99,DCP,Ethan Silverman,"Marc Bolan, Richard Barone, Rolan Bolan",Ethan Silverman
+TIMES SQUARE,1980,111,DCP,Allan Moyle,"Tim Curry, Trini Alvarado, Robin Johnson","Jacob Brackman, Allan Moyle, Leanne Ungar"
+DINNER WITH LEATHERFACE,2024,106,DCP,Michael Kallio,"Chase Anderson, Betsy Baker, James M. Bass",Michael Kallio
+DESPERATE LIVING,1977,90,35mm,John Waters,"Liz Renay, Mink Stole, Susan Lowe",John Waters
+PORTRAIT OF A LADY ON FIRE,2019,121,DCP,Céline Sciamma,"Noémie Merlant, Adèle Haenel, Luàna Bajrami",Céline Sciamma
+LIFERS: A LOCAL H MOVIE,2024,82,DCP,Scott Lucas,"Local H, Radkey, Gabe Rodriguez",Scott Lucas
+WALK HARD: THE DEWEY COX STORY,2007,96,DCP,Jake Kasdan,"John C. Reilly, Jenna Fischer, Tim Meadows, Margo Martindale, Kristen Wiig, Raymond J. Barry","Judd Apatow, Jake Kasdan"
+THE ROOM,2003,99,35mm,Tommy Wiseau,"Tommy Wiseau, Juliette Danielle, Greg Sestero",Tommy Wiseau
+SAVING FACE,2004,97,35mm,Alice Wu,"Joan Chen, Michelle Krusiec, Lynn Chen",Alice Wu
+NO OTHER LAND,2024,96,DCP,"Basel Adra, Hamdan Ballal, Yuval Abraham, Rachel Szor",,"Basel Adra, Hamdan Ballal, Yuval Abraham, Rachel Szor"
+SAVE THE CHILDREN,1973,123,DCP,Stan Lathan,"Cannonball Adderley, Jerry Butler, Sammy Davis Jr.",Matt Robinson
+I AM TRYING TO BREAK YOUR HEART,2002,92,DCP,Sam Jones,"Jeff Tweedy, John Stirratt, Leroy Bach",
+D.E.B.S.,2004,91,35mm,Angela Robinson,"Sara Foster, Jordana Brewster, Devon Aoki",Angela Robinson
+STOP MAKING SENSE,1984,88,DCP,Jonathan Demme,"David Byrne, Bernie Worrell, Alex Weir, Tina Weymouth, Chris Frantz, Jerry Harrison",Jonathan Demme
+PERSONA,1966,83,DCP,Ingmar Bergman,Bibi Andersson,Ingmar Bergman
+BORN IN FLAMES,1983,80,35mm,Lizzie Borden,"Honey, Adele Bertei, Jean Satterfield","Ed Bowes, Lizzie Borden"
+JAWS,1975,124,35mm,Steven Spielberg,"Roy Scheider, Robert Shaw, Richard Dreyfuss","Peter Benchley (screenplay), Carl Gottlieb (screenplay)"
+THE RUNAWAYS,2010,106,35mm,Floria Sigismondi,"Kristen Stewart, Dakota Fanning, Michael Shannon","Floria Sigismondi, Cherie Currie"
+BOUND,1996,108,35mm,"Lana Wachowski, Lilly Wachowski","Jennifer Tilly, Gina Gershon, Joe Pantoliano","Lana Wachowski, Lilly Wachowski"
+THE WATERMELON WOMAN,1996,85,DCP,Cheryl Dunye,"Cheryl Dunye, Guinevere Turner, Valarie Walker","Cheryl Dunye, Douglas McKeown"
+FANTASTIC MR. FOX,2009,87,35mm,Wes Anderson,"George Clooney, Meryl Streep, Bill Murray","Roald Dahl (novel), Wes Anderson (screenplay)"
+THE COMPOUND LIVE WITH IAN HAPP AND SPECIAL GUESTS,,90,,,"Ian Happ, Dakota Mekkes, Tom Prizeman",

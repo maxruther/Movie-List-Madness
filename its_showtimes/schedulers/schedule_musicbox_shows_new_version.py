@@ -10,21 +10,21 @@ import pandas as pd
 from datetime import datetime, date
 
 if __name__ == '__main__':
-    from utils import authenticate, delete_all_events_from_cal, get_show_info
+    from utils import authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal
 else:
     try:
-        from utils import authenticate, delete_all_events_from_cal, get_show_info
+        from utils import authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal
     except:
         try:
-            from its_showtimes.schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info
+            from its_showtimes.schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal
         except:
             try:
-                from schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info
+                from schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal
             except:
                 try:
-                    from ..schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info
+                    from ..schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal
                 except:
-                    raise Exception("\n'schedule_musicbox_shows' ERROR: Failed to import all methods 'authenticate, delete_all_events_from_cal, get_show_info'\n")
+                    raise Exception("\n'schedule_musicbox_shows' ERROR: Failed to import all methods 'authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal'\n")
 
 def insert_events_of_mb_shows(
         mb_showtimes_df,
@@ -146,9 +146,16 @@ def schedule_musicbox_shows(
 
         movie_radar_cal_id = 'd5608bfd7792dbbddee666bf5f63d6795af57083ecfc437f718df9018b0896b8@group.calendar.google.com'
 
-        delete_all_events_from_cal(service, movie_radar_cal_id)
+        # delete_all_events_from_cal(service, movie_radar_cal_id)
 
-        insert_events_of_mb_shows(mb_showtimes_df, mb_info_df, mc_scrape_df, service, movie_radar_cal_id)
+        already_scheduled_shows_df = get_showtime_df_from_cal(service, movie_radar_cal_id)
+
+        new_shows_df = pd.merge(
+            mb_showtimes_df, already_scheduled_shows_df,
+            how='left', on=['Title', 'Showtime'], indicator=True
+            ).query('_merge == "left_only"').drop(columns=['_merge'])
+
+        insert_events_of_mb_shows(new_shows_df, mb_info_df, mc_scrape_df, service, movie_radar_cal_id)
 
 
     except HttpError as error:

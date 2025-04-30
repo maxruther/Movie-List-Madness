@@ -7,16 +7,20 @@ from json.decoder import JSONDecodeError
 
 import pandas as pd
 
+from datetime import datetime
+
 
 def authenticate(
         SCOPES: list[str] = ['https://www.googleapis.com/auth/calendar'],
+        token_path: str = ".secret/token.json",
+        creds_path: str = ".secret/G_Cal_Creds.json",
         ) -> Credentials:
     creds = None
 
     # The file token.json stores the user's access and refresh tokens, and is created automatically when the authorization flow completes for the first time.
-    if os.path.exists(".secret/token.json"):
+    if os.path.exists(token_path):
         try:
-            creds = Credentials.from_authorized_user_file(".secret/token.json")
+            creds = Credentials.from_authorized_user_file(token_path)
         except JSONDecodeError as error:
             print(f'An error occurred while reading the token file. The token will be re-acquired: {error}')
             creds = None
@@ -29,18 +33,56 @@ def authenticate(
                 creds = None
                 print(f'An error occurred while refreshing the token. The token will be re-acquired: {error}')
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    ".secret/G_Cal_Creds.json", SCOPES)
+                    creds_path, SCOPES)
                 creds = flow.run_local_server(port=0)
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                ".secret/G_Cal_Creds.json", SCOPES)
+                creds_path, SCOPES)
             creds = flow.run_local_server(port=0)
 
         # Save the credentials for the next run
-        with open(".secret/token.json", "w") as token:
+        with open(token_path, "w") as token:
             token.write(creds.to_json())
 
     return creds
+
+def get_showtime_df_from_cal(
+          service,
+          test_cal_id: str,
+          ) -> pd.DataFrame:
+    
+
+    scheduled_shows = []
+    page_token = None
+    while True:
+        pages_event_results = service.events().list(calendarId=test_cal_id, pageToken=page_token).execute()
+
+        pages_events = pages_event_results.get('items', [])
+
+        for event in pages_events:
+            show_title = event['summary']
+            show_start = event['start']['dateTime']
+            show_start_dttime = datetime.fromisoformat(show_start).astimezone()
+            show_start_dttime_naive = show_start_dttime.replace(tzinfo=None)
+
+
+            show_record = {
+                    "Title": show_title,
+                    "Showtime": show_start_dttime_naive,
+                    }
+            # print(show_record)
+
+            scheduled_shows.append(show_record)
+
+        page_token = pages_event_results.get('nextPageToken')
+        if not page_token:
+            break
+    
+    cal_showtime_df = pd.DataFrame(scheduled_shows)
+    
+    return cal_showtime_df
+    
+
 
 
 def delete_all_events_from_cal(google_cal_service,

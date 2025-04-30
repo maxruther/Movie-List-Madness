@@ -30,7 +30,8 @@ for filename in movie_info_filenames:
 # Load the scraped film info, showtimes, and metacritic data into the
 # MySQL db.
 load_mc_scrapes(
-    movie_info_filenames + ['master']
+    *movie_info_filenames,
+    'master'
     )
 
 load_showtimes(
