@@ -152,7 +152,7 @@ def schedule_musicbox_shows(
 
         new_shows_df = pd.merge(
             mb_showtimes_df, already_scheduled_shows_df,
-            how='left', on=['Title', 'Showtime'], indicator=True
+            how='left', on=['Title', 'Showtime'], indicator=True,
             ).query('_merge == "left_only"').drop(columns=['_merge'])
 
         insert_events_of_mb_shows(new_shows_df, mb_info_df, mc_scrape_df, service, movie_radar_cal_id)

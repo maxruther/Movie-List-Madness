@@ -17,13 +17,13 @@ import pickle
 from typing import Dict, Tuple
 
 if __name__ == '__main__':
-    from utils import parse_show_name, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs
+    from utils import parse_show_name, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs, save_scrape_and_add_to_existing, save_driver_html_to_file
 else:
     try:
-        from its_showtimes.scrapers.utils import parse_show_name, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs
+        from its_showtimes.scrapers.utils import parse_show_name, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs, save_scrape_and_add_to_existing, save_driver_html_to_file
     except:
         try:
-            from scrapers.utils import parse_show_name, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs
+            from scrapers.utils import parse_show_name, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs, save_scrape_and_add_to_existing, save_driver_html_to_file
         except:
             raise Exception("\n'siskel_scrape' ERROR: Failed to import methods from my utils.py\n")
 
@@ -65,6 +65,10 @@ def siskel_scrape(
     # Navigate to the film calendar page.
     driver.get(film_calendar_link)
 
+    # Save this page's source code to file, for debugging purposes.
+    html_data_subdir = 'siskel'
+    save_driver_html_to_file(driver, html_data_subdir)
+
     # # Get the next month's calendar's link, if it exists.
     # Locate the "Next Month" button.
     next_month_button_element = None
@@ -79,6 +83,9 @@ def siskel_scrape(
     if next_month_button_element:
         next_month_button_element.click()
         calendar_links.append(driver.current_url)
+
+        # Save this page's source code to file, for debugging purposes.
+        save_driver_html_to_file(driver, html_data_subdir)
 
         # Navigate back to the current month's calendar.
         driver.get(film_calendar_link)
@@ -293,10 +300,10 @@ def siskel_scrape(
 
 
     # Create dataframes of the scraped showtimes and show info.
-    showtimes_df = pd.DataFrame(film_showtimes_list)
+    new_showtimes_df = pd.DataFrame(film_showtimes_list)
 
-    info_df = pd.DataFrame.from_dict(show_info_dict, orient='index').reset_index()
-    info_df.rename(columns={'index': 'Title'}, inplace=True)
+    new_info_df = pd.DataFrame.from_dict(show_info_dict, orient='index').reset_index()
+    new_info_df.rename(columns={'index': 'Title'}, inplace=True)
 
 
     # Set the names of the output files and their parent dir (as the 
@@ -305,21 +312,27 @@ def siskel_scrape(
     info_filename = 'siskel_show_info'
     output_subdir = 'siskel'
 
-    # Accordingly, save the dataframes as pkl and csv files.
-    save_output_df_to_dirs(showtimes_df, test_n_films, showtimes_filename, output_subdir)
-    save_output_df_to_dirs(info_df, test_n_films, info_filename, output_subdir)
+    # Save this scrape to file, and also add its data to any existing
+    # data-scrape files.
+    save_scrape_and_add_to_existing(
+        new_showtimes_df, showtimes_filename, output_subdir, test_n_films
+        )
+    save_scrape_and_add_to_existing(
+        new_info_df, info_filename, output_subdir, test_n_films
+        )
 
+    
     # Note and print scrape's runtime.
     print_runtime_of_scrape(scrape_start)
 
     # Quit and close the driver, to conclude.
     driver.quit()
 
-    return showtimes_df, info_df
+    return new_showtimes_df, new_info_df
 
 
 if __name__ == '__main__':
 
     # Run the Siskel scrape
-    # showtimes_df, info_df = siskel_scrape()
-    showtimes_df, info_df = siskel_scrape(test_n_films=5)
+    showtimes_df, info_df = siskel_scrape()
+    # showtimes_df, info_df = siskel_scrape(test_n_films=5)

@@ -1,5 +1,6 @@
 import re
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 import pandas as pd
 from os import makedirs
@@ -135,3 +136,93 @@ def save_output_df_to_dirs(df: pd.DataFrame,
     # Save to file the dataframe of the scraped Letterboxd diary.
     df.to_pickle(f'{output_dir_pkl}/{testing_prefix}{output_filename}.pkl')
     df.to_csv(f'{output_dir_csv}/{testing_prefix}{output_filename}.csv', index=False)
+
+
+def get_existing_df_if_exists(
+    output_filename: str,
+    output_subdir: str,
+    testing: int | bool,
+    ):
+    # Load the relevant data-scrape file if it exists (in pkl format).
+    # Otherwise, instantiate an empty dataframe in its place.
+    if testing:
+        output_filepath = f'data/pkl/{output_subdir}/test/test_{output_filename}.pkl'
+    else:
+        output_filepath = f'data/pkl/{output_subdir}/{output_filename}.pkl'
+    existing_data_filepath = output_filepath
+
+    existing_df = pd.DataFrame()
+    if exists(existing_data_filepath):
+        existing_df = pd.read_pickle(existing_data_filepath)
+    
+    return existing_df
+
+
+def add_new_data_to_existing(
+        new_data_df: pd.DataFrame,
+        existing_data_df: pd.DataFrame,
+        ) -> pd.DataFrame:
+    
+    # Create dataframe of new records minus those preexisting.
+    new_data_minus_existing_df = pd.concat([new_data_df, existing_data_df, existing_data_df]).drop_duplicates(keep=False)
+    result_df = pd.concat([existing_data_df, new_data_minus_existing_df], ignore_index=True)
+
+    return result_df
+
+
+def save_driver_html_to_file(
+        driver: webdriver.Chrome,
+        output_subdir: str,
+        output_filename: str = 'sourceHTML',
+        ) -> None:
+    
+    # Get the HTML source of the current page.
+    html_source = driver.page_source
+
+    if 'musicbox' in output_subdir:
+        # Name output file with page's main header (ex. 'April 2025')
+        output_filename = driver.find_element(By.CSS_SELECTOR, 'h1.page-title').text.strip()
+        output_filename = output_filename.replace(' ', '')
+    
+    # Set the filepath of the directories that
+    # will house this html that will be scraped imminently.
+    output_dir_html = f'data/html/{output_subdir}'
+
+    # Set the date stamp for the output filename.
+    date_stamp = time.strftime('%Y-%m-%d')
+
+    # Create the output directory, if it doesn't already exist.
+    makedirs(output_dir_html, exist_ok=True)
+
+    # Save the HTML of the current page to a file.
+    with open(f'{output_dir_html}/{output_filename}__{date_stamp}.html',
+              'w', encoding='utf-8') as file:
+        file.write(html_source)
+
+
+def save_scrape_and_add_to_existing(
+        new_data_df: pd.DataFrame,
+        output_filename: str,
+        output_subdir: str,
+        testing: int | bool,
+        ) -> None:
+    
+    single_scrape_subdir = output_subdir + '/single_scrapes'
+    makedirs(single_scrape_subdir, exist_ok=True)
+    
+    # Save newly scraped data to file.
+    date_stamp = time.strftime('%Y-%m-%d')
+    save_output_df_to_dirs(new_data_df, testing, 
+                           f"{output_filename}_{date_stamp}",
+                           single_scrape_subdir)
+
+    # Get the existing dataframe, if it exists.
+    existing_df = get_existing_df_if_exists(output_filename, output_subdir, testing)
+
+    # Add the new data to the existing data.
+    updated_df = add_new_data_to_existing(new_data_df, existing_df)
+
+    # Save the updated dataframe to file.
+    save_output_df_to_dirs(updated_df, testing, 
+                           output_filename,
+                           output_subdir)
