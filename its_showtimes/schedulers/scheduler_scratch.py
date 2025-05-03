@@ -18,14 +18,14 @@ from testing_utils import get_first_n_days_of_showtime_df
 import pandas as pd
 
 
-def delete_coming_events_from_cal(
+def delete_upcoming_events_from_cal(
         google_cal_service,
         cal_id: str,
         ) -> None:
     
     page_token = None
     while True:
-        events_result = google_cal_service.events().list(calendarId=test_cal_id, pageToken=page_token).execute()
+        events_result = google_cal_service.events().list(calendarId=cal_id, pageToken=page_token).execute()
         # for event in list(events_result['items'])[:5]:
         for event in events_result['items']:
             event_id = event['id']
@@ -48,7 +48,7 @@ def delete_coming_events_from_cal(
             else:
                 # print("EVENT DATE IS TODAY OR AFTER\n")
                 google_cal_service.events().delete(calendarId=cal_id, eventId=event_id).execute()
-                print(f'DELETED EVENT: {event['summary']} AT {event['start']['dateTime']}')
+                print(f'DELETED UPCOMING EVENT: {event['summary']} AT {event['start']['dateTime']}')
 
             # print(event_id, event_summary, event_start)
             # print(type(event_start))

@@ -8,12 +8,14 @@ from critic_ratings.db_loaders.load_showtimes import load_showtimes
 
 from its_showtimes.schedulers.schedule_siskel_shows import schedule_siskel_shows
 from its_showtimes.schedulers.schedule_musicbox_shows import schedule_musicbox_shows
+from its_showtimes.schedulers.schedule_siskel_shows_new_version import schedule_siskel_shows_new_version
+from its_showtimes.schedulers.schedule_musicbox_shows_new_version import schedule_musicbox_shows_new_version
 
 
-# Scrape the indie theater pages for showtimes and info on those
-# screened films.
-siskel_showtimes_df, siskel_info_df = siskel_scrape()
-musicbox_showtimes_df, musicbox_info_df = musicbox_scrape()
+# # Scrape the indie theater pages for showtimes and info on those
+# # screened films.
+# siskel_showtimes_df, siskel_info_df = siskel_scrape()
+# musicbox_showtimes_df, musicbox_info_df = musicbox_scrape()
 
 # Run the Metacritic scrape on the films pulled from the indie theater
 # calendars.
@@ -22,10 +24,10 @@ movie_info_filenames = [
     'data\pkl\musicbox\musicbox_show_info.pkl',
 ]
 
-for filename in movie_info_filenames:
-    mc_search_and_scrape(
-        input_filepath=filename
-    )
+# for filename in movie_info_filenames:
+#     mc_search_and_scrape(
+#         input_filepath=filename
+#     )
 
 # Load the scraped film info, showtimes, and metacritic data into the
 # MySQL db.
@@ -40,5 +42,7 @@ load_showtimes(
 )
 
 # Load the theaters' showtimes to Google Calendar as events.
-schedule_siskel_shows()
-schedule_musicbox_shows()
+# schedule_siskel_shows()
+# schedule_musicbox_shows()
+schedule_siskel_shows_new_version()
+schedule_musicbox_shows_new_version()

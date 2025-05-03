@@ -88,7 +88,7 @@ def load_mc_scrapes(
             input_filename = 'master'
         else:
             input_filename, input_extension = splitext(basename(input_filepath))
-            input_dirname = dirname(input_filepath) + '/mc_scrape'
+            input_dirname = dirname(input_filepath).replace('\\', '/') + '/mc_scrape'
 
             if input_extension != '.pkl':
                 raise ValueError(f"Input file must be a .pkl file. Detected extension: {input_extension}")

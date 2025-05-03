@@ -7,7 +7,7 @@ from json.decoder import JSONDecodeError
 
 import pandas as pd
 
-from datetime import datetime
+from datetime import datetime, date
 
 
 def authenticate(
@@ -68,7 +68,7 @@ def get_showtime_df_from_cal(
 
             show_record = {
                     "Title": show_title,
-                    "Showtime": show_start_dttime_naive,
+                    "Showtime": show_start_dttime,
                     }
             # print(show_record)
 
@@ -148,12 +148,70 @@ def get_show_info(
         # raise Exception(f'ERROR: No \'siskel_info\' match found for {film_title} ({film_year}) by {film_director}')
 
     elif len(matching_info_df) > 1:
-        raise Exception(
-            f"ERROR: Multiple '{info_df_name}' matches found for {film_title} ({film_year}) by {film_director}",
-            matching_info_df,
-            sep='\n\n')
+        print(f"Multiple '{info_df_name}' matches found for {film_title} ({film_year}) by {film_director}",
+              matching_info_df, sep='\n\n')
+        
+        later_record = matching_info_df.iloc[-1]
+        later_record_index = later_record.name
+        later_record_as_dict = matching_info_df.iloc[-1].to_dict()
 
+        print(f"Using the later records, showing index '{later_record_index}'",)
+
+        return later_record_as_dict
+
+        # print(f"\nUse the later record, which shows index '{later_record_index}' (y) or cancel this process (n) ?")
+        # input_response = input("Enter your choice: ").strip().lower()
+        # while input_response not in ['y', 'n']:
+        #     print("Invalid input. Please enter 'y' or 'n'.")
+        #     input_response = input("Enter your choice: ").strip().lower()
+        # if input_response == 'y':
+        #     return later_record_as_dict
+        # elif input_response == 'n':
+        #     raise Exception("Process cancelled by user, following duplicate record return.")
+    
 
     matching_info_dict = matching_info_df.to_dict(orient='records')[0]
 
     return matching_info_dict
+
+
+def delete_upcoming_events_from_cal(
+        google_cal_service,
+        cal_id: str,
+        ) -> None:
+    
+    page_token = None
+    while True:
+        events_result = google_cal_service.events().list(calendarId=cal_id, pageToken=page_token).execute()
+        # for event in list(events_result['items'])[:5]:
+        for event in events_result['items']:
+            event_id = event['id']
+            event_summary = event['summary']
+            event_start = event['start']['dateTime']
+            event_start_dttime = datetime.fromisoformat(event_start)
+            event_start_date = event_start_dttime.date()
+
+            todays_date = date.today()
+
+            # print(f"{event_summary}: {event_start_date}")
+
+            # print(f"Event start date: {event_start_date}",
+                #   f"Today's Date: {todays_date}")
+
+
+            if event_start_date < todays_date:
+                # print("EVENT DATE IS BEFORE TODAY\n")
+                continue
+            else:
+                # print("EVENT DATE IS TODAY OR AFTER\n")
+                google_cal_service.events().delete(calendarId=cal_id, eventId=event_id).execute()
+                print(f'DELETED UPCOMING EVENT: {event['summary']} AT {event['start']['dateTime']}')
+
+            # print(event_id, event_summary, event_start)
+            # print(type(event_start))
+        
+        page_token = events_result.get('nextPageToken')
+        if not page_token:
+            break
+
+    return

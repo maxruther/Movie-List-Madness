@@ -10,19 +10,19 @@ import pandas as pd
 from datetime import datetime, date
 
 if __name__ == '__main__':
-    from utils import authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal
+    from utils import authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal, delete_upcoming_events_from_cal
 else:
     try:
-        from utils import authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal
+        from utils import authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal, delete_upcoming_events_from_cal
     except:
         try:
-            from its_showtimes.schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal
+            from its_showtimes.schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal, delete_upcoming_events_from_cal
         except:
             try:
-                from schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal
+                from schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal, delete_upcoming_events_from_cal
             except:
                 try:
-                    from ..schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal
+                    from ..schedulers.utils import authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal, delete_upcoming_events_from_cal
                 except:
                     raise Exception("\n'schedule_musicbox_shows' ERROR: Failed to import all methods 'authenticate, delete_all_events_from_cal, get_show_info, get_showtime_df_from_cal'\n")
 
@@ -114,7 +114,7 @@ def insert_events_of_mb_shows(
                 "summary": film_title,
                 "location": "164 N State St, Chicago, IL 60601",
                 "description": movie_event_desc,
-                "colorId": 5,
+                "colorId": 4,
                 "start": {
                     "dateTime": movie_start_str,
                     "timeZone": "America/Chicago"
@@ -133,11 +133,19 @@ def insert_events_of_mb_shows(
     return
 
 
-def schedule_musicbox_shows(
-        mb_showtimes_df: pd.DataFrame,
-        mb_info_df: pd.DataFrame,
-        mc_scrape_df: pd.DataFrame,
-        ):
+def schedule_musicbox_shows_new_version():
+
+    mb_showtimes_df = None
+    with open('data/pkl/musicbox/musicbox_showtimes.pkl', 'rb') as file:
+        mb_showtimes_df = pickle.load(file)
+
+    mb_info_df = None
+    with open('data/pkl/musicbox/musicbox_show_info.pkl', 'rb') as file:
+        mb_info_df = pickle.load(file)
+
+    mc_scrape_df = None
+    with open('data/pkl/musicbox/mc_scrape/musicbox_show_info_mc_info.pkl', 'rb') as file:
+        mc_scrape_df = pickle.load(file)
 
     creds = authenticate()
         
@@ -148,7 +156,11 @@ def schedule_musicbox_shows(
 
         # delete_all_events_from_cal(service, movie_radar_cal_id)
 
+        delete_upcoming_events_from_cal(service, movie_radar_cal_id)
+
         already_scheduled_shows_df = get_showtime_df_from_cal(service, movie_radar_cal_id)
+
+        mb_showtimes_df['Showtime'] = pd.to_datetime(mb_showtimes_df['Showtime']).dt.tz_localize('UTC').dt.tz_convert('America/Chicago')
 
         new_shows_df = pd.merge(
             mb_showtimes_df, already_scheduled_shows_df,
@@ -164,20 +176,10 @@ def schedule_musicbox_shows(
 
 if __name__ == '__main__':
 
-    mb_showtimes_df = None
-    with open('data/pkl/musicbox/musicbox_showtimes.pkl', 'rb') as file:
-        mb_showtimes_df = pickle.load(file)
 
-    mb_info_df = None
-    with open('data/pkl/musicbox/musicbox_show_info.pkl', 'rb') as file:
-        mb_info_df = pickle.load(file)
-
-    mc_scrape_df = None
-    with open('data/pkl/musicbox/mc_scrape/musicbox_show_info_mc_info.pkl', 'rb') as file:
-        mc_scrape_df = pickle.load(file)
 
     # today = date.today()
     # n_days_of_shows_to_slate = dt.timedelta(days=2)
     # test_show_df = mb_showtimes_df[mb_showtimes_df['Showtime_Date'] >= today & mb_showtimes_df['Showtime_Date'] <= today + n_days_of_shows_to_slate]
 
-    schedule_musicbox_shows(mb_showtimes_df, mb_info_df, mc_scrape_df)
+    schedule_musicbox_shows_new_version(mb_showtimes_df, mb_info_df, mc_scrape_df)

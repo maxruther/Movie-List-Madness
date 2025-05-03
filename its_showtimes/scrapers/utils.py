@@ -179,10 +179,14 @@ def save_driver_html_to_file(
     # Get the HTML source of the current page.
     html_source = driver.page_source
 
-    if 'musicbox' in output_subdir:
-        # Name output file with page's main header (ex. 'April 2025')
-        output_filename = driver.find_element(By.CSS_SELECTOR, 'h1.page-title').text.strip()
-        output_filename = output_filename.replace(' ', '')
+    if output_filename == 'sourceHTML':
+        if 'musicbox' in output_subdir:
+            # Name output file with page's main header (ex. 'April 2025')
+            output_filename = driver.find_element(By.CSS_SELECTOR, 'h1.page-title').text.strip()
+            output_filename = output_filename.replace(' ', '')
+        elif 'siskel' in output_subdir:
+            output_filename = driver.find_element(By.XPATH, '/html/body/div[1]/div[4]/div/div/section/div/div/div[2]/div/div/table/caption').text.strip()
+            output_filename = output_filename.replace(' ', '')
     
     # Set the filepath of the directories that
     # will house this html that will be scraped imminently.
