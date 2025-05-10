@@ -1,36 +1,61 @@
 import { NextResponse } from 'next/server';
 import mysql from 'mysql2/promise';
-
-// You'll want to use environment variables in production!
-const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: 'yos',
-  database: 'movieDB',
-});
+import { startOfWeek, addDays, formatISO } from 'date-fns';
 
 export async function GET() {
   try {
-    const [rows] = await pool.query(`
-    SELECT i.Metascore, i.\`Title Searched\`, i.\`Year Searched\`, i.\`Director Searched\`, s.Theater, max(s.Showtime_Date), min(s.Showtime_Date) FROM
-        (
-        SELECT * FROM siskel_show_info_mc_info
-        UNION
-        SELECT * FROM musicbox_show_info_mc_info
-        ) as i
-    INNER JOIN
-        (
-        SELECT *, 'Siskel' as Theater FROM siskel_showtimes
-        UNION
-        SELECT *, 'Musicbox' as Theater FROM musicbox_showtimes_2
-        ) as s
-    ON s.\`Title\`=i.\`Title Searched\` and
-    s.\`Year\`=i.\`Year Searched\` and
-    s.\`Director\`=i.\`Director Searched\`
-    GROUP BY i.Metascore, i.\`Title Searched\`, i.\`Year Searched\`, i.\`Director Searched\`, s.Theater
-    ORDER BY i.Metascore DESC, max(s.Showtime_Date) DESC
-    `);
-    // const [rows] = await pool.query(`
+    const pool = mysql.createPool({
+      host: 'localhost',
+      user: 'root',
+      password: 'yos',
+      database: 'movieDB',
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0,
+    });
+
+    const start = formatISO(startOfWeek(new Date(), { weekStartsOn: 1 }));
+    const end = formatISO(addDays(new Date(), 7));
+
+    const [rows] = await pool.query(
+      `SELECT Title as title,
+      COALESCE(Year, 0) as year,
+      Showtime AS datetime,
+      Theater as theater
+      FROM
+      (
+      SELECT *, 'Musicbox' as Theater FROM musicbox_showtimes
+      UNION
+      SELECT *, 'Siskel' as Theater FROM siskel_showtimes
+      ) as showdies
+      WHERE Showtime >= ? and Showtime < ?
+      ORDER BY Showtime ASC;`,
+      [start, end]
+    );
+
+    // console.log("📝 Raw SQL Results:", rows);
+
+    await pool.end();
+
+    const formatted = (rows as any[]).map(row => ({
+      ...row,
+      tags: [], // Placeholder for tags. Will create these soon
+      // datetime: row.datetime ? new Date(row.datetime.replace(" ", "T")).toISOString() : null,
+      datetime: row.datetime instanceof Date
+        ? row.datetime.toISOString()
+        : row.datetime
+          ? new Date(row.datetime.replace(" ", "T")).toISOString()
+          : null,
+    }));
+
+    return NextResponse.json(formatted);
+  } catch (err) {
+    console.error("💥 SQL Error:", err);
+    return NextResponse.json({ error: 'DB error' }, { status: 500 });
+  }
+}
+
+  // const [rows] = await pool.query(`
     //   SELECT
     //     id,
     //     title,
@@ -48,8 +73,3 @@ export async function GET() {
     // }));
 
     // return NextResponse.json(parsed);
-  } catch (error) {
-    console.error('MySQL fetch error:', error);
-    return NextResponse.json({ error: 'Database query failed' }, { status: 500 });
-  }
-}
