@@ -1,286 +1,130 @@
 // src/app/page.tsx
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
-import { createPortal } from 'react-dom';
-import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
-import { parse, format, startOfWeek, getDay } from 'date-fns';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-
-const locales = {
-  'en-US': require('date-fns/locale/en-US')
-};
+import { useEffect, useState } from 'react';
+import { format, parseISO, startOfWeek, addDays } from 'date-fns';
 
 type Showtime = {
   title: string;
   year: number;
-  start: string | Date;
-  end: string | Date;
   theater: string;
+  tags: string[];
+  datetime: string; // ISO date string
 };
 
-const localizer = dateFnsLocalizer({
-  format,
-  parse: (value, formatString, locale) => parse(value, formatString, new Date(), { locale }),
-  startOfWeek: () => startOfWeek(new Date(), { weekStartsOn: 1 }),
-  getDay,
-  locales,
-});
-
-function EventComponent({ event }: { event: Showtime }) {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [tooltipPosition, setTooltipPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
-
-  useEffect(() => {
-    const textEl = textRef.current;
-    const wrapperEl = wrapperRef.current;
-    if (textEl && wrapperEl) {
-      const textHeight = textEl.scrollHeight;
-      const containerHeight = wrapperEl.offsetHeight;
-      if (textHeight > containerHeight) {
-        setScale(containerHeight / textHeight);
-      } else {
-        setScale(1);
-      }
-    }
-  }, [event.title]);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (!wrapperRef.current?.contains(e.target as Node)) {
-        setShowTooltip(false);
-      }
-    };
-    document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
-
-  const bringToFront = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const rect = wrapperRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    setTooltipPosition({ top: rect.bottom + window.scrollY + 6, left: rect.left + window.scrollX });
-    setShowTooltip(true);
-
-    const eventNode = wrapperRef.current?.closest('.rbc-event');
-    if (eventNode instanceof HTMLElement) {
-      eventNode.style.zIndex = '9999';
-      eventNode.style.position = 'relative';
-
-      setTimeout(() => {
-        eventNode.style.zIndex = 'auto';
-        eventNode.style.position = 'absolute';
-      }, 3000);
-    }
-  };
-
-  const formatTime = (date: Date) => date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-  const formatDate = (date: Date) => date.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' });
-
-  return (
-    <div
-      ref={wrapperRef}
-      onClick={bringToFront}
-      style={{
-        backgroundColor: event.theater === 'Musicbox' ? '#b91c1c' : '#1e3a8a',
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'flex-start',
-        border: 'none',
-        boxShadow: 'none',
-        pointerEvents: 'auto',
-        position: 'relative'
-      
-      }}
-    >
-      <div
-        ref={textRef}
-        style={{
-          fontSize: `${0.85 * scale}rem`,
-          lineHeight: '1.2',
-          wordWrap: 'break-word',
-          whiteSpace: 'normal',
-          width: '100%',
-          color: 'white'
-        }}
-      >
-        {event.title}
-      </div>
-
-      {showTooltip && createPortal(
-        <div
-          style={{
-            position: 'absolute',
-            top: tooltipPosition.top,
-            left: tooltipPosition.left,
-            backgroundColor: 'white',
-            color: '#333',
-            border: '1px solid #ccc',
-            borderRadius: '6px',
-            fontSize: '0.8rem',
-            zIndex: 10000,
-            minWidth: '180px',
-            padding: '8px',
-            boxShadow: '0px 4px 6px rgba(0,0,0,0.1)'
-          }}
-        >
-          <strong>{event.title}</strong>
-          <div>{formatDate(new Date(event.start))}</div>
-          <div>{formatTime(new Date(event.start))} – {formatTime(new Date(event.end))}</div>
-          <div>{event.year}</div>
-          <div>{event.theater}</div>
-        </div>,
-        document.body
-      )}
-    </div>
-  );
-}
-
 export default function HomePage() {
-  const [events, setEvents] = useState<Showtime[]>([]);
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [showtimes, setShowtimes] = useState<Showtime[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTheater, setSelectedTheater] = useState<string | null>(null);
 
-  const allTheaters = ["Musicbox", "Siskel"];
-  const [selectedTheaters, setSelectedTheaters] = useState(new Set(allTheaters));
-
-  const allSelected = allTheaters.every(theater => selectedTheaters.has(theater));
-
-  const handleCheckboxChange = (theater: string) => {
-    setSelectedTheaters(prev => {
-      const updated = new Set(prev);
-      if (updated.has(theater)) {
-        updated.delete(theater);
-      } else {
-        updated.add(theater);
-      }
-      return updated;
-    });
-  };
-
-  const handleSelectAllChange = () => {
-    setSelectedTheaters(prev => {
-      if (allSelected) {
-        return new Set();
-      } else {
-        return new Set(allTheaters);
-      }
-    });
-  };
+  const uniqueTags = [...new Set(showtimes.flatMap(s => s.tags))];
+  const uniqueTheaters = [...new Set(showtimes.map(s => s.theater))];
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const res = await fetch('/api/showtimes');
-        const data = await res.json();
-
-        const parsedEvents = data.flatMap((event: Showtime) => {
-          const start = new Date(event.start);
-          const end = new Date(event.end);
-
-          const sameDay = start.toDateString() === end.toDateString();
-          if (sameDay) {
-            return {
-              ...event,
-              start,
-              end,
-            };
-          } else {
-            const splitEnd = new Date(start);
-            splitEnd.setHours(23, 59, 59, 999);
-
-            const nextStart = new Date(splitEnd);
-            nextStart.setDate(nextStart.getDate() + 1);
-            nextStart.setHours(0, 0, 0, 0);
-
-            return [
-              {
-                ...event,
-                start,
-                end: splitEnd,
-              },
-              {
-                ...event,
-                start: nextStart,
-                end,
-              },
-            ];
-          }
-        });
-
-        console.log("🎥 Parsed showtimes:", parsedEvents);
-        setEvents(parsedEvents);
-      } catch (error) {
-        console.error("Failed to fetch showtimes:", error);
-      }
-    };
-
-    fetchEvents();
+    // Fetch data from the API route
+    fetch('/api/showtimes')
+      .then(res => res.json())
+      .then(data => setShowtimes(data))
+      .catch(err => console.error('Failed to fetch showtimes:', err));
   }, []);
 
-  const filteredEvents = events.filter(event =>
-    selectedTheaters.has(event.theater)
-  );
+  const startOfThisWeek = startOfWeek(new Date(), { weekStartsOn: 1 }); // Monday
+  const daysOfWeek = Array.from({ length: 7 }, (_, i) => addDays(startOfThisWeek, i));
+
+  const filtered = showtimes.filter(show => {
+    const tagMatch = selectedTags.length === 0 || selectedTags.every(tag => show.tags.includes(tag));
+    const theaterMatch = !selectedTheater || show.theater === selectedTheater;
+    return tagMatch && theaterMatch;
+  });
+
+  const groupedByDay = daysOfWeek.map(day => {
+    const dateKey = format(day, 'yyyy-MM-dd');
+    const matches = filtered.filter(show => {
+        return show.datetime && format(parseISO(show.datetime), 'yyyy-MM-dd') === dateKey;
+    });
+
+    // Group by film within each day
+    const films = matches.reduce((acc, show) => {
+        const filmKey = `${show.title}-${show.year}`;
+        if (!acc[filmKey]) {
+            acc[filmKey] = {
+                title: show.title || "Untitled",
+                year: show.year || "No Year",
+                theater: show.theater,
+                showtimes: [],
+                tags: show.tags || []
+            };
+        }
+        acc[filmKey].showtimes.push(show.datetime);
+        return acc;
+    }, {});
+
+    return {
+        date: day,
+        films: Object.values(films)
+    };
+  });
+
+  const toggleTag = (tag: string) => {
+    setSelectedTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <h1 className="text-3xl font-bold mb-6">This Week's Showtimes</h1>
 
       <div className="mb-4">
-        <div style={{ marginBottom: "0.5rem", fontWeight: "bold" }}>Theater Selection:</div>
-        <label style={{ marginRight: "1rem", fontStyle: "italic", color: "#333" }}>
-          <input
-            type="checkbox"
-            checked={allSelected}
-            onChange={handleSelectAllChange}
-          />{' '}
-          Select all theaters
-        </label>
-        {allTheaters.map(theater => (
-          <label key={theater} style={{ marginRight: "1rem" }}>
-            <input
-              type="checkbox"
-              checked={selectedTheaters.has(theater)}
-              onChange={() => handleCheckboxChange(theater)}
-            />
-            {theater}
-          </label>
-        ))}
+        <h2 className="font-semibold">Filter by Theater:</h2>
+        <div className="flex gap-2 mt-2">
+          {uniqueTheaters.map(theater => (
+            <button
+              key={theater}
+              className={`px-3 py-1 rounded-full border ${selectedTheater === theater ? 'bg-blue-500 text-white' : 'bg-white'}`}
+              onClick={() => setSelectedTheater(selectedTheater === theater ? null : theater)}
+            >
+              {theater}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <Calendar
-        localizer={localizer}
-        events={filteredEvents}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: 800 }}
-        defaultView="week"
-        views={['week']}
-        step={60}
-        timeslots={1}
-        min={new Date(1970, 0, 1, 0, 0)}
-        max={new Date(1970, 0, 1, 23, 59)}
-        date={currentDate}
-        onNavigate={(newDate) => setCurrentDate(newDate)}
-        components={{
-          event: EventComponent
-        }}
-        eventPropGetter={(event) => {
-          const backgroundColor = event.theater === 'Musicbox' ? '#b91c1c' : '#1e3a8a';
-          return {
-            style: {
-              backgroundColor,
-              color: 'white',
-              border: '2px solid rgba(255, 255, 255, 0.4)'
-            }
-          };
-        }}
-      />
+      <div className="mb-4">
+        <h2 className="font-semibold">Filter by Tags:</h2>
+        <div className="flex gap-2 mt-2 flex-wrap">
+          {uniqueTags.map(tag => (
+            <button
+              key={tag}
+              className={`px-3 py-1 rounded-full border ${selectedTags.includes(tag) ? 'bg-green-500 text-white' : 'bg-white'}`}
+              onClick={() => toggleTag(tag)}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {groupedByDay.map(({ date, films }) => (
+        <div key={date.toISOString()} className="mb-6">
+          <h2 className="text-xl font-semibold mb-2">{format(date, 'EEEE, MMM d')}</h2>
+          {films.length === 0 ? (
+            <p className="text-gray-500">No showtimes</p>
+          ) : (
+            <div className="grid gap-4">
+              {films.map((film, idx) => (
+                <div key={`${film.title}-${film.year}`} className="p-4 bg-white shadow rounded-xl">
+                  <h3 className="text-1xl font-bold mb-2">{film.title} ({film.year})</h3>
+                  <p className="text-sm text-gray-500">{film.theater}</p>
+                  <div className="mt-1 text-sm">
+                    {film.showtimes.map((time, i) => format(parseISO(time), 'h:mm a')).join(', ')}
+                  </div>
+                  <div className="mt-1 text-sm text-gray-600">
+                    {films.tags ? film.tags.join(', ') : ""}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
