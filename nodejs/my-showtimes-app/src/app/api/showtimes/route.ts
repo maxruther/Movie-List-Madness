@@ -1,75 +1,69 @@
-import { NextResponse } from 'next/server';
+// src/app/api/showtimes/route.ts
 import mysql from 'mysql2/promise';
-import { startOfWeek, addDays, formatISO } from 'date-fns';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
-  try {
-    const pool = mysql.createPool({
-      host: 'localhost',
-      user: 'root',
-      password: 'yos',
-      database: 'movieDB',
-      waitForConnections: true,
-      connectionLimit: 10,
-      queueLimit: 0,
-    });
+    try {
+        // Establish a connection to the MySQL database
+        const pool = await mysql.createPool({
+            host: 'localhost',
+            user: 'root',
+            password: 'yos',
+            database: 'movieDB',
+            waitForConnections: true,
+            connectionLimit: 10,
+            queueLimit: 0
+        });
 
-    const start = formatISO(startOfWeek(new Date(), { weekStartsOn: 1 }));
-    const end = formatISO(addDays(new Date(), 7));
+        // Query the database for showtimes within the next week
+        const [rows] = await pool.query(
+            `SELECT Title AS title,
+            COALESCE(Year, 0) AS year,
+            Showtime AS start,
+            Theater as theater
+            FROM 
+            (
+            SELECT *, 'Musicbox' as Theater FROM musicbox_showtimes
+            UNION
+            SELECT *, 'Siskel' as Theater FROM siskel_showtimes
+            ) as showdies
+             ORDER BY Showtime ASC`
+            //  WHERE Showtime >= NOW() AND Showtime < DATE_ADD(NOW(), INTERVAL 7 DAY)
+        );
 
-    const [rows] = await pool.query(
-      `SELECT Title as title,
-      COALESCE(Year, 0) as year,
-      Showtime AS datetime,
-      Theater as theater
-      FROM
-      (
-      SELECT *, 'Musicbox' as Theater FROM musicbox_showtimes
-      UNION
-      SELECT *, 'Siskel' as Theater FROM siskel_showtimes
-      ) as showdies
-      WHERE Showtime >= ? and Showtime < ?
-      ORDER BY Showtime ASC;`,
-      [start, end]
-    );
+        // console.log("📝 Raw SQL Results:", rows);
 
-    // console.log("📝 Raw SQL Results:", rows);
+        // Format the rows for the calendar
+        const events = rows
+            .map(row => {
+                // Handle datetime conversion safely
+                const startDate = typeof row.start === 'string'
+                    ? new Date(row.start.replace(" ", "T"))
+                    : row.start instanceof Date
+                    ? row.start
+                    : null;
 
-    await pool.end();
+                if (!startDate || isNaN(startDate.getTime())) {
+                    console.error("Invalid date in row:", row);
+                    return null; // Skip this row if the date is invalid
+                }
 
-    const formatted = (rows as any[]).map(row => ({
-      ...row,
-      tags: [], // Placeholder for tags. Will create these soon
-      // datetime: row.datetime ? new Date(row.datetime.replace(" ", "T")).toISOString() : null,
-      datetime: row.datetime instanceof Date
-        ? row.datetime.toISOString()
-        : row.datetime
-          ? new Date(row.datetime.replace(" ", "T")).toISOString()
-          : null,
-    }));
+                const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000); // Placeholder 2-hour duration
 
-    return NextResponse.json(formatted);
-  } catch (err) {
-    console.error("💥 SQL Error:", err);
-    return NextResponse.json({ error: 'DB error' }, { status: 500 });
-  }
+
+                return {
+                    title: row.title,
+                    start: startDate,
+                    end: endDate,
+                    theater: row.theater || 'Unknown Theater'
+                };
+            })
+            .filter(Boolean);
+
+        await pool.end();
+        return NextResponse.json(events);
+    } catch (error) {
+        console.error('Error fetching showtimes:', error);
+        return NextResponse.json({ error: 'Failed to fetch showtimes' }, { status: 500 });
+    }
 }
-
-  // const [rows] = await pool.query(`
-    //   SELECT
-    //     id,
-    //     title,
-    //     theater,
-    //     tags,
-    //     showtimes
-    //   FROM showtimes
-    // `);
-    
-    // // Optional: Parse tags and showtimes if stored as CSV in DB
-    // const parsed = (rows as any[]).map(row => ({
-    //   ...row,
-    //   tags: row.tags ? row.tags.split(',') : [],
-    //   showtimes: row.showtimes ? row.showtimes.split(',') : [],
-    // }));
-
-    // return NextResponse.json(parsed);
