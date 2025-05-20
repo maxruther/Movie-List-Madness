@@ -182,4 +182,4 @@ if __name__ == '__main__':
     # n_days_of_shows_to_slate = dt.timedelta(days=2)
     # test_show_df = mb_showtimes_df[mb_showtimes_df['Showtime_Date'] >= today & mb_showtimes_df['Showtime_Date'] <= today + n_days_of_shows_to_slate]
 
-    schedule_musicbox_shows_new_version(mb_showtimes_df, mb_info_df, mc_scrape_df)
+    schedule_musicbox_shows_new_version()
