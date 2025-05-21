@@ -7,6 +7,8 @@ from bs4 import BeautifulSoup
 
 import time
 from datetime import datetime
+import pytz
+
 import re
 from os import makedirs
 
@@ -100,8 +102,8 @@ def musicbox_scrape(
         soup = BeautifulSoup(calendar_text, 'html.parser')
 
         calendar_days_ahead = soup.select('div.calendar-cell:not(.past):not(.empty):not(.calendar-head)')
-        for day in list(calendar_days_ahead)[:test_n_days]:
-            print(day.text.strip(), end='\n' + '-'*80 + '\n\n')
+        # for day in list(calendar_days_ahead)[:test_n_days]:
+            # print(day.text.strip(), end='\n' + '-'*80 + '\n\n')
 
         
         if test_n_days:
@@ -186,6 +188,18 @@ def musicbox_scrape(
                                 cast = ', '.join([cast_elem.text.strip(' ,') for cast_elem in cast_elems])
                                 # print(f'{credit_type}: {cast}')
                                 film_details[show_title]['Cast'] = cast
+                        
+                        # Get show's written description
+                        show_desc = None
+                        desc_elem = main_section_soup.select_one('div.description')
+                        if desc_elem:
+                            show_desc = desc_elem.text.strip()
+                            film_details[show_title]["Description"] = show_desc
+                            print(show_title, show_desc, sep='\n', end='\n\n')
+
+                        # Save the URL of the show's dedicated Musicbox
+                        # page.
+                        film_details[show_title]["Link"] = show_link
 
                     showtimes = showtimes_elem.select('a.use-ajax')
                     # print(f'Showtimes:')
@@ -193,17 +207,23 @@ def musicbox_scrape(
                         showtime_str = showtime.text.replace('"', '')
 
                         date_and_showtime = date_str + ' ' + showtime_str
-                        showtime_datetime = datetime.strptime(date_and_showtime, 
+                        naive_showtime_datetime = datetime.strptime(date_and_showtime, 
                                                             '%b %d %Y %I:%M%p')
+                        
                         # print(showtime_datetime)
+
+                        chi_timezone = pytz.timezone('America/Chicago')
+                        aware_showtime_datetime = chi_timezone.localize(naive_showtime_datetime)
+                        utc_showtime_datetime = aware_showtime_datetime.astimezone(pytz.utc)
+
                         
                         showtime_record_dict = {
                             'Title': show_title,
                             'Year': film_details[show_title]['Year'],
                             'Director': film_details[show_title]['Director'],
-                            'Showtime': showtime_datetime,
-                            'Showtime_Date': showtime_datetime.date(),
-                            'Showtime_Time': showtime_datetime.time(),
+                            'Showtime': utc_showtime_datetime.isoformat(),
+                            'Showtime_Date': utc_showtime_datetime.date().isoformat(),
+                            'Showtime_Time': utc_showtime_datetime.time().isoformat(),
                         }
                         showtimes_list.append(showtime_record_dict)
 
@@ -243,5 +263,5 @@ def musicbox_scrape(
 if __name__ == '__main__':
 
     # Run the Music Box scrape
-    showtimes_df, info_df = musicbox_scrape(test_n_days=1)
+    showtimes_df, info_df = musicbox_scrape(test_n_days=3)
     # showtimes_df, info_df = musicbox_scrape()
