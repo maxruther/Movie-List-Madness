@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 import pytz
 
 import pickle
@@ -100,6 +100,9 @@ def siskel_scrape(
     # To time the scrape, note the current time as its start.
     scrape_start = time.time()
 
+    # Mark the datetime of this running of the scrape.
+    scrape_datetime_str = datetime.now(timezone.utc).isoformat()
+
     # # Iterate through the month calendars. 
     # (If testing, only process the first month's calendar.)
     if test_n_films:
@@ -112,7 +115,6 @@ def siskel_scrape(
 
         # Form an iterable of all its shows
         shows = soup.select('li.calendar-view-day__row')
-
 
         # Iterate through each of the calendar's shows to scrape the
         # films' info and showtimes.
@@ -138,8 +140,12 @@ def siskel_scrape(
             show_time_elem = show.select_one('time')
             if show_time_elem:
                 showtime_str = show_time_elem.get('datetime')
-                showtime_datetime = datetime.fromisoformat(showtime_str).astimezone()
-                # print(showtime_datetime)
+                # showtime_datetime = datetime.fromisoformat(showtime_str).astimezone()
+
+                showtime_datetime = datetime.strptime(showtime_str, "%Y-%m-%dT%H:%M:%SZ")
+                showtime_datetime = showtime_datetime.replace(tzinfo=pytz.UTC)
+                showtime_datetime = showtime_datetime.isoformat()
+                print(showtime_datetime)
 
             # Get the link to the show's dedicated page.
             # (This is where the film's info is found.)
@@ -267,6 +273,9 @@ def siskel_scrape(
                     'Link': link,
                     'Show': show_title,
                     'Description': description,
+                    'Theater': 'Siskel',
+                    'Scrape_Datetime': scrape_datetime_str,
+                    
                     }
                 
                 
@@ -290,9 +299,11 @@ def siskel_scrape(
                 'Year': year,
                 'Director': directors,
                 'Showtime': showtime_datetime,
-                'Showtime_Date': showtime_datetime.date(),
-                'Showtime_Time': showtime_datetime.time(),
-            }
+                'Theater': 'Siskel',
+                'Scrape_Datetime': scrape_datetime_str,
+                
+                }
+            
             film_showtimes_list.append(showtime_entry)
 
 
@@ -334,5 +345,5 @@ def siskel_scrape(
 if __name__ == '__main__':
 
     # Run the Siskel scrape
-    showtimes_df, info_df = siskel_scrape()
-    # showtimes_df, info_df = siskel_scrape(test_n_films=5)
+    # showtimes_df, info_df = siskel_scrape()
+    showtimes_df, info_df = siskel_scrape(test_n_films=5)

@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 import pytz
 
 import re
@@ -17,13 +17,13 @@ import pandas as pd
 from typing import Dict, Tuple
 
 if __name__ == '__main__':
-    from utils import tech_summary_list_to_dict, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs, get_existing_df_if_exists, add_new_data_to_existing, save_driver_html_to_file, save_scrape_and_add_to_existing
+    from utils import tech_summary_list_to_dict, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs, get_existing_df_if_exists, add_new_data_to_existing, save_driver_html_to_file, save_scrape_and_add_to_existing, move_scrape_cols_to_end
 else:
     try:
-        from its_showtimes.scrapers.utils import tech_summary_list_to_dict, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs, get_existing_df_if_exists, add_new_data_to_existing, save_driver_html_to_file, save_scrape_and_add_to_existing
+        from its_showtimes.scrapers.utils import tech_summary_list_to_dict, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs, get_existing_df_if_exists, add_new_data_to_existing, save_driver_html_to_file, save_scrape_and_add_to_existing, move_scrape_cols_to_end
     except:
         try:
-            from scrapers.utils import tech_summary_list_to_dict, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs, get_existing_df_if_exists, add_new_data_to_existing, save_driver_html_to_file, save_scrape_and_add_to_existing
+            from scrapers.utils import tech_summary_list_to_dict, print_runtime_of_scrape, create_chromedriver, save_output_df_to_dirs, get_existing_df_if_exists, add_new_data_to_existing, save_driver_html_to_file, save_scrape_and_add_to_existing, move_scrape_cols_to_end
         except:
             raise Exception("\n'musicbox_scrape' ERROR: Failed to import methods from 'scrapers.utils.py'\n")
 
@@ -89,6 +89,9 @@ def musicbox_scrape(
     # Time the imminent scraping by first
     # noting its start (for the dev's reference.)
     scrape_start = time.time()
+
+    # Mark the datetime of this running of the scrape.
+    scrape_datetime_str = datetime.now(timezone.utc).isoformat()
 
     # Iterate through each calendar page, scraping the showtimes and film details.
     if test_n_days:
@@ -200,6 +203,8 @@ def musicbox_scrape(
                         # Save the URL of the show's dedicated Musicbox
                         # page.
                         film_details[show_title]["Link"] = show_link
+                        film_details[show_title]["Theater"] = 'Music Box'
+                        film_details[show_title]["Scrape_Datetime"] = scrape_datetime_str
 
                     showtimes = showtimes_elem.select('a.use-ajax')
                     # print(f'Showtimes:')
@@ -222,8 +227,8 @@ def musicbox_scrape(
                             'Year': film_details[show_title]['Year'],
                             'Director': film_details[show_title]['Director'],
                             'Showtime': utc_showtime_datetime.isoformat(),
-                            'Showtime_Date': utc_showtime_datetime.date().isoformat(),
-                            'Showtime_Time': utc_showtime_datetime.time().isoformat(),
+                            'Theater': 'Music Box',
+                            'Scrape_Datetime': scrape_datetime_str,
                         }
                         showtimes_list.append(showtime_record_dict)
 
@@ -263,5 +268,5 @@ def musicbox_scrape(
 if __name__ == '__main__':
 
     # Run the Music Box scrape
-    showtimes_df, info_df = musicbox_scrape(test_n_days=3)
+    showtimes_df, info_df = musicbox_scrape(test_n_days=2)
     # showtimes_df, info_df = musicbox_scrape()

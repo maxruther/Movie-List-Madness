@@ -204,6 +204,14 @@ def save_driver_html_to_file(
         file.write(html_source)
 
 
+def move_scrape_cols_to_end(
+        df,
+        scrape_cols=['Theater', 'Scrape_Datetime'],
+        ):
+    other_cols = [col for col in df.columns if col not in scrape_cols]
+    return df[other_cols + list(scrape_cols)]
+
+
 def save_scrape_and_add_to_existing(
         new_data_df: pd.DataFrame,
         output_filename: str,
@@ -226,7 +234,12 @@ def save_scrape_and_add_to_existing(
     # Add the new data to the existing data.
     updated_df = add_new_data_to_existing(new_data_df, existing_df)
 
+    # Move the scrape meta attributes to the rightmost, for readability.
+    updated_df = move_scrape_cols_to_end(updated_df)
+
     # Save the updated dataframe to file.
     save_output_df_to_dirs(updated_df, testing, 
                            output_filename,
                            output_subdir)
+
+
