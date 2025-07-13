@@ -6,19 +6,20 @@ import pandas as pd
 from sqlalchemy import create_engine, types
 from os.path import splitext, basename, dirname, exists
 
+from utils import load_latest_data
 
 def prepare_scrape_df(
-        showtime_df: pd.DataFrame,
+        show_scrape_df: pd.DataFrame,
         ) -> Tuple[ pd.DataFrame, Dict[str, TypeEngine] ]:
     
     year_attr = None
-    if 'Year' in showtime_df.columns:
+    if 'Year' in show_scrape_df.columns:
         year_attr = 'Year'
-    elif 'Release Year' in showtime_df.columns:
+    elif 'Release Year' in show_scrape_df.columns:
         year_attr = 'Release Year'
 
     # Fix variable type(s)
-    showtime_df[year_attr] = showtime_df[year_attr].astype('Int32')
+    show_scrape_df[year_attr] = show_scrape_df[year_attr].astype('Int32')
     
     # Define the variable type mapping for the MySQL table
     dtype_mapping = {
@@ -26,69 +27,61 @@ def prepare_scrape_df(
         year_attr: types.INT,
         'Director': types.VARCHAR(80),
         'Showtime': types.DATETIME,
-        'Showtime_Date': types.DATE,
-        'Showtime_Time': types.TIME,
+        'Theater': types.VARCHAR(80),
+        'Scrape_Datetime': types.DATETIME,
     }
     
-    return showtime_df, dtype_mapping
+    return show_scrape_df, dtype_mapping
 
+def load_showtimes() -> None:
 
-def load_showtimes(
-        *input_filepath_list: str,
-        ) -> None:
+    theater_list = [
+        'siskel',
+        'musicbox',
+    ]
 
-    for input_filepath in input_filepath_list:
-        print(f"\nProcessing file {input_filepath} for database loading.")
+    scrape_type_list = [
+        'show_info',
+        'showtimes'
+    ]
 
-        input_filename, input_extension = splitext(basename(input_filepath))
-        input_dirname = dirname(input_filepath)
+    for scrape_type in scrape_type_list:
+        for theater in theater_list:
+            show_scrape_df = load_latest_data(theater, scrape_type)
+            dataset_name = f'{theater}_{scrape_type}'
 
-        if input_extension != '.pkl':
-            raise ValueError(f"Input file must be a .pkl file. Detected extension: {input_extension}")
+            if show_scrape_df.empty:
+                raise Exception(f"DB LOAD ERROR: The loaded dataframe for '{dataset_name}' is empty. Ending this file's processing without loading to database.\n")
+            else:
+                print(f"Loading showtime data for '{dataset_name}' into the database.")
 
-        if input_dirname[:9] != 'data/pkl/':
-            raise ValueError(f"Input file must be in 'data/pkl/' or a subdirectory thereof. Detected directory: {input_dirname}")
+                # # LOAD DATA TO A NEW TABLE IN THE MYSQL DB
 
-        if not exists(input_filepath):
-            raise FileNotFoundError(f"Input file does not exist: {input_filepath}")
+                # Prepare the DataFrame for loading into MySQL
+                show_scrape_df, dtype_mapping = prepare_scrape_df(
+                    show_scrape_df,
+                    )
+                
+                # Connect to the MySQL db
+                movie_db_url = None
+                with open('.secret/movie_db_url.txt', 'r') as f:
+                    movie_db_url = f.read().strip()
+                engine = create_engine(movie_db_url)
+                conn = engine.connect()
+                
+                # Load the prepared DataFrame into a MySQL table, 
+                # overwriting it if it exists already.
+                show_scrape_df.to_sql(con=conn, 
+                                name=f'{dataset_name}', 
+                                if_exists='replace',
+                                index=False,
+                                dtype=dtype_mapping,
+                                )
 
-        showtime_df = pd.read_pickle(input_filepath)
-
-        if showtime_df.empty:
-            print(f"The showtime file is empty for '{input_filename}'.",
-                "\nEnding this file's processing without loading to database.")
-        else:
-            print(f"Loading showtime data for '{input_filename}' into the database.")
-
-            # # LOAD DATA TO A NEW TABLE IN THE MYSQL DB
-
-            # Prepare the DataFrame for loading into MySQL
-            showtime_df, dtype_mapping = prepare_scrape_df(
-                showtime_df,
-                )
-            
-            # Connect to the MySQL db
-            movie_db_url = None
-            with open('.secret/movie_db_url.txt', 'r') as f:
-                movie_db_url = f.read().strip()
-            engine = create_engine(movie_db_url)
-            conn = engine.connect()
-            
-            # Load the prepared DataFrame into a MySQL table, 
-            # overwriting it if it exists already.
-            showtime_df.to_sql(con=conn, 
-                            name=f'{input_filename}', 
-                            if_exists='replace',
-                            index=False,
-                            dtype=dtype_mapping,
-                            )
-
-            print(f"Successfully loaded table '{input_filename}'.")
+                print(f"Successfully loaded table '{dataset_name}'.\n")
 
 
 if __name__ == '__main__':
 
-    load_showtimes(
-        'data/pkl/siskel/siskel_showtimes.pkl',
-        'data/pkl/musicbox/musicbox_showtimes.pkl',
-        )
+    load_showtimes()
+

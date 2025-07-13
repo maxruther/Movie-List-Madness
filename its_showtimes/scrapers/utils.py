@@ -287,5 +287,5 @@ def load_latest_data(
     files.sort(key=extract_date, reverse=True)
     most_recent_file = os.path.join(folder_path, files[0])
 
-    print(f"Loading latest {data_type} data for {theater}: {files[0]}")
+    print(f"Loading from file latest {data_type} data for {theater}: {files[0]}")
     return pd.read_pickle(most_recent_file)
