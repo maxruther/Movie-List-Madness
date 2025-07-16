@@ -17,17 +17,20 @@ export async function GET() {
 
         // Query the database for showtimes within the next week
         const [rows] = await pool.query(
-            `SELECT Title AS title,
-            COALESCE(Year, 0) AS year,
-            Showtime AS start,
-            Theater as theater
-            FROM 
-            (
-            SELECT *, 'Musicbox' as Theater FROM musicbox_showtimes
-            UNION
-            SELECT *, 'Siskel' as Theater FROM siskel_showtimes
-            ) as showdies
-             ORDER BY Showtime ASC`
+            `SELECT * FROM v_screenings_enriched`
+
+            // // OLD QUERY:
+            // `SELECT Title AS title,
+            // COALESCE(Year, 0) AS year,
+            // Showtime AS start,
+            // Theater as theater
+            // FROM 
+            // (
+            // SELECT *, 'Musicbox' as Theater FROM musicbox_showtimes
+            // UNION
+            // SELECT *, 'Siskel' as Theater FROM siskel_showtimes
+            // ) as showdies
+            //  ORDER BY Showtime ASC`
             //  WHERE Showtime >= NOW() AND Showtime < DATE_ADD(NOW(), INTERVAL 7 DAY)
         );
 
@@ -48,13 +51,21 @@ export async function GET() {
                     return null; // Skip this row if the date is invalid
                 }
 
-                const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000); // Placeholder 2-hour duration
+                const endDate = new Date(startDate.getTime() + row.runtime * 60 * 1000);
 
 
                 return {
+                    id: `${row.title}_${startDate.toISOString()}_${row.theater}`,
+                    
                     title: row.title,
+                    year: row.year,
+                    director: row.director,
+                    description: row.description,
+                    link: row.link,
+
                     start: startDate,
                     end: endDate,
+
                     theater: row.theater || 'Unknown Theater'
                 };
             })

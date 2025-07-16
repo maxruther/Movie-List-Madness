@@ -13,10 +13,10 @@ from its_showtimes.schedulers.schedule_musicbox_shows_new_version import schedul
 
 ## SHOWTIME SCRAPE
 
-# Scrape the indie theater pages for showtimes and info on those
-# screened films.
-siskel_showtimes_df, siskel_info_df = siskel_scrape()
-musicbox_showtimes_df, musicbox_info_df = musicbox_scrape()
+# # Scrape the indie theater pages for showtimes and info on those
+# # screened films.
+# siskel_showtimes_df, siskel_info_df = siskel_scrape()
+# musicbox_showtimes_df, musicbox_info_df = musicbox_scrape()
 
 
 # ## METACRITIC SCRAPE
@@ -44,6 +44,7 @@ musicbox_showtimes_df, musicbox_info_df = musicbox_scrape()
 #     'data/pkl/siskel/siskel_showtimes.pkl',
 #     'data/pkl/musicbox/musicbox_showtimes.pkl',
 # )
+load_showtimes()
 
 # # Load the theaters' showtimes to Google Calendar as events.
 # # schedule_siskel_shows()

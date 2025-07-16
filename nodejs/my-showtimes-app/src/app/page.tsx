@@ -14,8 +14,12 @@ const locales = {
 type Showtime = {
   title: string;
   year: number;
+  director: string;
   start: string | Date;
   end: string | Date;
+  runtime: number;
+  link: string;
+  description: string;
   theater: string;
 };
 
@@ -87,7 +91,7 @@ function EventComponent({ event }: { event: Showtime }) {
       ref={wrapperRef}
       onClick={bringToFront}
       style={{
-        backgroundColor: event.theater === 'Musicbox' ? '#b91c1c' : '#1e3a8a',
+        backgroundColor: event.theater === 'Music Box' ? '#b91c1c' : '#1e3a8a',
         width: '100%',
         height: '100%',
         display: 'flex',
@@ -146,7 +150,7 @@ export default function HomePage() {
   const [events, setEvents] = useState<Showtime[]>([]);
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  const allTheaters = ["Musicbox", "Siskel"];
+  const allTheaters = ["Music Box", "Siskel"];
   const [selectedTheaters, setSelectedTheaters] = useState(new Set(allTheaters));
 
   const allSelected = allTheaters.every(theater => selectedTheaters.has(theater));
@@ -229,7 +233,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold mb-6">This Week's Showtimes</h1>
+      <h1 className="text-3xl font-bold mb-6">Weekly Indie Showtimes</h1>
 
       <div className="mb-4">
         <div style={{ marginBottom: "0.5rem", fontWeight: "bold" }}>Theater Selection:</div>
@@ -271,7 +275,7 @@ export default function HomePage() {
           event: EventComponent
         }}
         eventPropGetter={(event) => {
-          const backgroundColor = event.theater === 'Musicbox' ? '#b91c1c' : '#1e3a8a';
+          const backgroundColor = event.theater === 'Music Box' ? '#b91c1c' : '#1e3a8a';
           return {
             style: {
               backgroundColor,

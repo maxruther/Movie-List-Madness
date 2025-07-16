@@ -6,7 +6,13 @@ import pandas as pd
 from sqlalchemy import create_engine, types
 from os.path import splitext, basename, dirname, exists
 
-from utils import load_latest_data
+if __name__ == '__main__':
+    from utils import load_latest_data
+else: 
+    try:
+        from critic_ratings.db_loaders.utils import load_latest_data
+    except:
+        raise Exception(f"ERROR - {basename(__file__)}: Failed to import from a submodule.")
 
 def prepare_scrape_df(
         show_scrape_df: pd.DataFrame,

@@ -1,0 +1,6 @@
+Open up a CMD window.
+Navigate to the "app" subdir of this nodejs deal, within "nodejs\my-showtimes-app\src"
+Once there, enter in CMD: npm run dev
+
+
+MySQL server needs to be running (from Services) in order to pull the data to the calendar.

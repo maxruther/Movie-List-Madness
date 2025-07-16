@@ -7,17 +7,23 @@ from schedulers.schedule_siskel_shows import schedule_siskel_shows
 from schedulers.schedule_siskel_shows_new_version import schedule_siskel_shows_new_version
 
 
-def scrape_and_sched():
+def scrape_and_sched(
+            scrape: bool = True,
+            sched: bool = True
+            ) -> None:
 
-      # Scrape the showtimes and film info      
-      siskel_scrape()
-      musicbox_scrape()
+      if scrape:
+            # Scrape the showtimes and film info      
+            siskel_scrape()
+            musicbox_scrape()
 
-      # Schedule the showtimes
-      # schedule_siskel_shows()
-      # schedule_musicbox_shows()
-      schedule_siskel_shows_new_version()
-      schedule_musicbox_shows_new_version()
+      if sched:
+            # Schedule the showtimes
+            # schedule_siskel_shows()
+            # schedule_musicbox_shows()
+            schedule_siskel_shows_new_version()
+            schedule_musicbox_shows_new_version()
 
 if __name__ == '__main__':
-      scrape_and_sched()
+      # scrape_and_sched()
+      scrape_and_sched(sched=False)
