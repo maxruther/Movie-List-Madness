@@ -3,12 +3,25 @@ from selenium.webdriver.common.by import By
 
 from bs4 import BeautifulSoup
 import re
+from datetime import datetime
 
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from fuzzywuzzy import fuzz
 
 import pandas as pd
+
+def extract_year_from_MC_result(date_str):
+    try:
+        # Try parsing as a formatted date
+        date_object = datetime.strptime(date_str, "%b %d, %Y")
+        return date_object.year
+    except ValueError:
+        # If date parsing fails, try extracting four digits as the year
+        match = re.search(r"\d{4}", date_str)
+        if match:
+            return int(match.group(0))
+    return None
 
 
 def preprocess_title_for_vectorizer(title):
@@ -48,7 +61,9 @@ def mc_get_films_link(
 
     # Submit a search URL ending with that segment to the driver, to run
     # that Metacritic search and get a page of its results.
-    driver.get('https://www.metacritic.com/search/' + film_title_url_suffix)
+    search_URL = 'https://www.metacritic.com/search/' + film_title_url_suffix
+    print(search_URL)
+    driver.get(search_URL)
 
     # Collect that page's results into an iterable, by identifying them
     # by a common XPath pattern.
@@ -87,7 +102,22 @@ def mc_get_films_link(
             if result_type != 'movie':
                 continue
 
-            result_year = soup.find('span', {'class': 'u-text-uppercase'}).text.strip()
+            # Parse the movie's release date from the result's html.
+            # NOTE: As of 7/16/2025, this field can be a full date. Before, it
+            # was only the year of the film's release. And this program
+            # didn't used to encounter missing values in this field, but
+            # does now.
+            result_release_date = soup.find('span', {'class': 'u-text-uppercase'})
+
+            # Extract year from the release date shown.
+            result_year = None
+            if not result_release_date:
+                print(f"No date shown associated with Metacritic movie search result '{result_title}'.")
+            else:
+                result_release_date = result_release_date.text.strip()
+                result_year = extract_year_from_MC_result(result_release_date)
+            
+            print(result_release_date, result_year, sep='\t')
 
             # Similarities between the searched film title and the result
             # are computed, both cosine and 'fuzzy' ones. 
@@ -105,7 +135,7 @@ def mc_get_films_link(
             # candidate. As such, its similarities to the searched title
             # (and its link) are stored in a dictionary for later 
             # comparison to the others.
-            if abs(int(result_year) - int(film_year)) <= 1 or title_cos_sim == 1:
+            if result_year and abs(int(result_year) - int(film_year)) <= 1 or title_cos_sim == 1:
             # if result_year == film_year:
                 result_director, director_fuzzy_sim, director_cos_sim = None, None, None
                 if film_director and not pd.isna(film_director):

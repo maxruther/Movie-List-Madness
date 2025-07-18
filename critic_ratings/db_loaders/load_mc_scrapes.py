@@ -4,6 +4,7 @@ from sqlalchemy.types import TypeEngine
 import pandas as pd
 
 import os
+import re
 
 from sqlalchemy import create_engine, types
 from os.path import splitext, basename, dirname, exists
@@ -34,9 +35,9 @@ def prepare_scrape_df(
         
         case 'mc_info':
             # Fix a couple variable types
-            scrape_df['Runtime'] = scrape_df['Runtime'].astype(int)
-            scrape_df['Year Searched'] = scrape_df['Year Searched'].astype('Int32')
-            scrape_df['Year Result'] = scrape_df['Year Result'].astype('Int32')
+            scrape_df['Runtime'] = pd.to_numeric(scrape_df['Runtime'], errors='coerce').astype("Int32")
+            scrape_df['Year Searched'] = pd.to_numeric(scrape_df['Year Searched'], errors='coerce').astype("Int32")
+            scrape_df['Year Result'] = pd.to_numeric(scrape_df['Year Result'], errors='coerce').astype("Int32")
 
             # Define the variable type mapping for the MySQL table
             dtype_mapping = {
@@ -55,8 +56,8 @@ def prepare_scrape_df(
 
         case 'mc_searchresults':
             # Fix a couple variable types
-            scrape_df['Year Searched'] = scrape_df['Year Searched'].astype('Int32')
-            scrape_df['Year Result'] = scrape_df['Year Result'].astype('Int32')
+            scrape_df['Year Searched'] = pd.to_numeric(scrape_df['Year Searched'], errors='coerce').astype("Int32")
+            scrape_df['Year Result'] = pd.to_numeric(scrape_df['Year Result'], errors='coerce').astype("Int32")
 
             # Define the variable type mapping for the MySQL table
             dtype_mapping = {
@@ -74,6 +75,24 @@ def prepare_scrape_df(
             }
     
     return scrape_df, dtype_mapping
+
+
+def parse_table_name(
+        filename: str
+        ) -> str:
+    """Prepare table name from filename"""
+
+    # Remove 'csv' extension
+    filename = filename.replace('.csv', '')
+
+    # Remove scrape date, if present
+    date_contained = re.search(r'(_\d{4}-\d{2}-\d{2})', filename)
+    # print(date_contained)
+    if date_contained:
+        filename = filename.replace(date_contained.group(), '')
+
+    # print(filename)
+    return filename
 
 
 def load_mc_scrapes(
@@ -134,17 +153,20 @@ def load_mc_scrapes(
                     scrape_df,
                     scrape_type,
                     )
+
+                # From the scrape filename, form the table name.
+                scrape_df_tablename = parse_table_name(scrape_df_filename)
                 
                 # Load the prepared DataFrame into a MySQL table, 
                 # overwriting it if it exists already.
                 scrape_df.to_sql(con=conn, 
-                                name=f'{scrape_df_filename}', 
+                                name=f'{scrape_df_tablename}', 
                                 if_exists='replace',
                                 index=False,
                                 dtype=dtype_mapping,
                                 )
                 
-                print(f"\tSuccessfully loaded table '{scrape_df_filename}'.\n")
+                print(f"\tSuccessfully loaded table '{scrape_df_tablename}'.\n")
 
 
 if __name__ == '__main__':

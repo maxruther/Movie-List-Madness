@@ -4,7 +4,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
-import { parse, format, startOfWeek, getDay } from 'date-fns';
+import { parse, format, startOfWeek, getDay, addDays } from 'date-fns';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const locales = {
@@ -155,6 +155,18 @@ export default function HomePage() {
 
   const allSelected = allTheaters.every(theater => selectedTheaters.has(theater));
 
+  type MetaReportRow = {
+    metascore: number;
+    title: string;
+    year: number;
+    director: string;
+    theaters: string;
+    first_screen_day: string;
+    last_screen_day: string
+  }
+
+  const [metaReport, setMetaReport] = useState<MetaReportRow[]>([]);
+
   const handleCheckboxChange = (theater: string) => {
     setSelectedTheaters(prev => {
       const updated = new Set(prev);
@@ -225,11 +237,33 @@ export default function HomePage() {
     };
 
     fetchEvents();
+
+
+    const fetchMeta = async () => {
+      try {
+        const res = await fetch('/api/metascore-report');
+        const data = await res.json();
+        setMetaReport(data);
+      } catch (err) {
+        console.error("Failed to load the metascore report: ", err);
+      }
+    };
+
+    fetchMeta();
   }, []);
 
   const filteredEvents = events.filter(event =>
     selectedTheaters.has(event.theater)
   );
+
+  const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 })
+  const weekEnd = addDays(weekStart, 6);
+
+  const weeklyMeta = metaReport.filter(row => {
+    const first = new Date(row.first_screen_day);
+    const last = new Date(row.last_screen_day);
+    return first <= weekEnd && last >= weekStart;
+  })
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -285,6 +319,35 @@ export default function HomePage() {
           };
         }}
       />
+
+      {/* 🔹 Weekly Metascore Report */}
+      {weeklyMeta.length > 0 && (
+        <div className="mt-8 bg-white p-4 rounded shadow">
+          <h2 className="text-xl font-semibold mb-2">This Week’s Critic Picks</h2>
+          <table className="table-auto w-full text-xs leading-tight">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="px-2 py-1 text-left">🎯 Metascore</th>
+                <th className="px-2 py-1 text-left">🎬 Title</th>
+                <th className="px-2 py-1 text-left">📅 Year</th>
+                <th className="px-2 py-1 text-left">🎞️ Director</th>
+                <th className="px-2 py-1 text-left">🏛️ Theater</th>
+              </tr>
+            </thead>
+            <tbody>
+              {weeklyMeta.map((row, idx) => (
+                <tr key={idx} className="border-t">
+                  <td className="px-2 py-1">{(row.metascore * 100).toFixed(0)}</td>
+                  <td className="px-2 py-1">{row.title}</td>
+                  <td className="px-2 py-1">{row.year}</td>
+                  <td className="px-2 py-1">{row.director}</td>
+                  <td className="px-2 py-1">{row.theaters}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
