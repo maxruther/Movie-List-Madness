@@ -304,7 +304,8 @@ def siskel_scrape(
                 
                 }
             
-            film_showtimes_list.append(showtime_entry)
+            if showtime_entry not in film_showtimes_list:
+                film_showtimes_list.append(showtime_entry)
 
 
     # # With the scrape now concluded, this process turns to file-saving.
@@ -346,4 +347,4 @@ if __name__ == '__main__':
 
     # Run the Siskel scrape
     # showtimes_df, info_df = siskel_scrape()
-    showtimes_df, info_df = siskel_scrape(test_n_films=5)
+    showtimes_df, info_df = siskel_scrape(test_n_films=20000)
