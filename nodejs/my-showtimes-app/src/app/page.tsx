@@ -6,6 +6,7 @@ import { createPortal } from 'react-dom';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { parse, format, startOfWeek, getDay, addDays } from 'date-fns';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { match } from 'assert';
 
 const locales = {
   'en-US': require('date-fns/locale/en-US')
@@ -189,6 +190,11 @@ export default function HomePage() {
     });
   };
 
+  const [originalEvents, setOriginalEvents] = useState<Showtime[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<Showtime[]>([]);
+  const [highlightedTitles, setHighlightedTitles] = useState<Set<string>>(new Set());
+  const [highlightedDirectors, setHighlightedDirectors] = useState<Set<string>>(new Set());
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -229,8 +235,8 @@ export default function HomePage() {
           }
         });
 
-        console.log("🎥 Parsed showtimes:", parsedEvents);
-        setEvents(parsedEvents);
+        setOriginalEvents(parsedEvents);
+        setFilteredEvents(parsedEvents);
       } catch (error) {
         console.error("Failed to fetch showtimes:", error);
       }
@@ -252,9 +258,55 @@ export default function HomePage() {
     fetchMeta();
   }, []);
 
-  const filteredEvents = events.filter(event =>
-    selectedTheaters.has(event.theater)
-  );
+  const handleTitleClick = (title: string) => {
+    const updated = new Set(highlightedTitles);
+    if (highlightedTitles.has(title)) {
+      updated.delete(title);
+    } else {
+      updated.add(title);
+    }
+    setHighlightedTitles(updated);
+    filterEvents(updated, highlightedDirectors);
+  };
+
+  const handleDirectorClick = (director: string) => {
+    const updated = new Set(highlightedDirectors);
+    if (highlightedDirectors.has(director)) {
+      updated.delete(director);
+    } else {
+      updated.add(director);
+    }
+    setHighlightedDirectors(updated);
+    filterEvents(highlightedTitles, updated);
+  };
+
+  const clearFilters = () => {
+    setFilteredEvents(originalEvents);
+    setHighlightedTitles(new Set());
+    setHighlightedDirectors(new Set());
+  };
+
+  const filterEvents = (titles: Set<string>, directors: Set<string>) => {
+    const hasTitleFilter = titles.size > 0;
+    const hasDirectorFilter = directors.size > 0;
+
+    const filtered = originalEvents.filter(event => {
+      const matchTitle = titles.has(event.title);
+      const matchDirector = directors.has(event.director);
+
+      if (hasTitleFilter && hasDirectorFilter) {
+        return matchTitle || matchDirector;
+      } else if (hasTitleFilter) {
+        return matchTitle;
+      } else if (hasDirectorFilter) {
+        return matchDirector;
+      } else {
+        return true;
+      }
+    });
+
+    setFilteredEvents(filtered);
+  };
 
   const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 })
   const weekEnd = addDays(weekStart, 6);
@@ -293,7 +345,7 @@ export default function HomePage() {
 
       <Calendar
         localizer={localizer}
-        events={filteredEvents}
+        events={filteredEvents.filter(event => selectedTheaters.has(event.theater))}
         startAccessor="start"
         endAccessor="end"
         style={{ height: 800 }}
@@ -309,14 +361,19 @@ export default function HomePage() {
           event: EventComponent
         }}
         eventPropGetter={(event) => {
+          const isHighlighted =
+          (highlightedTitles.has(event.title)) ||
+          (highlightedDirectors.has(event.director));
+
           const backgroundColor = event.theater === 'Music Box' ? '#b91c1c' : '#1e3a8a';
-          return {
-            style: {
-              backgroundColor,
-              color: 'white',
-              border: '2px solid rgba(255, 255, 255, 0.4)'
-            }
+          const style = {
+            backgroundColor,
+            color: 'white',
+            border: isHighlighted
+              ? '3px solid gold'
+              : '2px solid rgba(255, 255, 255, 0.4)'
           };
+          return { style };
         }}
       />
 
@@ -324,6 +381,42 @@ export default function HomePage() {
       {weeklyMeta.length > 0 && (
         <div className="mt-8 bg-white p-4 rounded shadow">
           <h2 className="text-xl font-semibold mb-2">This Week’s Critic Picks</h2>
+          <div className="flex items-center flex-wrap gap-2 mb-3">
+            {[...highlightedTitles].map((title) => (
+              <span
+              key={title}
+              className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full cursor-pointer flex items-center gap-1"
+              onClick={() => {
+                const updated = new Set(highlightedTitles);
+                updated.delete(title);
+                setHighlightedTitles(updated);
+                filterEvents(updated, highlightedDirectors);
+              }}
+              >
+                Title: {title} <span className="ml-1 text-blue-500 hover:text-blue-700">x</span>
+              </span>
+            ))}
+            {[...highlightedDirectors].map((director) => (
+              <span
+              key={director}
+              className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full cursor-pointer flex items-center gap-1"
+              onClick={() => {
+                const updated = new Set(highlightedDirectors);
+                updated.delete(director);
+                setHighlightedDirectors(updated);
+                filterEvents(highlightedTitles, updated);
+              }}
+            >
+              Director: {director} <span className="ml-1 text-purple-500 hover:text-purple-700">×</span>
+            </span>
+            ))}
+            <button
+              className="px-3 py-1 text-sm text-white bg-gray-700 rounded hover:bg-gray-600"
+              onClick={clearFilters}
+            >
+              Clear filter
+            </button>
+          </div>
           <table className="table-auto w-full text-xs leading-tight">
             <thead>
               <tr className="bg-gray-200">
@@ -338,9 +431,19 @@ export default function HomePage() {
               {weeklyMeta.map((row, idx) => (
                 <tr key={idx} className="border-t">
                   <td className="px-2 py-1">{(row.metascore * 100).toFixed(0)}</td>
-                  <td className="px-2 py-1">{row.title}</td>
+                  <td
+                    className="px-2 py-1 text-blue-600 underline cursor-pointer"
+                    onClick={() => handleTitleClick(row.title)}
+                  >
+                    {row.title}
+                  </td>
                   <td className="px-2 py-1">{row.year}</td>
-                  <td className="px-2 py-1">{row.director}</td>
+                  <td
+                    className="px-2 py-1 text-purple-600 underline cursor-pointer"
+                    onClick={() => handleDirectorClick(row.director)}
+                  >
+                    {row.director}
+                  </td>
                   <td className="px-2 py-1">{row.theaters}</td>
                 </tr>
               ))}
