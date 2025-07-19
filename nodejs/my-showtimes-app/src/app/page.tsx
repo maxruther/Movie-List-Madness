@@ -286,6 +286,16 @@ export default function HomePage() {
     setHighlightedDirectors(new Set());
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const timeGrid = document.querySelector('.rbc-time-content');
+      if (timeGrid instanceof HTMLElement) {
+        timeGrid.scrollTop = timeGrid.scrollHeight;
+      }
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [currentDate, filteredEvents]);
+
   const filterEvents = (titles: Set<string>, directors: Set<string>) => {
     const hasTitleFilter = titles.size > 0;
     const hasDirectorFilter = directors.size > 0;
@@ -318,64 +328,71 @@ export default function HomePage() {
   })
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold mb-6">Weekly Indie Showtimes</h1>
+    <div className="min-h-screen bg-gray-100 p-4 md:p-6">
+      <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Weekly Indie Showtimes</h1>
 
       <div className="mb-4">
         <div style={{ marginBottom: "0.5rem", fontWeight: "bold" }}>Theater Selection:</div>
-        <label style={{ marginRight: "1rem", fontStyle: "italic", color: "#333" }}>
-          <input
-            type="checkbox"
-            checked={allSelected}
-            onChange={handleSelectAllChange}
-          />{' '}
-          Select all theaters
-        </label>
-        {allTheaters.map(theater => (
-          <label key={theater} style={{ marginRight: "1rem" }}>
+          <label style={{ marginRight: "1rem", fontStyle: "italic", color: "#333" }}>
             <input
               type="checkbox"
-              checked={selectedTheaters.has(theater)}
-              onChange={() => handleCheckboxChange(theater)}
-            />
-            {theater}
+              checked={allSelected}
+              onChange={handleSelectAllChange}
+            />{' '}
+            Select all theaters
           </label>
-        ))}
+          {allTheaters.map(theater => (
+            <label key={theater} style={{ marginRight: "1rem" }}>
+              <input
+                type="checkbox"
+                checked={selectedTheaters.has(theater)}
+                onChange={() => handleCheckboxChange(theater)}
+              />
+              {theater}
+            </label>
+          ))}
       </div>
 
-      <Calendar
-        localizer={localizer}
-        events={filteredEvents.filter(event => selectedTheaters.has(event.theater))}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: 800 }}
-        defaultView="week"
-        views={['week']}
-        step={60}
-        timeslots={1}
-        min={new Date(1970, 0, 1, 0, 0)}
-        max={new Date(1970, 0, 1, 23, 59)}
-        date={currentDate}
-        onNavigate={(newDate) => setCurrentDate(newDate)}
-        components={{
-          event: EventComponent
-        }}
-        eventPropGetter={(event) => {
-          const isHighlighted =
-          (highlightedTitles.has(event.title)) ||
-          (highlightedDirectors.has(event.director));
+      <div style={{ height: 600, overflowY: 'auto' }}>
+        <Calendar
+          localizer={localizer}
+          events={filteredEvents.filter(event => selectedTheaters.has(event.theater))}
+          startAccessor="start"
+          endAccessor="end"
+          style={{ height: 600 }}
+          defaultView="week"
+          views={['week']}
+          step={60}
+          timeslots={1}
+          min={new Date(1970, 0, 1, 0, 0)}
+          max={new Date(1970, 0, 1, 23, 59)}
+          date={currentDate}
+          onNavigate={(newDate) => {
+            setCurrentDate(newDate);
+            setHighlightedTitles(new Set());
+            setHighlightedDirectors(new Set());
+            setFilteredEvents(originalEvents);
+          }}
+          components={{
+            event: EventComponent
+          }}
+          eventPropGetter={(event) => {
+            const isHighlighted =
+            (highlightedTitles.has(event.title)) ||
+            (highlightedDirectors.has(event.director));
 
-          const backgroundColor = event.theater === 'Music Box' ? '#b91c1c' : '#1e3a8a';
-          const style = {
-            backgroundColor,
-            color: 'white',
-            border: isHighlighted
-              ? '3px solid gold'
-              : '2px solid rgba(255, 255, 255, 0.4)'
-          };
-          return { style };
-        }}
-      />
+            const backgroundColor = event.theater === 'Music Box' ? '#b91c1c' : '#1e3a8a';
+            const style = {
+              backgroundColor,
+              color: 'white',
+              border: isHighlighted
+                ? '3px solid gold'
+                : '2px solid rgba(255, 255, 255, 0.4)'
+            };
+            return { style };
+          }}
+          ></Calendar>
+        </div>
 
       {/* 🔹 Weekly Metascore Report */}
       {weeklyMeta.length > 0 && (
@@ -417,38 +434,40 @@ export default function HomePage() {
               Clear filter
             </button>
           </div>
-          <table className="table-auto w-full text-xs leading-tight">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="px-2 py-1 text-left">🎯 Metascore</th>
-                <th className="px-2 py-1 text-left">🎬 Title</th>
-                <th className="px-2 py-1 text-left">📅 Year</th>
-                <th className="px-2 py-1 text-left">🎞️ Director</th>
-                <th className="px-2 py-1 text-left">🏛️ Theater</th>
-              </tr>
-            </thead>
-            <tbody>
-              {weeklyMeta.map((row, idx) => (
-                <tr key={idx} className="border-t">
-                  <td className="px-2 py-1">{(row.metascore * 100).toFixed(0)}</td>
-                  <td
-                    className="px-2 py-1 text-blue-600 underline cursor-pointer"
-                    onClick={() => handleTitleClick(row.title)}
-                  >
-                    {row.title}
-                  </td>
-                  <td className="px-2 py-1">{row.year}</td>
-                  <td
-                    className="px-2 py-1 text-purple-600 underline cursor-pointer"
-                    onClick={() => handleDirectorClick(row.director)}
-                  >
-                    {row.director}
-                  </td>
-                  <td className="px-2 py-1">{row.theaters}</td>
+          <div style={{ maxHeight: '11.5rem', overflowY: 'auto'}}>
+            <table className="table-auto w-full text-xs leading-snug">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="px-1 py-0.5 text-left">🎯 Metascore</th>
+                  <th className="px-1 py-0.5 text-left">🎬 Title</th>
+                  <th className="px-1 py-0.5 text-left">📅 Year</th>
+                  <th className="px-1 py-0.5 text-left">🎞️ Director</th>
+                  <th className="px-1 py-0.5 text-left">🏛️ Theater</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {weeklyMeta.map((row, idx) => (
+                  <tr key={idx} className="border-t">
+                    <td className="px-1 py-0.5">{(row.metascore * 100).toFixed(0)}</td>
+                    <td
+                      className="px-1 py-0.5 text-blue-600 underline cursor-pointer"
+                      onClick={() => handleTitleClick(row.title)}
+                    >
+                      {row.title}
+                    </td>
+                    <td className="px-1 py-0.5">{row.year}</td>
+                    <td
+                      className="px-1 py-0.5 text-purple-600 underline cursor-pointer"
+                      onClick={() => handleDirectorClick(row.director)}
+                    >
+                      {row.director}
+                    </td>
+                    <td className="px-1 py-0.5">{row.theaters}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

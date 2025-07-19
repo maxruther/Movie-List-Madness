@@ -14,12 +14,12 @@ from its_showtimes.schedulers.schedule_musicbox_shows import schedule_musicbox_s
 from its_showtimes.schedulers.schedule_siskel_shows_new_version import schedule_siskel_shows_new_version
 from its_showtimes.schedulers.schedule_musicbox_shows_new_version import schedule_musicbox_shows_new_version
 
-# ## SHOWTIME SCRAPE
+## SHOWTIME SCRAPE
 
-# # Scrape the indie theater pages for showtimes and info on those
-# # screened films.
-# siskel_showtimes_df, siskel_info_df = siskel_scrape()
-# musicbox_showtimes_df, musicbox_info_df = musicbox_scrape()
+# Scrape the indie theater pages for showtimes and info on those
+# screened films.
+siskel_showtimes_df, siskel_info_df = siskel_scrape()
+musicbox_showtimes_df, musicbox_info_df = musicbox_scrape()
 
 
 ## METACRITIC SCRAPE
@@ -47,16 +47,17 @@ for theater in valid_theaters:
 
     movie_info_filenames.append(most_recent_file)
 
-# # Run the Metacritic scrape on the films pulled from the indie theater
-# # calendars.
+# Run the Metacritic scrape on the films pulled from the indie theater
+# calendars.
+
 # # movie_info_filenames = [
 # #     'data\pkl\siskel\single_scrapes\siskel_show_info_2025-07-16.pkl',
 # #     'data\pkl\musicbox\musicbox_show_info.pkl',
 # # ]
-# for filename in movie_info_filenames:
-#     mc_search_and_scrape(
-#         input_filepath=filename
-#     )
+for filename in movie_info_filenames:
+    mc_search_and_scrape(
+        input_filepath=filename
+    )
 
 # LOAD SCRAPED DATA INTO DB
 # Load the scraped film info, showtimes, and metacritic data into the

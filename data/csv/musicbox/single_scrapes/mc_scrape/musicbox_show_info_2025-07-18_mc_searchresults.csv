@@ -1,0 +1,68 @@
+Title Searched,Title Result,Titles Fuzzy Sim,Titles Cosine Sim,Year Searched,Year Result,Director Searched,Director Result,Directors Fuzzy Sim,Directors Cosine Sim,Link
+EDDINGTON,Eddington,1.0,1.0,2025,2025,Ari Aster,Ari Aster,1.0,1.0,/movie/eddington/
+KILL THE JOCKEY,Kill the Jockey,1.0,1.0,2024,2025,Luis Ortega,Luis Ortega,1.0,1.0,/movie/kill-the-jockey/
+PASSING STRANGERS,,,,1973,,Arthur J. Bressan Jr.,,,,
+ALLIGATOR,Alligator,1.0,1.0,1980,1980,Lewis Teague,Lewis Teague,1.0,1.0,/movie/alligator/
+EEPHUS,Eephus,1.0,1.0,2024,2024,Carson Lund,Carson Lund,1.0,1.0,/movie/eephus/
+FORBIDDEN LETTERS,Forbidden Zone,0.71,0.5,1979,1980,Arthur J. Bressan Jr.,Richard Elfman,0.4,0.0,/movie/forbidden-zone/
+FORBIDDEN LETTERS,,,,1979,,Arthur J. Bressan Jr.,,,,
+RATS: NIGHT OF TERROR,,,,1984,,Bruno Mattei,,,,
+ROCKY HORROR PICTURE SHOW,The Rocky Horror Picture Show,0.93,0.894,1975,1975,Jim Sharman,Jim Sharman,1.0,1.0,/movie/the-rocky-horror-picture-show/
+ROCKY HORROR PICTURE SHOW,Rocky,0.33,0.5,1975,1976,Jim Sharman,John G. Avildsen,0.3,0.0,/movie/rocky/
+DADDY DEAREST,,,,1984,,Arthur J. Bressan Jr.,,,,
+ACOUSTIC OPEN MIC NIGHT,,,,1984,,,,,,
+BUDDIES,,,,1985,,Arthur J. Bressan Jr.,,,,
+L FOR LEISURE,L for Leisure,1.0,1.0,2014,2015,"Whitney Horn, Lev Kalman","Whitney Horn, Lev Kalman",1.0,1.0,/movie/l-for-leisure/
+SHARK TALE,Shark Tale,1.0,1.0,2004,2004,"Bibo Bergeron, Vicky Jenson, Rob Letterman","Bibo Bergeron, Vicky Jenson, Rob Letterman",1.0,1.0,/movie/shark-tale/
+AJ GOES TO THE DOG PARK,AJ Goes to the Dog Park,1.0,1.0,2024,2025,Toby Jones,Toby Jones,1.0,1.0,/movie/aj-goes-to-the-dog-park/
+SKYSCRAPER,Skyscraper,1.0,1.0,1996,2018,Raymond Martino,Rawson Marshall Thurber,0.47,0.0,/movie/skyscraper/
+SKYSCRAPER,,,,1996,,Raymond Martino,,,,
+JUICE,Juice,1.0,1.0,1984,1992,Arthur J. Bressan Jr.,Ernest R. Dickerson,0.4,0.0,/movie/juice/
+JUICE,,,,1984,,Arthur J. Bressan Jr.,,,,
+THE AMUSEMENT PARK,The Amusement Park,1.0,1.0,1973,2021,George A. Romero,George A. Romero,1.0,1.0,/movie/the-amusement-park/
+A NIGHTMARE ON ELM STREET 3: DREAM WARRIORS,A Nightmare on Elm Street 3: Dream Warriors,1.0,1.0,1987,1987,Chuck Russell,Chuck Russell,1.0,1.0,/movie/a-nightmare-on-elm-street-3-dream-warriors/
+25 CATS FROM QATAR,,,,2025,,Mye Hoang,,,,
+TANGERINE,Tangerine,1.0,1.0,2015,2015,Sean Baker,Sean Baker,1.0,1.0,/movie/tangerine/
+JUMANJI,Jumanji,1.0,1.0,1995,1995,Joe Johnston,Joe Johnston,1.0,1.0,/movie/jumanji/
+DRUNKEN ANGEL,,,,1948,,Akira Kurosawa,,,,
+THRONE OF BLOOD,,,,1957,,Akira Kurosawa,,,,
+THE HIDDEN FORTRESS,The Hidden Fortress,1.0,1.0,1958,1960,Akira Kurosawa,Akira Kurosawa,1.0,1.0,/movie/the-hidden-fortress/
+CECIL B. DEMENTED,Cecil B. DeMented,1.0,1.0,2000,2000,John Waters,John Waters,1.0,1.0,/movie/cecil-b-demented/
+CATVIDEOFEST,CatVideoFest 2024,0.83,0.707,2025,2024,,,,,/movie/catvideofest-2024/
+CATVIDEOFEST,,,,2025,,,,,,
+SEVEN SAMURAI,Seven Samurai,1.0,1.0,1954,1956,Akira Kurosawa,Akira Kurosawa,1.0,1.0,/movie/seven-samurai-1954/
+YOJIMBO,Yojimbo,1.0,1.0,1961,1961,Akira Kurosawa,Akira Kurosawa,1.0,1.0,/movie/yojimbo/
+SANJURO,Sanjuro,1.0,1.0,1962,1963,Akira Kurosawa,Akira Kurosawa,1.0,1.0,/movie/sanjuro/
+MORTAL KOMBAT,Mortal Kombat,1.0,1.0,1995,2021,Paul W.S. Anderson,Simon McQuoid,0.19,0.0,/movie/mortal-kombat-2021/
+MORTAL KOMBAT,Mortal Kombat,1.0,1.0,1995,1995,Paul W.S. Anderson,Paul W.S. Anderson,1.0,1.0,/movie/mortal-kombat/
+IKIRU,Ikiru,1.0,1.0,1952,1956,Akira Kurosawa,Akira Kurosawa,1.0,1.0,/movie/ikiru/
+EARTH,Earth,1.0,1.0,1930,2020,Aleksandr Dovzhenko,Nikolaus Geyrhalter,0.26,0.0,/movie/earth-2020/
+EARTH,Earth,1.0,1.0,1930,2009,Aleksandr Dovzhenko,"Alastair Fothergill, Mark Linfield",0.38,0.0,/movie/earth/
+EARTH,Earth,1.0,1.0,1930,1999,Aleksandr Dovzhenko,Deepa Mehta,0.27,0.0,/movie/earth-1999/
+EARTH,,,,1930,,Aleksandr Dovzhenko,,,,
+RASHOMON,Rashomon,1.0,1.0,1950,1951,Akira Kurosawa,Akira Kurosawa,1.0,1.0,/movie/rashomon/
+HIGH AND LOW,High and Low,1.0,1.0,1963,1963,Akira Kurosawa,Akira Kurosawa,1.0,1.0,/movie/high-and-low/
+"IT'S A MAD, MAD, MAD, MAD WORLD","It's a Mad, Mad, Mad, Mad World",1.0,1.0,1963,1963,Stanley Kramer,Stanley Kramer,1.0,1.0,/movie/its-a-mad-mad-mad-mad-world/
+SINNERS,Sinners,1.0,1.0,2025,2025,Ryan Coogler,Ryan Coogler,1.0,1.0,/movie/sinners/
+SON OF THE WHITE MARE,Son of the White Mare,1.0,1.0,1981,1983,Marcell Jankovics,Marcell Jankovics,1.0,1.0,/movie/son-of-the-white-mare/
+2001: A SPACE ODYSSEY,2001: A Space Odyssey,1.0,1.0,1968,1968,Stanley Kubrick,Stanley Kubrick,1.0,1.0,/movie/2001-a-space-odyssey/
+SLEEPING BEAUTY,Sleeping Beauty,1.0,1.0,1959,1959,Clyde Geronimi,"Les Clark, Clyde Geronimi, Eric Larson, Wolfgang Reitherman, Hamilton Luske",0.31,0.447,/movie/sleeping-beauty-1959/
+SLEEPING BEAUTY,Sleeping Beauty,1.0,1.0,1959,2011,Clyde Geronimi,Julia Leigh,0.32,0.0,/movie/sleeping-beauty/
+SLEEPING BEAUTY,,,,1959,,Clyde Geronimi,,,,
+DUNKIRK,Dunkirk,1.0,1.0,2017,2017,Christopher Nolan,Christopher Nolan,1.0,1.0,/movie/dunkirk/
+TOP GUN: MAVERICK,Top Gun: Maverick,1.0,1.0,2022,2022,Joseph Kosinski,Joseph Kosinski,1.0,1.0,/movie/top-gun-maverick/
+THE DARK CRYSTAL,The Dark Crystal,1.0,1.0,1982,1982,"Jim Henson, Frank Oz","Jim Henson, Frank Oz",1.0,1.0,/movie/the-dark-crystal/
+LAWRENCE OF ARABIA,,,,1962,,David Lean,,,,
+CLEOPATRA,Cleopatra,1.0,1.0,1963,1963,Joseph L. Mankiewicz,"Joseph L. Mankiewicz, Rouben Mamoulian",0.69,0.707,/movie/cleopatra/
+DER FAN,,,,1982,,Eckhart Schmidt,,,,
+BACKDRAFT,Backdraft,1.0,1.0,1991,1991,Ron Howard,Ron Howard,1.0,1.0,/movie/backdraft/
+THE PREMIERE,Nirvanna the Band the Show the Movie,0.33,0.588,2024,2025,Jon Silver,Matt Johnson,0.36,0.0,/movie/nirvanna-the-band-the-show-the-movie/
+THE PREMIERE,,,,2024,,Jon Silver,,,,
+ONCE UPON A TIME IN HOLLYWOOD,Once Upon a Time ... in Hollywood,0.94,1.0,2019,2019,Quentin Tarantino,Quentin Tarantino,1.0,1.0,/movie/once-upon-a-time-in-hollywood/
+BOYS GO TO JUPITER,Boys Go to Jupiter,1.0,1.0,2024,2025,Julian Glander,Julian Glander,1.0,1.0,/movie/boys-go-to-jupiter/
+TAXI ZUM KLO,,,,1980,,Frank Ripploh,,,,
+THE ROOM,The Room,1.0,1.0,2003,2003,Tommy Wiseau,Tommy Wiseau,1.0,1.0,/movie/the-room/
+HOT SPRING SHARK ATTACK,Hot Spring Shark Attack,1.0,1.0,2024,2024,Morito Inoune,Morihito Inoue,0.89,0.0,/movie/hot-spring-shark-attack/
+HOT SPRING SHARK ATTACK,,,,2024,,Morito Inoune,,,,
+CAPTAIN ZERO: INTO THE ABYSS PART II,,,,2025,,Z Cher-Aimé,,,,
+JACKASS: THE MOVIE,Jackass: The Movie,1.0,1.0,2002,2002,Jeff Tremaine,Jeff Tremaine,1.0,1.0,/movie/jackass-the-movie/
